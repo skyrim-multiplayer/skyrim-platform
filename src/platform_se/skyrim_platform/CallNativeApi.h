@@ -9,6 +9,12 @@ namespace CallNativeApi {
 
 struct NativeCallRequirements
 {
+  NativeCallRequirements()
+  {
+    gameThrQ.reset(new TaskQueue);
+    jsThrQ.reset(new TaskQueue);
+  }
+
   RE::BSScript::IVirtualMachine* vm = nullptr;
   RE::VMStackID stackId = (RE::VMStackID)~0;
 

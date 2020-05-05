@@ -44,12 +44,24 @@ static inline size_t GetIndexFor()
 RE::BSScript::Variable AnySafeToVariable(const AnySafe& v,
                                          bool treatNumberAsInt);
 
-AnySafe CallNativeSafe(RE::BSScript::IVirtualMachine* vm,
-                       RE::VMStackID stackId, const std::string& className,
-                       const std::string& classFunc, const AnySafe& self,
-                       const AnySafe* args, size_t numArgs,
-                       FunctionInfoProvider& provider, TaskQueue& gameThrQ,
-                       TaskQueue& jsThrQ);
+using LatentCallback = std::function<void(AnySafe)>;
+
+struct Arguments
+{
+  RE::BSScript::IVirtualMachine* vm;
+  RE::VMStackID stackId;
+  const std::string& className;
+  const std::string& classFunc;
+  const AnySafe& self;
+  const AnySafe* args;
+  size_t numArgs;
+  FunctionInfoProvider& provider;
+  TaskQueue& gameThrQ;
+  TaskQueue& jsThrQ;
+  LatentCallback latentCallback;
+};
+
+AnySafe CallNativeSafe(Arguments& args);
 
 AnySafe DynamicCast(const std::string& to, const AnySafe& from);
 }
