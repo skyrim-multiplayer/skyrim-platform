@@ -4,8 +4,11 @@
 #include "Overloaded.h"
 #include <RE/BSScript/PackUnpack.h>
 #include <RE/BSScript/StackFrame.h>
+#include <RE/IAnimationGraphManagerHolder.h>
 #include <RE/SkyrimVM.h>
 #include <bitset>
+#include <skse64/GameRTTI.h>
+#include <skse64/GameReferences.h>
 
 template <class T>
 inline size_t GetIndexFor()
@@ -14,43 +17,87 @@ inline size_t GetIndexFor()
   return v.index();
 }
 
+namespace {
+class StringHolder
+{
+public:
+  const RE::BSFixedString& operator[](const std::string& str)
+  {
+    auto& entry = entries[str];
+    if (!entry)
+      entry.reset(new Entry(str));
+    return entry->GetFixedString();
+  }
+
+  static StringHolder& ThreadSingleton()
+  {
+    thread_local StringHolder stringHolder;
+    return stringHolder;
+  }
+
+private:
+  StringHolder() = default;
+
+  class Entry
+  {
+  public:
+    Entry(const std::string& str)
+    {
+      holder.reset(new std::string(str));
+      fs.reset(new RE::BSFixedString(str.data()));
+    }
+
+    ~Entry() { fs.reset(); }
+
+    const RE::BSFixedString& GetFixedString() const noexcept { return *fs; }
+
+  private:
+    std::unique_ptr<RE::BSFixedString> fs;
+    std::unique_ptr<std::string> holder;
+  };
+  std::unordered_map<std::string, std::unique_ptr<Entry>> entries;
+};
+}
+
 RE::BSScript::Variable AnySafeToVariable(const CallNative::AnySafe& v,
                                          bool treatNumberAsInt)
 {
   return std::visit(
-    overloaded{
-      [&](double f) {
-        RE::BSScript::Variable res;
-        treatNumberAsInt ? res.SetSInt((int)floor(f)) : res.SetFloat((float)f);
-        return res;
-      },
-      [](bool b) {
-        RE::BSScript::Variable res;
-        res.SetBool(b);
-        return res;
-      },
-      [](const std::string& s) -> RE::BSScript::Variable {
-        throw std::runtime_error("Unable to cast String to Variable");
-      },
-      [](const CallNative::ObjectPtr& obj) {
-        RE::BSScript::Variable res;
-        res.SetNone();
-        if (!obj) {
-          return res;
-        }
-        auto nativePtrRaw = (RE::TESForm*)obj->GetNativeObjectPtr();
-        if (!nativePtrRaw)
-          throw NullPointerException("nativePtrRaw");
+    overloaded{ [&](double f) {
+                 RE::BSScript::Variable res;
+                 treatNumberAsInt ? res.SetSInt((int)floor(f))
+                                  : res.SetFloat((float)f);
+                 return res;
+               },
+                [](bool b) {
+                  RE::BSScript::Variable res;
+                  res.SetBool(b);
+                  return res;
+                },
+                [](const std::string& s) {
+                  RE::BSScript::Variable res;
+                  res.SetString(StringHolder::ThreadSingleton()[s]);
+                  return res;
+                },
+                [](const CallNative::ObjectPtr& obj) {
+                  RE::BSScript::Variable res;
+                  res.SetNone();
+                  if (!obj) {
+                    return res;
+                  }
+                  auto nativePtrRaw = (RE::TESForm*)obj->GetNativeObjectPtr();
+                  if (!nativePtrRaw)
+                    throw NullPointerException("nativePtrRaw");
 
-        RE::BSScript::PackHandle(
-          &res, nativePtrRaw,
-          static_cast<RE::VMTypeID>(nativePtrRaw->formType));
-        return res;
-      },
-      [](auto) -> RE::BSScript::Variable {
-        throw std::runtime_error(
-          "Unable to cast the argument to RE::BSScript::Variable");
-      } },
+                  RE::BSScript::PackHandle(
+                    &res, nativePtrRaw,
+                    static_cast<RE::VMTypeID>(nativePtrRaw->formType));
+                  return res;
+                },
+                [](auto) -> RE::BSScript::Variable {
+                  throw std::runtime_error(
+                    "Unable to cast the argument to RE::BSScript::Variable");
+                } },
     v);
 }
 
@@ -125,6 +172,37 @@ CallNative::AnySafe CallNative::CallNativeSafe(
   stackIterator->second->top->owningObjectType = it->second;
   stackIterator->second->top->self = AnySafeToVariable(self, false);
   stackIterator->second->top->size = numArgs;
+
+  bool isSendAnimEvent = !stricmp(className.data(), "Debug") &&
+    !stricmp(classFunc.data(), "sendAnimationEvent");
+  if (isSendAnimEvent) {
+    /*if (numArgs != 2)
+      throw std::runtime_error('\'' + className + '.' + classFunc +
+                               "' expects 2 arguments");
+    if (args[0].index() != GetIndexFor<ObjectPtr>())
+      throw std::runtime_error("Expected param1 to be an object");
+
+    if (args[1].index() != GetIndexFor<std::string>())
+      throw std::runtime_error("Expected param2 to be string");
+
+    if (auto objPtr = std::get<ObjectPtr>(args[0])) {
+      auto nativeObjPtr = (RE::TESForm*)objPtr->GetNativeObjectPtr();
+      if (!nativeObjPtr)
+        throw NullPointerException("nativeObjPtr");
+      auto refr = DYNAMIC_CAST(nativeObjPtr, TESForm, TESObjectREFR);
+      if (!refr) {
+        throw std::runtime_error(
+          "Expected param1 to be ObjectReference but got " +
+          std::string(objPtr->GetType()));
+      }
+      reinterpret_cast<RE::IAnimationGraphManagerHolder*>(
+        &refr->animGraphHolder)
+        ->NotifyAnimationGraph(AnySafeToVariable(args[1], false).GetString());
+    }*/
+
+    return ObjectPtr();
+  }
+
   auto topArgs = stackIterator->second->top->args;
   for (int i = 0; i < numArgs; i++) {
     RE::BSFixedString unusedNameOut;
@@ -167,8 +245,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(
         return ObjectPtr();
     }
     case RE::BSScript::TypeInfo::RawType::kString:
-      throw std::runtime_error(
-        "Functions with String return type are not supported");
+      return (std::string)r.GetString().data();
     case RE::BSScript::TypeInfo::RawType::kInt:
       return (double)r.GetSInt();
     case RE::BSScript::TypeInfo::RawType::kFloat:
