@@ -167,9 +167,14 @@ JsValue CallNativeApi::CallNative(
 
   static VmProvider provider;
 
+  if (!requirements.gameThrQ)
+    throw NullPointerException("gameThrQ");
+  if (!requirements.jsThrQ)
+    throw NullPointerException("jsThrQ");
   auto res = CallNative::CallNativeSafe(
     requirements.vm, requirements.stackId, className, functionName,
-    JsValueToNativeValue(self), nativeArgs, n, provider);
+    JsValueToNativeValue(self), nativeArgs, n, provider,
+    *requirements.gameThrQ, *requirements.jsThrQ);
 
   return NativeValueToJsValue(res);
 }

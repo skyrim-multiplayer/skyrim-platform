@@ -2,20 +2,13 @@
 #include "GetNativeFunctionAddr.h"
 #include "NullPointerException.h"
 #include "Overloaded.h"
+#include "SendAnimationEvent.h"
+#include "VmCall.h"
+#include "VmCallback.h"
 #include <RE/BSScript/PackUnpack.h>
 #include <RE/BSScript/StackFrame.h>
-#include <RE/IAnimationGraphManagerHolder.h>
 #include <RE/SkyrimVM.h>
 #include <bitset>
-#include <skse64/GameRTTI.h>
-#include <skse64/GameReferences.h>
-
-template <class T>
-inline size_t GetIndexFor()
-{
-  static const CallNative::AnySafe v = T();
-  return v.index();
-}
 
 namespace {
 class StringHolder
@@ -59,8 +52,8 @@ private:
 };
 }
 
-RE::BSScript::Variable AnySafeToVariable(const CallNative::AnySafe& v,
-                                         bool treatNumberAsInt)
+RE::BSScript::Variable CallNative::AnySafeToVariable(
+  const CallNative::AnySafe& v, bool treatNumberAsInt)
 {
   return std::visit(
     overloaded{ [&](double f) {
@@ -116,7 +109,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(
   RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
   const std::string& className, const std::string& classFunc,
   const AnySafe& self, const AnySafe* args, size_t numArgs,
-  FunctionInfoProvider& provider)
+  FunctionInfoProvider& provider, TaskQueue& gameThrQ, TaskQueue& jsThrQ)
 {
   auto funcInfo = provider.GetFunctionInfo(className, classFunc);
   if (!funcInfo) {
@@ -125,7 +118,9 @@ CallNative::AnySafe CallNative::CallNativeSafe(
                              std::string(classFunc) + "' ");
   }
   if (funcInfo->IsLatent()) {
-    throw std::runtime_error("Latent functions are not supported");
+    throw std::runtime_error("Latent functions are not supported '" +
+                             std::string(className) + "." +
+                             std::string(classFunc) + "' ");
   }
 
   if (self.index() != GetIndexFor<ObjectPtr>())
@@ -173,33 +168,14 @@ CallNative::AnySafe CallNative::CallNativeSafe(
   stackIterator->second->top->self = AnySafeToVariable(self, false);
   stackIterator->second->top->size = numArgs;
 
-  bool isSendAnimEvent = !stricmp(className.data(), "Debug") &&
-    !stricmp(classFunc.data(), "sendAnimationEvent");
-  if (isSendAnimEvent) {
-    /*if (numArgs != 2)
-      throw std::runtime_error('\'' + className + '.' + classFunc +
-                               "' expects 2 arguments");
-    if (args[0].index() != GetIndexFor<ObjectPtr>())
-      throw std::runtime_error("Expected param1 to be an object");
-
-    if (args[1].index() != GetIndexFor<std::string>())
-      throw std::runtime_error("Expected param2 to be string");
-
-    if (auto objPtr = std::get<ObjectPtr>(args[0])) {
-      auto nativeObjPtr = (RE::TESForm*)objPtr->GetNativeObjectPtr();
-      if (!nativeObjPtr)
-        throw NullPointerException("nativeObjPtr");
-      auto refr = DYNAMIC_CAST(nativeObjPtr, TESForm, TESObjectREFR);
-      if (!refr) {
-        throw std::runtime_error(
-          "Expected param1 to be ObjectReference but got " +
-          std::string(objPtr->GetType()));
-      }
-      reinterpret_cast<RE::IAnimationGraphManagerHolder*>(
-        &refr->animGraphHolder)
-        ->NotifyAnimationGraph(AnySafeToVariable(args[1], false).GetString());
-    }*/
-
+  bool needsRealGameThread =
+    (!stricmp(className.data(), "Debug") &&
+     !stricmp(classFunc.data(), "sendAnimationEvent"));
+  if (needsRealGameThread) {
+    std::vector<AnySafe> _args;
+    for (auto it = args; it < args + numArgs; it++)
+      _args.push_back(*it);
+    gameThrQ.AddTask([=] { SendAnimationEvent::Run(_args); });
     return ObjectPtr();
   }
 

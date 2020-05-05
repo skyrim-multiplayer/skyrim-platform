@@ -1,5 +1,7 @@
 #pragma once
+#include "CallNative.h" // CallNative::State
 #include "JsEngine.h"
+#include "TaskQueue.h"
 #include <RE/BSScript/IVirtualMachine.h>
 #include <functional>
 
@@ -9,6 +11,8 @@ struct NativeCallRequirements
 {
   RE::BSScript::IVirtualMachine* vm = nullptr;
   RE::VMStackID stackId = (RE::VMStackID)~0;
+
+  std::shared_ptr<TaskQueue> gameThrQ, jsThrQ;
 };
 
 JsValue CallNative(

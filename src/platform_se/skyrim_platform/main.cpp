@@ -26,6 +26,8 @@
 #include <string>
 #include <thread>
 
+#include <skse64/GameReferences.h>
+
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
 
@@ -36,6 +38,7 @@ static SKSEMessagingInterface* g_messaging = nullptr;
 static ctpl::thread_pool g_pool(1);
 
 CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
+TaskQueue g_gameThrQ;
 
 std::string ReadFile(const std::filesystem::path& p)
 {
@@ -142,7 +145,7 @@ void JsTick(bool gameFunctionsAvailable)
         engine->RunScript(scriptSrc, fileName.string()).ToString();
       }
     }
-    
+
     EventsApi::SendEvent(gameFunctionsAvailable ? "update" : "tick", {});
 
   } catch (std::exception& e) {
@@ -190,6 +193,14 @@ void OnUpdate()
 {
   PushJsTick(false);
   TESModPlatform::Update();
+
+  /*static auto animEventName = RE::BSFixedString("SneakStart");
+  auto refr = *g_thePlayer;
+  auto graphManagerHolder =
+    reinterpret_cast<RE::IAnimationGraphManagerHolder*>(
+      &refr->animGraphHolder);
+
+  graphManagerHolder->NotifyAnimationGraph(animEventName);*/
 }
 
 void UpdateDumpFunctions()
@@ -214,6 +225,7 @@ void OnPapyrusUpdate(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId)
   g_nativeCallRequirements.stackId = stackId;
   g_nativeCallRequirements.vm = vm;
   PushJsTick(true);
+  g_gameThrQ.Update();
   g_nativeCallRequirements = {};
 }
 
