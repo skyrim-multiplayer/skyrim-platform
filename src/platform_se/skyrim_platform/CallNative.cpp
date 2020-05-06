@@ -304,10 +304,8 @@ bool IsInstanceOf(
 {
   RE::BSScript::ObjectTypeInfo* objectInQuestion = objectInfo.get();
 
-  if (!objectInQuestion) {
-    NullPointerException("objectInQuestion");
-    return false;
-  }
+  if (!objectInQuestion)
+    throw NullPointerException("objectInQuestion");
 
   while (true) {
 
