@@ -256,7 +256,12 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
   if (funcInfo->IsLatent()) {
     VmFunctionArguments vmFuncArgs(
       [](void* numArgs) { return (size_t)numArgs; },
-      [&args_](size_t i) { return AnySafeToVariable(args_.args[i]); },
+      [&args_, &f](size_t i) {
+        RE::BSFixedString unusedNameOut;
+        RE::BSScript::TypeInfo typeOut;
+        f->GetParam(i, unusedNameOut, typeOut);
+        return AnySafeToVariable(args_.args[i], typeOut.IsInt());
+      },
       (void*)numArgs);
     auto fsClassName = AnySafeToVariable(className).GetString();
     auto fsClassFunc = AnySafeToVariable(classFunc).GetString();
