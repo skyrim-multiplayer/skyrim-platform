@@ -295,7 +295,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
     f->Call(stackIterator->second, vmImpl->GetErrorLogger(), vmImpl, false);
   if (callResut != RE::BSScript::IFunction::CallResult::kCompleted) {
     throw std::runtime_error("Bad call result " +
-                             std::to_string((int)callResut) + " after calling "+ className +"." + classFunc+"();");
+                             std::to_string((int)callResut));
   }
 
   auto& r = stackIterator->second->returnValue;
