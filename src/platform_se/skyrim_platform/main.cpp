@@ -32,6 +32,7 @@
 #define PLUGIN_VERSION 0
 
 void StartSKSE(void* hDllHandle);
+void SetupFridaHooks();
 
 static SKSETaskInterface* g_taskInterface = nullptr;
 static SKSEMessagingInterface* g_messaging = nullptr;
@@ -90,7 +91,6 @@ void JsTick(bool gameFunctionsAvailable)
       EventsApi::Clear();
       g_taskQueue.Clear();
       g_nativeCallRequirements.jsThrQ->Clear();
-
 
       if (!engine) {
         engine.reset(new JsEngine);
@@ -263,6 +263,8 @@ __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
     _FATALERROR("QueryInterface failed for PapyrusInterface");
     return false;
   }
+
+  SetupFridaHooks();
 
   g_taskInterface->AddTask(new MyUpdateTask(g_taskInterface, OnUpdate));
 
