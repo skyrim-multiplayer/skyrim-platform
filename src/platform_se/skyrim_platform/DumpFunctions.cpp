@@ -112,7 +112,9 @@ json FunctionToJson(const char* typeName, RE::BSScript::IFunction* f,
 
   std::stringstream ss;
   auto funcInfo = GetNativeFunctionAddr::Run(*f);
-  ss << funcInfo.fn;
+  auto baseAddr = REL::Module::BaseAddr();
+  auto offset = (size_t)funcInfo.fn - baseAddr;
+  ss << offset;
   res["offset"] = ss.str();
 
   res["useLongSignature"] = funcInfo.useLongSignature;
