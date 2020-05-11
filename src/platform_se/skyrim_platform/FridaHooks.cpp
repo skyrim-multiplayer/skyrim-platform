@@ -9,6 +9,8 @@
 
 #include <frida/frida-gum.h>
 
+#include "EventsApi.h"
+#include "StringHolder.h"
 #include <RE/ConsoleLog.h>
 #include <RE/TESObjectREFR.h>
 
@@ -68,17 +70,23 @@ static void example_listener_on_enter(GumInvocationListener* listener,
   switch ((size_t)hook_id) {
     case HOOK_SEND_ANIMATION_EVENT:
       auto _ic = (_GumInvocationContext*)ic;
-      if (auto c = RE::ConsoleLog::GetSingleton()) {
-        auto refr = _ic->cpu_context->rcx
-          ? (RE::TESObjectREFR*)(_ic->cpu_context->rcx - 0x38)
-          : nullptr;
-        uint32_t formId = refr ? refr->formID : 0;
+      auto refr = _ic->cpu_context->rcx
+        ? (RE::TESObjectREFR*)(_ic->cpu_context->rcx - 0x38)
+        : nullptr;
+      uint32_t formId = refr ? refr->formID : 0;
 
-        auto animEventName =
-          (char**)gum_invocation_context_get_nth_argument(ic, 1);
+      auto animEventName =
+        (char**)gum_invocation_context_get_nth_argument(ic, 1);
 
-        c->Print("formId = %x, animEventName = %s", formId,
-                 animEventName ? *animEventName : "<null>");
+      if (!refr || !animEventName)
+        break;
+
+      std::string str = *animEventName;
+      EventsApi::SendAnimationEventEnter(refr, str);
+      if (str != *animEventName) {
+        auto fs = const_cast<RE::BSFixedString*>(
+          &StringHolder::ThreadSingleton()[str]);
+        animEventName = reinterpret_cast<char**>(fs);
       }
       break;
   }
@@ -87,6 +95,15 @@ static void example_listener_on_enter(GumInvocationListener* listener,
 static void example_listener_on_leave(GumInvocationListener* listener,
                                       GumInvocationContext* ic)
 {
+  ExampleListener* self = EXAMPLE_LISTENER(listener);
+  auto hook_id = gum_invocation_context_get_listener_function_data(ic);
+
+  switch ((size_t)hook_id) {
+    case HOOK_SEND_ANIMATION_EVENT:
+      bool res = !!gum_invocation_context_get_return_value(ic);
+      EventsApi::SendAnimationEventLeave(res);
+      break;
+  }
 }
 
 static void example_listener_class_init(ExampleListenerClass* klass)

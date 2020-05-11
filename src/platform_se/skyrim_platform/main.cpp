@@ -36,10 +36,10 @@ void SetupFridaHooks();
 
 static SKSETaskInterface* g_taskInterface = nullptr;
 static SKSEMessagingInterface* g_messaging = nullptr;
-static ctpl::thread_pool g_pool(1);
+ctpl::thread_pool g_pool(1);
 
 CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
-static TaskQueue g_taskQueue;
+TaskQueue g_taskQueue;
 
 std::string ReadFile(const std::filesystem::path& p)
 {
