@@ -148,7 +148,7 @@ void EventsApi::SendAnimationEventLeave(bool animationSucceeded) noexcept
         PrepareContext(perThread, ClearStorage::No);
 
         perThread.context.SetProperty("animationSucceeded",
-                                      animationSucceeded);
+                                      JsValue::Bool(animationSucceeded));
         h.leave.Call({ JsValue::Undefined(), perThread.context });
 
         h.perThread.erase(owningThread);

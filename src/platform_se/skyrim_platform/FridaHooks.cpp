@@ -75,8 +75,9 @@ static void example_listener_on_enter(GumInvocationListener* listener,
         : nullptr;
       uint32_t formId = refr ? refr->formID : 0;
 
+      constexpr int argIdx = 1;
       auto animEventName =
-        (char**)gum_invocation_context_get_nth_argument(ic, 1);
+        (char**)gum_invocation_context_get_nth_argument(ic, argIdx);
 
       if (!refr || !animEventName)
         break;
@@ -86,7 +87,9 @@ static void example_listener_on_enter(GumInvocationListener* listener,
       if (str != *animEventName) {
         auto fs = const_cast<RE::BSFixedString*>(
           &StringHolder::ThreadSingleton()[str]);
-        animEventName = reinterpret_cast<char**>(fs);
+        auto newAnimEventName = reinterpret_cast<char**>(fs);
+        gum_invocation_context_replace_nth_argument(ic, argIdx,
+                                                    newAnimEventName);
       }
       break;
   }
