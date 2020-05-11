@@ -93,7 +93,7 @@ void PrepareContext(EventsGlobalState::Handler::PerThread& h,
 }
 }
 
-void EventsApi::SendAnimationEventEnter(RE::TESObjectREFR* self,
+void EventsApi::SendAnimationEventEnter(uint32_t selfId,
                                         std::string& animEventName) noexcept
 {
   DWORD owningThread = GetCurrentThreadId();
@@ -105,22 +105,15 @@ void EventsApi::SendAnimationEventEnter(RE::TESObjectREFR* self,
       // This should always be done before calling throwing functions
       g.sendAnimationEvent.inProgressThreads.insert(owningThread);
 
-      // RE::ConsoleLog::GetSingleton()->Print(
-      //  "size = %d", g.sendAnimationEvent.handlers.size());
-
       for (auto& h : g.sendAnimationEvent.handlers) {
         auto& perThread = h.perThread[owningThread];
         PrepareContext(perThread, ClearStorage::Yes);
 
-        auto jsSelf = NativeValueCasts::NativeObjectToJsObject(
-          std::make_shared<CallNative::Object>(
-            CallNative::Object("ObjectReference", self)));
-
-        perThread.context.SetProperty("self", jsSelf);
+        perThread.context.SetProperty("selfId", (double)selfId);
         perThread.context.SetProperty("animEventName", animEventName);
 
         h.enter.Call({ JsValue::Undefined(), perThread.context });
-
+        
         animEventName =
           (std::string)perThread.context.GetProperty("animEventName");
       }

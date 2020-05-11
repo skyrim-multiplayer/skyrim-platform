@@ -83,7 +83,7 @@ static void example_listener_on_enter(GumInvocationListener* listener,
         break;
 
       std::string str = *animEventName;
-      EventsApi::SendAnimationEventEnter(refr, str);
+      EventsApi::SendAnimationEventEnter(formId, str);
       if (str != *animEventName) {
         auto fs = const_cast<RE::BSFixedString*>(
           &StringHolder::ThreadSingleton()[str]);

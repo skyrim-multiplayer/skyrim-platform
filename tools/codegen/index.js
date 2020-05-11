@@ -24,7 +24,7 @@ export declare let storage: any;
 
 export declare namespace SendAnimationEventHook {
     class Context {
-        self: ObjectReference;
+        selfId: number;
         animEventName: string;
 
         storage: Map<string, any>;
