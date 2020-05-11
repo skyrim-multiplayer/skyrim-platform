@@ -111,11 +111,12 @@ json FunctionToJson(const char* typeName, RE::BSScript::IFunction* f,
   }
 
   std::stringstream ss;
-  ss << GetNativeFunctionAddr::Run(*f).fn;
-  res["address"] = ss.str();
+  auto funcInfo = GetNativeFunctionAddr::Run(*f);
+  ss << funcInfo.fn;
+  res["offset"] = ss.str();
 
-  res["useLongSignature"] = GetNativeFunctionAddr::Run(*f).useLongSignature;
-  res["isLatent"] = GetNativeFunctionAddr::Run(*f).isLatent;
+  res["useLongSignature"] = funcInfo.useLongSignature;
+  res["isLatent"] = funcInfo.isLatent;
   return res;
 }
 
