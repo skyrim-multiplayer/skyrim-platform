@@ -96,11 +96,9 @@ let dumpFunction = (className, f, isGlobal) => {
     output += tab + `${isGlobal ? 'static ' : ''}${prettify(funcName, ''.toLowerCase)}`;
     output += `(`;
     f.arguments.forEach((arg, i) => {
-        if(funcName.toLowerCase() === "setmotiontype" && i === 0){
-            output += `${arg.name}: MotionType`;
-            return;
-        }
-        output += `${arg.name}: ${parseReturnValue(arg.type)}`;
+        let isSetMotioTypeFistArg = funcName.toLowerCase() === "setmotiontype" && i === 0;
+        let argType = isSetMotioTypeFistArg ? "MotionType" : parseReturnValue(arg.type);
+        output += `${arg.name}: ${argType}`;
         if (i !== f.arguments.length - 1) {
             output += `, `;
         }
