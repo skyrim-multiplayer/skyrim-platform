@@ -7,7 +7,7 @@ let prettify = (name, f = ''.toUpperCase) => {
         : c + name.slice(1);
 };
 
-const p = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Output\\FunctionsDump.txt';
+const p = 'E:\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Output\\FunctionsDump.txt';
 const source = JSON.parse(fs.readFileSync(p));
 const tab = '    ';
 const ignored = ['TESModPlatform.Add', 'Math'];
@@ -98,9 +98,6 @@ let dumpFunction = (className, f, isGlobal) => {
     f.arguments.forEach((arg, i) => {
         if(funcName.toLowerCase() === "setmotiontype" && i === 0){
             output += `${arg.name}: MotionType`;
-            if (i !== f.arguments.length - 1) {
-                output += `, `;
-            }
             return;
         }
         output += `${arg.name}: ${parseReturnValue(arg.type)}`;
