@@ -16,7 +16,7 @@ extern TaskQueue g_taskQueue;
 
 struct EventsGlobalState
 {
-  typedef std::map<std::string, std::vector<JsValue>> Callbacks;
+  using Callbacks = std::map<std::string, std::vector<JsValue>>;
   Callbacks callbacks;
   Callbacks callbacksOnce;
 
