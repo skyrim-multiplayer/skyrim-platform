@@ -17,6 +17,7 @@ extern TaskQueue g_taskQueue;
 struct EventsGlobalState
 {
   std::map<std::string, std::vector<JsValue>> callbacks;
+  std::vector<JsValue> callbacksOnce;
 
   class Handler
   {
@@ -57,6 +58,14 @@ struct SendAnimationEventTag
 void EventsApi::SendEvent(const char* eventName,
                           const std::vector<JsValue>& arguments)
 {
+  if (!strcmp(eventName, "once")) {
+    for (auto& f : g.callbacksOnce) {
+      f.Call(arguments);
+    }
+    g.callbacksOnce.clear();
+    return;
+  }
+
   for (auto& f : g.callbacks[eventName])
     f.Call(arguments);
 }
@@ -187,12 +196,14 @@ JsValue EventsApi::On(const JsFunctionArguments& args)
   auto eventName = args[1].ToString();
   auto callback = args[2];
 
-  std::set<std::string> events = { "tick", "update" };
+  std::set<std::string> events = { "tick", "update", "once" };
 
   if (events.count(eventName) == 0)
     throw InvalidArgumentException("eventName", eventName);
 
-  g.callbacks[eventName].push_back(callback);
+  bool isOnce = eventName == "once";
+  isOnce ? g.callbacksOnce.push_back(callback)
+         : g.callbacks[eventName].push_back(callback);
 
   return JsValue::Undefined();
 }
