@@ -28,6 +28,9 @@
 
 #include <skse64/GameReferences.h>
 
+#include "NativeValueCasts.h"
+#include <RE/PlayerCharacter.h>
+
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
 
@@ -230,12 +233,38 @@ void OnPapyrusUpdate(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId)
   g_nativeCallRequirements.vm = vm;
   PushJsTick(true);
   g_nativeCallRequirements.gameThrQ->Update();
+
+  g_pool
+    .push([=](int) {
+      JsValue exports = JsValue::Object();
+      CallNativeApi::Register(exports,
+                              [] { return g_nativeCallRequirements; });
+
+      float x = RE::PlayerCharacter::GetSingleton()->GetPositionX();
+      float y = RE::PlayerCharacter::GetSingleton()->GetPositionY();
+      float z = RE::PlayerCharacter::GetSingleton()->GetPositionZ();
+
+      auto ac = exports.GetProperty("callNative")
+                  .Call({ JsValue::Undefined(), "game", "findRandomActor",
+                          JsValue::Undefined(), x, y, z, 1000 });
+
+      auto acNative = NativeValueCasts::JsObjectToNativeObject(ac);
+      if (acNative && acNative->GetNativeObjectPtr()) {
+        auto addr = GetNthVTableElement(acNative->GetNativeObjectPtr(), 0xa6);
+
+        //RE::ConsoleLog::GetSingleton()->Print(
+       //   "!!! %d", int(addr - REL::Module::BaseAddr()));
+      }
+    })
+    .wait();
+
   g_nativeCallRequirements.stackId = (RE::VMStackID)~0;
   g_nativeCallRequirements.vm = nullptr;
 
-  auto addr =
-    GetNthVTableElement(const_cast<PlayerCharacter*>(*g_thePlayer), 0xa6);
-  //RE::ConsoleLog::GetSingleton()->Print("%d",
+  /*auto addr =
+    GetNthVTableElement(const_cast<PlayerCharacter*>(*g_thePlayer), 0xa6);*/
+
+  // RE::ConsoleLog::GetSingleton()->Print("%d",
   //                                      int(addr - REL::Module::BaseAddr()));
 }
 
