@@ -194,6 +194,13 @@ void PushJsTick(bool gameFunctionsAvailable)
   g_pool.push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
 }
 
+size_t GetNthVTableElement(void* obj, size_t idx)
+{
+  using VTable = size_t*;
+  auto vtable = *(VTable*)obj;
+  return vtable[idx];
+}
+
 void OnUpdate()
 {
   PushJsTick(false);
@@ -225,6 +232,11 @@ void OnPapyrusUpdate(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId)
   g_nativeCallRequirements.gameThrQ->Update();
   g_nativeCallRequirements.stackId = (RE::VMStackID)~0;
   g_nativeCallRequirements.vm = nullptr;
+
+  auto addr =
+    GetNthVTableElement(const_cast<PlayerCharacter*>(*g_thePlayer), 0xa6);
+  //RE::ConsoleLog::GetSingleton()->Print("%d",
+  //                                      int(addr - REL::Module::BaseAddr()));
 }
 
 extern "C" {

@@ -14,6 +14,7 @@
 #include <RE/ConsoleLog.h>
 #include <RE/TESObjectREFR.h>
 
+#include <sstream>
 #include <windows.h>
 
 typedef struct _ExampleListener ExampleListener;
@@ -26,7 +27,8 @@ struct _ExampleListener
 
 enum _ExampleHookId
 {
-  HOOK_SEND_ANIMATION_EVENT
+  HOOK_SEND_ANIMATION_EVENT,
+  DRAW_SHEATHE_WEAPON
 };
 
 static void example_listener_iface_init(gpointer g_iface, gpointer iface_data);
@@ -48,8 +50,10 @@ void SetupFridaHooks()
   interceptor = gum_interceptor_obtain();
   listener = (GumInvocationListener*)g_object_new(EXAMPLE_TYPE_LISTENER, NULL);
 
+  int r;
+
   gum_interceptor_begin_transaction(interceptor);
-  auto r = gum_interceptor_attach(
+  r = gum_interceptor_attach(
     interceptor, (void*)(REL::Module::BaseAddr() + 6353472), listener,
     GSIZE_TO_POINTER(HOOK_SEND_ANIMATION_EVENT));
 
@@ -58,6 +62,17 @@ void SetupFridaHooks()
     sprintf_s(buf, "Interceptor failed with %d", int(r));
     MessageBox(0, buf, "Error", MB_ICONERROR);
   }
+
+  gum_interceptor_attach(interceptor,
+                         (void*)(REL::Module::BaseAddr() + 7141008), listener,
+                         GSIZE_TO_POINTER(DRAW_SHEATHE_WEAPON));
+
+  if (GUM_ATTACH_OK != r) {
+    char buf[1025];
+    sprintf_s(buf, "Interceptor failed with %d", int(r));
+    MessageBox(0, buf, "Error", MB_ICONERROR);
+  }
+
   gum_interceptor_end_transaction(interceptor);
 }
 
@@ -68,6 +83,15 @@ static void example_listener_on_enter(GumInvocationListener* listener,
   auto hook_id = gum_invocation_context_get_listener_function_data(ic);
 
   switch ((size_t)hook_id) {
+    case DRAW_SHEATHE_WEAPON: {
+
+      auto draw = (uint8_t*)gum_invocation_context_get_nth_argument(ic, 1);
+      std::stringstream ss;
+      ss << std::hex << *draw;
+      auto s = ss.str();
+      RE::ConsoleLog::GetSingleton()->Print("draw %s", s.data());
+      break;
+    }
     case HOOK_SEND_ANIMATION_EVENT:
       auto _ic = (_GumInvocationContext*)ic;
       auto refr = _ic->cpu_context->rcx
