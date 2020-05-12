@@ -112,7 +112,7 @@ static void example_listener_on_enter(GumInvocationListener* listener,
       auto falseValue = gpointer(*byte ? draw - 1 : draw);
       auto trueValue = gpointer(*byte ? draw : draw + 1);
 
-      auto mode = TESModPlatform::GetWeapDrawnMode(refr);
+      auto mode = TESModPlatform::GetWeapDrawnMode(formId);
       if (mode == TESModPlatform::WEAP_DRAWN_MODE_ALWAYS_TRUE) {
         gum_invocation_context_replace_nth_argument(ic, 1, trueValue);
       } else if (mode == TESModPlatform::WEAP_DRAWN_MODE_ALWAYS_FALSE) {
@@ -127,7 +127,7 @@ static void example_listener_on_enter(GumInvocationListener* listener,
 
       auto draw = (uint32_t*)gum_invocation_context_get_nth_argument(ic, 1);
 
-      auto mode = TESModPlatform::GetWeapDrawnMode(refr);
+      auto mode = TESModPlatform::GetWeapDrawnMode(formId);
       if (mode == TESModPlatform::WEAP_DRAWN_MODE_ALWAYS_TRUE) {
         gum_invocation_context_replace_nth_argument(ic, 1, gpointer(1));
       } else if (mode == TESModPlatform::WEAP_DRAWN_MODE_ALWAYS_FALSE) {

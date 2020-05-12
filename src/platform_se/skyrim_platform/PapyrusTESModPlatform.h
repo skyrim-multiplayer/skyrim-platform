@@ -36,7 +36,7 @@ void SetWeaponDrawnMode(RE::BSScript::IVirtualMachine* vm,
                         RE::VMStackID stackId, RE::StaticFunctionTag*,
                         RE::Actor* actor, SInt32 weapDrawnMode);
 
-int GetWeapDrawnMode(RE::Actor* actor); // Threadsafe
+int GetWeapDrawnMode(uint32_t actorId); // Threadsafe
 
 void Update();
 uint64_t GetNumPapyrusUpdates();

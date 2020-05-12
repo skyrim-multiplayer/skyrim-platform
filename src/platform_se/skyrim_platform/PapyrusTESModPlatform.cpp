@@ -5,10 +5,9 @@
 #include <RE/BSScript/NativeFunction.h>
 #include <RE/ConsoleLog.h>
 #include <RE/SkyrimVM.h>
-#include <map>
 #include <mutex>
-#include <optional>
 #include <skse64/GameReferences.h>
+#include <unordered_map>
 
 namespace TESModPlatform {
 bool papyrusUpdateAllowed = false;
@@ -16,15 +15,9 @@ bool vmCallAllowed = true;
 std::function<void(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId)>
   onPapyrusUpdate = nullptr;
 uint64_t numPapyrusUpdates = 0;
-
-struct WeapDrawnMode
-{
-  int value = WEAP_DRAWN_MODE_DEFAULT;
-};
-
 struct
 {
-  std::map<std::pair<uint32_t, RE::Actor*>, WeapDrawnMode> weapDrawnMode;
+  std::unordered_map<uint32_t, int> weapDrawnMode;
   std::recursive_mutex m;
 } share;
 
@@ -103,33 +96,16 @@ void TESModPlatform::SetWeaponDrawnMode(RE::BSScript::IVirtualMachine* vm,
       weapDrawnMode > WEAP_DRAWN_MODE_MAX)
     return;
 
-  std::optional<bool> setWeapDrawnTask;
-
-  {
-    std::lock_guard l(share.m);
-    auto& v = share.weapDrawnMode[{ actor->formID, actor }].value;
-    if (v != weapDrawnMode) {
-      v = weapDrawnMode;
-
-      if (weapDrawnMode == WEAP_DRAWN_MODE_ALWAYS_TRUE)
-        setWeapDrawnTask = true;
-      else if (weapDrawnMode == WEAP_DRAWN_MODE_ALWAYS_FALSE)
-        setWeapDrawnTask = false;
-    }
-  }
-
-  if (setWeapDrawnTask.has_value())
-    actor->DrawWeaponMagicHands(*setWeapDrawnTask);
+  std::lock_guard l(share.m);
+  share.weapDrawnMode[actor->formID] = weapDrawnMode;
 }
 
-int TESModPlatform::GetWeapDrawnMode(RE::Actor* actor)
+int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
 {
-  if (!actor)
-    return WEAP_DRAWN_MODE_DEFAULT;
   std::lock_guard l(share.m);
-  auto it = share.weapDrawnMode.find({ actor->formID, actor });
+  auto it = share.weapDrawnMode.find(actorId);
   return it == share.weapDrawnMode.end() ? WEAP_DRAWN_MODE_DEFAULT
-                                         : it->second.value;
+                                         : it->second;
 }
 
 void TESModPlatform::Update()
