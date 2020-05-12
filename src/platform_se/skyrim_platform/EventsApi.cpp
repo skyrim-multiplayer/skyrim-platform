@@ -68,7 +68,7 @@ void CallCalbacks(const char* eventName, const std::vector<JsValue>& arguments,
   }
 
   if (isOnce)
-    callbacks.clear();
+    callbacks[eventName].clear();
 }
 }
 
