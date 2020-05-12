@@ -7,7 +7,7 @@ let prettify = (name, f = ''.toUpperCase) => {
         : c + name.slice(1);
 };
 
-const p = 'E:\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Output\\FunctionsDump.txt';
+const p = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Output\\FunctionsDump.txt';
 const source = JSON.parse(fs.readFileSync(p));
 const tab = '    ';
 const ignored = ['TESModPlatform.Add', 'Math'];
