@@ -20,7 +20,7 @@ namespace {
 struct State
 {
   std::set<std::string> dumpedClasses;
-  bool isBaseClassDamped = false;
+  bool isDumpingEmptyTypesAllowed = true;
 };
 
 std::string RawTypeToString(RE::BSScript::TypeInfo::RawType raw)
@@ -170,14 +170,13 @@ void DumpType(State& state, RE::BSScript::ObjectTypeInfo* type, json& out)
   if (auto parent = type->GetParent()) {
     jType["parent"] = parent->GetName();
   }
-  if (!state.isBaseClassDamped || !globalFuncs.empty() || !memberFuncs.empty())
+  if (state.isDumpingEmptyTypesAllowed || !globalFuncs.empty() ||
+      !memberFuncs.empty())
     out["types"][name] = jType;
 }
 }
 
-// the game crashes if it is inside a function
-// problems with the destruction of the object
-RE::BSScrapArray<RE::BSFixedString> objNames;
+thread_local RE::BSScrapArray<RE::BSFixedString> g_typeNames;
 
 void DumpFunctions::Run()
 {
@@ -191,9 +190,9 @@ void DumpFunctions::Run()
     State state;
 
     std::map<std::string, RE::BSScript::ObjectTypeInfo*> types;
-    vm->GetScriptObjectsWithATypeID(objNames);
+    vm->GetScriptObjectsWithATypeID(g_typeNames);
 
-    for (auto& papirusCalss : objNames) {
+    for (auto& papirusCalss : g_typeNames) {
       RE::VMTypeID typeID;
       RE::BSTSmartPointer<RE::BSScript::ObjectTypeInfo> obj;
 
@@ -206,7 +205,7 @@ void DumpFunctions::Run()
       DumpType(state, type, out);
     }
 
-    state.isBaseClassDamped = true;
+    state.isDumpingEmptyTypesAllowed = false;
     types.clear();
 
     for (auto& [name, type] : vm->objectTypeMap)
