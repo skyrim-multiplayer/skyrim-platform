@@ -60,15 +60,15 @@ namespace {
 void CallCalbacks(const char* eventName, const std::vector<JsValue>& arguments,
                   bool isOnce = false)
 {
-  EventsGlobalState::Callbacks& callbacks =
+  EventsGlobalState::Callbacks callbacks =
     isOnce ? g.callbacksOnce : g.callbacks;
+
+  if (isOnce)
+    g.callbacksOnce[eventName].clear();
 
   for (auto& f : callbacks[eventName]) {
     f.Call(arguments);
   }
-
-  if (isOnce)
-    callbacks[eventName].clear();
 }
 }
 
