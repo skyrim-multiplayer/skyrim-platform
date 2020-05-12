@@ -201,7 +201,7 @@ JsValue EventsApi::GetHooks()
 }
 
 namespace {
-JsValue RunCallbacks(const JsFunctionArguments& args, bool isOnce = false)
+JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
 {
   auto eventName = args[1].ToString();
   auto callback = args[2];
@@ -219,10 +219,10 @@ JsValue RunCallbacks(const JsFunctionArguments& args, bool isOnce = false)
 
 JsValue EventsApi::On(const JsFunctionArguments& args)
 {
-  return RunCallbacks(args);
+  return AddCallback(args);
 }
 
 JsValue EventsApi::Once(const JsFunctionArguments& args)
 {
-  return RunCallbacks(args, true);
+  return AddCallback(args, true);
 }
