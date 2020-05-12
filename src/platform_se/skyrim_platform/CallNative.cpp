@@ -73,7 +73,8 @@ public:
 namespace {
 CallNative::AnySafe VariableToAnySafe(
   const RE::BSScript::Variable& r,
-  std::optional<const char*> className = std::nullopt)
+  std::optional<const char*> className = std::nullopt,
+  bool intIsUnsigned = false)
 {
   using namespace CallNative;
 
@@ -113,7 +114,7 @@ CallNative::AnySafe VariableToAnySafe(
     case RE::BSScript::TypeInfo::RawType::kString:
       return (std::string)r.GetString().data();
     case RE::BSScript::TypeInfo::RawType::kInt:
-      return (double)r.GetSInt();
+      return (double)(intIsUnsigned ? r.GetUInt() : r.GetSInt());
     case RE::BSScript::TypeInfo::RawType::kFloat:
       return (double)r.GetFloat();
     case RE::BSScript::TypeInfo::RawType::kBool:
@@ -258,8 +259,8 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
   }
 
   auto& r = stackIterator->second->returnValue;
-
-  return VariableToAnySafe(r, funcInfo->GetReturnType().className);
+  return VariableToAnySafe(r, funcInfo->GetReturnType().className,
+                           false);
 }
 
 namespace {

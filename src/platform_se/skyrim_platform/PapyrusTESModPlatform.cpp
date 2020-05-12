@@ -1,4 +1,5 @@
 #include "PapyrusTESModPlatform.h"
+#include "CallNativeApi.h"
 #include "NullPointerException.h"
 #include <RE/BSScript/IFunctionArguments.h>
 #include <RE/BSScript/IStackCallbackFunctor.h>
@@ -8,6 +9,8 @@
 #include <mutex>
 #include <skse64/GameReferences.h>
 #include <unordered_map>
+
+extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 
 namespace TESModPlatform {
 bool papyrusUpdateAllowed = false;
@@ -95,6 +98,22 @@ void TESModPlatform::SetWeaponDrawnMode(RE::BSScript::IVirtualMachine* vm,
   if (!actor || weapDrawnMode < WEAP_DRAWN_MODE_MIN ||
       weapDrawnMode > WEAP_DRAWN_MODE_MAX)
     return;
+
+  if (g_nativeCallRequirements.gameThrQ) {
+    auto formId = actor->formID;
+    g_nativeCallRequirements.gameThrQ->AddTask([=] {
+      if (LookupFormByID(formId) != (void*)actor)
+        return;
+
+      if (!actor->IsWeaponDrawn() &&
+          weapDrawnMode == WEAP_DRAWN_MODE_ALWAYS_TRUE)
+        actor->DrawWeaponMagicHands(true);
+
+      if (actor->IsWeaponDrawn() &&
+          weapDrawnMode == WEAP_DRAWN_MODE_ALWAYS_FALSE)
+        actor->DrawWeaponMagicHands(false);
+    });
+  }
 
   std::lock_guard l(share.m);
   share.weapDrawnMode[actor->formID] = weapDrawnMode;
