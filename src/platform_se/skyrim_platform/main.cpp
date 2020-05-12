@@ -152,9 +152,6 @@ void JsTick(bool gameFunctionsAvailable)
     }
 
     EventsApi::SendEvent(gameFunctionsAvailable ? "update" : "tick", {});
-    
-    if(gameFunctionsAvailable)
-        EventsApi::SendEvent("once", {});
 
   } catch (std::exception& e) {
     if (auto console = RE::ConsoleLog::GetSingleton()) {
