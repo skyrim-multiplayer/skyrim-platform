@@ -23,13 +23,13 @@ export declare function getJsMemoryUsage(): number;
 export declare let storage: any;
 
 export enum MotionType {
-    Motion_Dynamic = 1,
-    Motion_SphereInertia = 2, 
-    Motion_BoxInertia = 3,
-    Motion_Keyframed = 4,
-    Motion_Fixed = 5,
-    Motion_ThinBoxInertia = 6,
-    Motion_Character = 7
+    Dynamic = 1,
+    SphereInertia = 2, 
+    BoxInertia = 3,
+    Keyframed = 4,
+    Fixed = 5,
+    ThinBoxInertia = 6,
+    Character = 7
 };
 
 export declare namespace SendAnimationEventHook {
