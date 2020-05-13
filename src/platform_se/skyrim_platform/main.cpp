@@ -27,6 +27,7 @@
 #include <thread>
 
 #include <skse64/GameReferences.h>
+#include <skse64\ObScript.h>
 
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0

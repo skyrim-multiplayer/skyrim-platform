@@ -10,6 +10,8 @@
 #include <unordered_map>
 
 #include <RE\ConsoleLog.h>
+#include <skse64\ObScript.h>
+#include <skse64_common\SafeWrite.h>
 
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
@@ -46,6 +48,17 @@ struct EventsGlobalState
     std::set<DWORD> inProgressThreads;
     std::vector<Handler> handlers;
   };
+
+  struct ConsoleComand
+  {
+    std::string originalName = "";
+    std::string longName = "";
+    std::string shortName = "";
+    uint16_t numArgs = 0;
+    JsValue execute = JsValue::Undefined();
+  };
+
+  std::map<std::string, ConsoleComand> replacedConsoleCmd;
   HookInfo sendAnimationEvent;
 } g;
 
@@ -225,4 +238,91 @@ JsValue EventsApi::On(const JsFunctionArguments& args)
 JsValue EventsApi::Once(const JsFunctionArguments& args)
 {
   return AddCallback(args, true);
+}
+#include <GameForms.h>
+
+namespace {
+bool ConsoleComand_Execute(const ObScriptParam* paramInfo,
+                           ScriptData* scriptData, TESObjectREFR* thisObj,
+                           TESObjectREFR* containingObj, Script* scriptObj,
+                           ScriptLocals* locals, double& result,
+                           UInt32& opcodeOffsetPtr)
+{
+  auto log = RE::ConsoleLog::GetSingleton();
+   
+  if (log && scriptObj) {
+      auto formId = std::to_string(scriptObj->formID);
+      auto type = std::to_string(scriptObj->formType);
+      std::string f = "scriptObj: formId = " + formId +" type = "+ type;
+      log->Print(f.data());
+  }
+  log->Print("end");
+  return true;
+}
+
+EventsGlobalState::ConsoleComand FillCmdInfo(const JsFunctionArguments& args) noexcept 
+{
+  EventsGlobalState::ConsoleComand cmd;
+
+ 
+    auto comandName = args[1].ToString();
+    auto comandNewLongName = args[2].ToString();
+    auto comandNewShortName = args[3].ToString();
+    double numArgs = 0;
+    JsValue func = args[5];
+
+    try {
+    numArgs =
+      std::get<double>(NativeValueCasts::JsValueToNativeValue(args[4]));
+    } catch (const std::bad_variant_access& f) {
+      std::string what = f.what();
+      throw std::runtime_error("ReplaceConsoleCommand " + what);
+    }
+
+    if (numArgs < 0 || numArgs > 5) 
+      throw std::runtime_error(
+        "ReplaceConsoleCommand argument count parameter too large ");
+    auto log = RE::ConsoleLog::GetSingleton();
+      cmd.originalName = comandName;
+      cmd.longName = comandNewLongName;
+      cmd.shortName = comandNewShortName;
+      cmd.numArgs = (uint16_t)numArgs;
+      cmd.execute = func;
+ 
+  return cmd;
+}
+}
+
+JsValue EventsApi::ReplaceConsoleCommand(const JsFunctionArguments& args)
+{
+  bool success = false;
+  auto cmdInfo = FillCmdInfo(args);
+  g.replacedConsoleCmd[cmdInfo.originalName] = cmdInfo;
+  auto& myIter = g.replacedConsoleCmd[cmdInfo.originalName];
+  auto log = RE::ConsoleLog::GetSingleton();
+    
+  for (ObScriptCommand* iter = g_firstConsoleCommand;
+       iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
+       ++iter) {
+    if (iter->longName == myIter.originalName) {
+      success = true;
+
+      ObScriptCommand cmd = *iter;
+      
+      cmd.longName = myIter.longName.data();
+      cmd.shortName = myIter.shortName.data();
+      cmd.helpText = "";
+      cmd.needsParent = 0;
+      cmd.numParams = myIter.numArgs;
+      cmd.execute = ConsoleComand_Execute;
+      cmd.flags = 0;
+
+      SafeWriteBuf((uintptr_t)iter, &cmd, sizeof(cmd));
+    }
+  }
+
+  if (!success)
+    throw std::runtime_error("wrong ConsoleCommand name to replace");
+
+  return JsValue::Undefined();
 }
