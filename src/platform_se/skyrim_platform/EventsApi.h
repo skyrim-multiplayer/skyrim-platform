@@ -7,7 +7,6 @@ class SKSETaskInterface;
 namespace EventsApi {
 JsValue On(const JsFunctionArguments& args);
 JsValue Once(const JsFunctionArguments& args);
-JsValue ReplaceConsoleCommand(const JsFunctionArguments& args);
 
 void SendEvent(const char* eventName, const std::vector<JsValue>& arguments);
 void Clear();
@@ -23,7 +22,6 @@ inline void Register(JsValue& exports)
 {
   exports.SetProperty("on", JsValue::Function(On));
   exports.SetProperty("once", JsValue::Function(Once));
-  exports.SetProperty("replaceConsoleCommand", JsValue::Function(ReplaceConsoleCommand));
   exports.SetProperty("hooks", GetHooks());
 }
 }

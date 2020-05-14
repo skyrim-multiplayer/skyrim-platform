@@ -1,5 +1,6 @@
 #pragma once
 #include "TaskQueue.h"
+#include <ChakraCore.h>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -35,6 +36,8 @@ public:
     ArrayBuffer = 10,
     TypedArray = 11,
     DataView = 12,
+    Getter = 20,
+    Setter = 30
   };
 
   using FunctionT = std::function<JsValue(const JsFunctionArguments& args)>;
@@ -79,6 +82,10 @@ public:
   Type GetType() const;
   JsExternalObjectBase* GetExternalData() const;
   void SetProperty(const JsValue& key, const JsValue& value);
+
+  void static SetProperty(JsValueRef object, const char* propertyName,
+                          const FunctionT& arg, Type type);
+
   JsValue GetProperty(const JsValue& key) const;
 
   JsValue Call(const std::vector<JsValue>& arguments) const

@@ -1,7 +1,6 @@
 #include "JsEngine.h"
 
 #include "NullPointerException.h"
-#include <ChakraCore.h>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -325,6 +324,35 @@ void JsValue::SetProperty(const JsValue& key, const JsValue& newValue)
     default:
       throw std::runtime_error("SetProperty: Bad key type (" +
                                std::to_string(int(key.GetType())) + ")");
+  }
+}
+
+void JsValue::SetProperty(JsValueRef object, const char* propertyName,
+                          const FunctionT& arg, Type type)
+{
+  if (type != Type::Getter && type != Type::Setter)
+    throw std::runtime_error(
+      "incorrect type for the setter or getter parameter");
+
+  JsValueRef getterOrSetter;
+  JsValueRef descriptor;
+  JsValueRef getOrSet;
+  JsValueRef key;
+  bool result;
+  JsCreateObject(&descriptor);
+  JsCreateFunction(NativeFunctionImpl, new FunctionT(arg), &getterOrSetter);
+
+  type == Type::Getter ? JsCreateString("get", 3, &getOrSet)
+                       : JsCreateString("set", 3, &getOrSet);
+
+  JsObjectSetProperty(descriptor, getOrSet, getterOrSetter, true);
+
+  JsCreateString(propertyName, strlen(propertyName), &key);
+  JsObjectDefineProperty(object, key, descriptor, &result);
+
+  if (!result) {
+    std::string res = "Error creating getter for object";
+    throw std::runtime_error(res.data());
   }
 }
 
