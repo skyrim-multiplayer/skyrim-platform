@@ -18,9 +18,20 @@ let output = `
 export declare function printConsole(...arguments: any[]): void;
 export declare function writeScript(scriptName: string, src: string): void;
 export declare function on(eventName: string, callback: any): void;
+export declare function once(eventName: string, callback: any): void;
 export declare function callNative(className: string, functionName: string, self?: object, ...args: any): any;
 export declare function getJsMemoryUsage(): number;
 export declare let storage: any;
+
+export enum MotionType {
+    Dynamic = 1,
+    SphereInertia = 2, 
+    BoxInertia = 3,
+    Keyframed = 4,
+    Fixed = 5,
+    ThinBoxInertia = 6,
+    Character = 7
+};
 
 export declare namespace SendAnimationEventHook {
     class Context {
@@ -86,7 +97,9 @@ let dumpFunction = (className, f, isGlobal) => {
     output += tab + `${isGlobal ? 'static ' : ''}${prettify(funcName, ''.toLowerCase)}`;
     output += `(`;
     f.arguments.forEach((arg, i) => {
-        output += `${arg.name}: ${parseReturnValue(arg.type)}`;
+        let isSetMotioTypeFistArg = funcName.toLowerCase() === "setmotiontype" && i === 0;
+        let argType = isSetMotioTypeFistArg ? "MotionType" : parseReturnValue(arg.type);
+        output += `${arg.name}: ${argType}`;
         if (i !== f.arguments.length - 1) {
             output += `, `;
         }
