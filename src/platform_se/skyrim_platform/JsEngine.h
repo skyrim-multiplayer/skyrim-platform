@@ -36,8 +36,6 @@ public:
     ArrayBuffer = 10,
     TypedArray = 11,
     DataView = 12,
-    Getter = 20,
-    Setter = 30
   };
 
   using FunctionT = std::function<JsValue(const JsFunctionArguments& args)>;
@@ -83,8 +81,8 @@ public:
   JsExternalObjectBase* GetExternalData() const;
   void SetProperty(const JsValue& key, const JsValue& value);
 
-  void static SetProperty(JsValueRef object, const char* propertyName,
-                          const FunctionT& arg, Type type);
+  void SetProperty(const char* propertyName, const FunctionT& getter,
+                   const FunctionT& setter);
 
   JsValue GetProperty(const JsValue& key) const;
 

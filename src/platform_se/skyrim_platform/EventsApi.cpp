@@ -47,7 +47,6 @@ struct EventsGlobalState
     std::vector<Handler> handlers;
   };
 
-  std::map<std::string, ConsoleApi::ConsoleComand> replacedConsoleCmd;
   HookInfo sendAnimationEvent;
 } g;
 
