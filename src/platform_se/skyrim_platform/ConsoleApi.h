@@ -10,12 +10,14 @@ struct ConsoleComand
   std::string shortName = "";
   uint16_t numArgs = 0;
   ObScript_Execute execute;
-  JsValue jsExecute = JsValue::Undefined();
+  JsValue jsExecute =
+    JsValue::Function([](const JsFunctionArguments& args) { return JsValue::Bool(true); });
   ObScriptCommand* myIter;
+  ObScriptCommand myOriginalData;
 };
 static std::map<std::string, ConsoleComand> replacedConsoleCmd;
 JsValue PrintConsole(const JsFunctionArguments& args);
-
+void Clear();
 JsValue GetConsoleHookApi();
 JsValue FindConsoleComand(const JsFunctionArguments& args);
 
@@ -24,7 +26,6 @@ inline void Register(JsValue& exports)
   exports.SetProperty("printConsole", JsValue::Function(PrintConsole));
   exports.SetProperty("tesConsole", GetConsoleHookApi());
 }
-JsValue ReplaceConsoleCommand(const JsFunctionArguments& args);
 
 ConsoleComand FillCmdInfo(ObScriptCommand* cmd);
 

@@ -38,6 +38,29 @@ JsValue ConsoleApi::PrintConsole(const JsFunctionArguments& args)
   return JsValue::Undefined();
 }
 
+void ConsoleApi::Clear()
+{
+  auto log = RE::ConsoleLog::GetSingleton();
+  for (ObScriptCommand* iter = g_firstConsoleCommand;
+       iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
+       ++iter) {
+
+    if (!iter || !iter->longName || !log)
+      continue;
+
+    for (auto& item : replacedConsoleCmd) {
+      if (!stricmp(item.second.longName.data(), iter->longName) ||
+          !stricmp(item.second.shortName.data(), iter->shortName)) {
+        log->Print(iter->longName);
+        SafeWriteBuf((uintptr_t)iter, &(item.second.myOriginalData),
+                     sizeof(item.second.myOriginalData));
+        break;
+      }
+    }
+  }
+  replacedConsoleCmd.clear();
+}
+
 JsValue ConsoleApi::GetConsoleHookApi()
 {
   JsValue cmdHookApi = JsValue::Object();
@@ -57,6 +80,7 @@ ConsoleApi::ConsoleComand ConsoleApi::FillCmdInfo(ObScriptCommand* cmd)
     cmdInfo.numArgs = cmd->numParams;
     cmdInfo.execute = cmd->execute;
     cmdInfo.myIter = cmd;
+    cmdInfo.myOriginalData = *cmd;
   }
   return cmdInfo;
 }
@@ -66,11 +90,12 @@ JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
   auto comandName = args[1].ToString();
   auto log = RE::ConsoleLog::GetSingleton();
   auto replacedCmd = &replacedConsoleCmd;
-  ObScriptCommand* cmdIter = g_firstConsoleCommand;
+
   for (ObScriptCommand* iter = g_firstConsoleCommand;
        iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
        ++iter) {
-    if (!stricmp(iter->longName, comandName.data())) {
+    if (!stricmp(iter->longName, comandName.data()) ||
+        !stricmp(iter->shortName, comandName.data())) {
       JsValue obj = JsValue::Object();
       (*replacedCmd)[comandName] = FillCmdInfo(iter);
       obj.SetProperty(
@@ -123,12 +148,7 @@ JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
 
       obj.SetProperty(
         "execute",
-        [=](const JsFunctionArguments& args) {
-          return JsValue::Function([=](const JsFunctionArguments& args) {
-            (*replacedCmd)[comandName].jsExecute.Call({});
-            return JsValue::Undefined();
-          });
-        },
+        [](const JsFunctionArguments& args) { return JsValue::Undefined(); },
         [=](const JsFunctionArguments& args) {
           (*replacedCmd)[comandName].jsExecute = args[1];
           return JsValue::Undefined();
@@ -149,31 +169,34 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        Script* scriptObj, ScriptLocals* locals,
                                        double& result, UInt32& opcodeOffsetPtr)
 {
-  auto log = RE::ConsoleLog::GetSingleton();
+  if (!scriptObj)
+    throw NullPointerException("scriptObj");
 
-  if (log && scriptObj) {
-    auto func = [&](int) {
-      try {
-        RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
-        auto comand = script->GetCommand();
-        std::string f = "start exequte comand: " + comand;
-        log->Print(f.data());
-        const char* data = comand.data();
-        for (auto& item : replacedConsoleCmd) {
-          if (!stricmp(item.second.longName.data(), data) ||
-              !stricmp(item.second.shortName.data(), data)) {
-            log->Print("waiting for a response from the server");
-            item.second.jsExecute.Call({});
-          }
+  RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
+  std::string comandName = script->GetCommand();
+  std::pair<const std::string, ConsoleComand>* iterator = nullptr;
+
+  auto func = [&](int) {
+    try {
+      for (auto& item : replacedConsoleCmd) {
+        if (!stricmp(item.second.longName.data(), comandName.data()) ||
+            !stricmp(item.second.shortName.data(), comandName.data())) {
+
+          if (item.second.jsExecute.Call({}))
+            iterator = &item;
         }
-      } catch (std::exception& e) {
-        std::string what = e.what();
-        g_taskQueue.AddTask([what] {
-          throw std::runtime_error(what + " (in ConsoleComand_Execute)");
-        });
       }
-    };
-    g_pool.push(func).wait();
-    return true;
-  }
+    } catch (std::exception& e) {
+      std::string what = e.what();
+      g_taskQueue.AddTask([what] {
+        throw std::runtime_error(what + " (in ConsoleComand_Execute)");
+      });
+    }
+  };
+
+  g_pool.push(func).wait();
+  if (iterator)
+    iterator->second.execute(paramInfo, scriptData, thisObj, containingObj,
+                             scriptObj, locals, result, opcodeOffsetPtr);
+  return true;
 }
