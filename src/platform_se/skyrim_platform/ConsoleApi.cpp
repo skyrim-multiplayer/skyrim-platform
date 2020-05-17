@@ -85,11 +85,86 @@ ConsoleApi::ConsoleComand ConsoleApi::FillCmdInfo(ObScriptCommand* cmd)
   return cmdInfo;
 }
 
+namespace {
+
+void CreateLongNameProperty(
+  JsValue& obj,
+  std::pair<const std::string, ConsoleApi::ConsoleComand>* replaced)
+{
+  obj.SetProperty(
+    "longName",
+    [=](const JsFunctionArguments& args) {
+      return JsValue::String((*replaced).second.myIter->longName);
+    },
+    [=](const JsFunctionArguments& args) {
+      ObScriptCommand cmd = *(*replaced).second.myIter;
+      (*replaced).second.longName = args[1].ToString();
+      cmd.longName = (*replaced).second.longName.c_str();
+      SafeWriteBuf((uintptr_t)(*replaced).second.myIter, &cmd, sizeof(cmd));
+      return JsValue::Undefined();
+    });
+}
+
+void CreateShortNameProperty(
+  JsValue& obj,
+  std::pair<const std::string, ConsoleApi::ConsoleComand>* replaced)
+{
+  obj.SetProperty(
+    "shortName",
+    [=](const JsFunctionArguments& args) {
+      return JsValue::String(replaced->second.myIter->shortName);
+    },
+    [=](const JsFunctionArguments& args) {
+      ObScriptCommand cmd = *replaced->second.myIter;
+      replaced->second.shortName = args[1].ToString();
+      cmd.shortName = replaced->second.shortName.c_str();
+      SafeWriteBuf((uintptr_t)replaced->second.myIter, &cmd, sizeof(cmd));
+      return JsValue::Undefined();
+    });
+}
+
+void CreateNumArgsProperty(
+  JsValue& obj,
+  std::pair<const std::string, ConsoleApi::ConsoleComand>* replaced)
+{
+  obj.SetProperty(
+    "numArgs",
+    [=](const JsFunctionArguments& args) {
+      return JsValue::Double(replaced->second.myIter->numParams);
+    },
+    [=](const JsFunctionArguments& args) {
+      ObScriptCommand cmd = *replaced->second.myIter;
+      try {
+        replaced->second.numArgs =
+          std::get<double>(NativeValueCasts::JsValueToNativeValue(args[1]));
+      } catch (const std::bad_variant_access& f) {
+        std::string what = f.what();
+        throw std::runtime_error("try to get numArgs " + what);
+      }
+      cmd.numParams = replaced->second.numArgs;
+      SafeWriteBuf((uintptr_t)replaced->second.myIter, &cmd, sizeof(cmd));
+      return JsValue::Undefined();
+    });
+}
+
+void CreateExecuteProperty(
+  JsValue& obj,
+  std::pair<const std::string, ConsoleApi::ConsoleComand>* replaced)
+{
+  obj.SetProperty(
+    "execute",
+    [](const JsFunctionArguments& args) { return JsValue::Undefined(); },
+    [=](const JsFunctionArguments& args) {
+      replaced->second.jsExecute = args[1];
+      return JsValue::Undefined();
+    });
+}
+}
+
 JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
 {
   auto comandName = args[1].ToString();
   auto log = RE::ConsoleLog::GetSingleton();
-  auto replacedCmd = &replacedConsoleCmd;
 
   for (ObScriptCommand* iter = g_firstConsoleCommand;
        iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
@@ -97,62 +172,15 @@ JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
     if (!stricmp(iter->longName, comandName.data()) ||
         !stricmp(iter->shortName, comandName.data())) {
       JsValue obj = JsValue::Object();
-      (*replacedCmd)[comandName] = FillCmdInfo(iter);
-      obj.SetProperty(
-        "longName",
-        [=](const JsFunctionArguments& args) {
-          return JsValue::String((*replacedCmd)[comandName].myIter->longName);
-        },
-        [=](const JsFunctionArguments& args) {
-          auto& replaced = (*replacedCmd)[comandName];
-          ObScriptCommand cmd = *replaced.myIter;
-          replaced.longName = args[1].ToString();
-          cmd.longName = replaced.longName.c_str();
-          SafeWriteBuf((uintptr_t)replaced.myIter, &cmd, sizeof(cmd));
-          return JsValue::Undefined();
-        });
 
-      obj.SetProperty(
-        "shortName",
-        [=](const JsFunctionArguments& args) {
-          return JsValue::String((*replacedCmd)[comandName].myIter->shortName);
-        },
-        [=](const JsFunctionArguments& args) {
-          auto& replaced = (*replacedCmd)[comandName];
-          ObScriptCommand cmd = *replaced.myIter;
-          replaced.shortName = args[1].ToString();
-          cmd.shortName = replaced.shortName.c_str();
-          SafeWriteBuf((uintptr_t)replaced.myIter, &cmd, sizeof(cmd));
-          return JsValue::Undefined();
-        });
+      replacedConsoleCmd[comandName] = FillCmdInfo(iter);
+      auto replaced = replacedConsoleCmd.find(comandName);
 
-      obj.SetProperty(
-        "numArgs",
-        [=](const JsFunctionArguments& args) {
-          return JsValue::Double((*replacedCmd)[comandName].myIter->numParams);
-        },
-        [=](const JsFunctionArguments& args) {
-          auto& replaced = (*replacedCmd)[comandName];
-          ObScriptCommand cmd = *replaced.myIter;
-          try {
-            replaced.numArgs = std::get<double>(
-              NativeValueCasts::JsValueToNativeValue(args[1]));
-          } catch (const std::bad_variant_access& f) {
-            std::string what = f.what();
-            throw std::runtime_error("try to get numArgs " + what);
-          }
-          cmd.numParams = replaced.numArgs;
-          SafeWriteBuf((uintptr_t)replaced.myIter, &cmd, sizeof(cmd));
-          return JsValue::Undefined();
-        });
+      CreateLongNameProperty(obj, &(*replaced));
+      CreateShortNameProperty(obj, &(*replaced));
+      CreateNumArgsProperty(obj, &(*replaced));
+      CreateExecuteProperty(obj, &(*replaced));
 
-      obj.SetProperty(
-        "execute",
-        [](const JsFunctionArguments& args) { return JsValue::Undefined(); },
-        [=](const JsFunctionArguments& args) {
-          (*replacedCmd)[comandName].jsExecute = args[1];
-          return JsValue::Undefined();
-        });
       ObScriptCommand cmd = *iter;
       cmd.execute = ConsoleApi::ConsoleComand_Execute;
       SafeWriteBuf((uintptr_t)iter, &cmd, sizeof(cmd));
@@ -175,13 +203,25 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
   RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
   std::string comandName = script->GetCommand();
   std::pair<const std::string, ConsoleComand>* iterator = nullptr;
+  
+  auto log = RE::ConsoleLog::GetSingleton();
+
+  //script->data->GetChunk()->AsString()->GetString().c_str();
+  /* log->Print("start");
+  std::string resS = script->data->GetChunk()->AsString()->GetString();
+   int  resI = script->data->GetChunk()->AsInteger()->GetInteger();
+  auto res = "res = " + resS + std::to_string(resI);
+  log->Print(res.data());*/
 
   auto func = [&](int) {
     try {
       for (auto& item : replacedConsoleCmd) {
         if (!stricmp(item.second.longName.data(), comandName.data()) ||
             !stricmp(item.second.shortName.data(), comandName.data())) {
-
+          
+            
+          //log->Print(param.paramData);
+          //log->Print("end");
           if (item.second.jsExecute.Call({}))
             iterator = &item;
         }
