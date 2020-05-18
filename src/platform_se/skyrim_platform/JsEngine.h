@@ -1,6 +1,5 @@
 #pragma once
 #include "TaskQueue.h"
-#include <ChakraCore.h>
 #include <cstdint>
 #include <memory>
 #include <optional>

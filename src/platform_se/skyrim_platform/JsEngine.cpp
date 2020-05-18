@@ -1,6 +1,6 @@
 #include "JsEngine.h"
-
 #include "NullPointerException.h"
+#include <ChakraCore.h>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -333,11 +333,12 @@ void JsValue::SetProperty(const char* propertyName, const FunctionT& getter,
   JsValue descriptor = JsValue::Object();
   JsValue propName = JsValue::String(propertyName);
   if (getter)
-  descriptor.SetProperty("get", JsValue::Function(getter));
+    descriptor.SetProperty("get", JsValue::Function(getter));
   if (setter)
-  descriptor.SetProperty("set", JsValue::Function(setter));
+    descriptor.SetProperty("set", JsValue::Function(setter));
   bool result;
-  SafeCall(F(JsObjectDefineProperty), this->value, propName.value, descriptor.value, &result);
+  SafeCall(F(JsObjectDefineProperty), this->value, propName.value,
+           descriptor.value, &result);
 }
 
 JsValue JsValue::GetProperty(const JsValue& key) const

@@ -8,8 +8,8 @@
 #include <set>
 #include <unordered_map>
 
-#include <RE\ConsoleLog.h>
 #include "ConsoleApi.h"
+#include <RE\ConsoleLog.h>
 
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
