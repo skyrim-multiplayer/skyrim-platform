@@ -258,6 +258,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
   }
 
   auto& r = stackIterator->second->returnValue;
+
   return VariableToAnySafe(r, funcInfo->GetReturnType().className);
 }
 

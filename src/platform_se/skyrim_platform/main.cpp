@@ -28,9 +28,6 @@
 
 #include <skse64/GameReferences.h>
 
-#include "NativeValueCasts.h"
-#include <RE/PlayerCharacter.h>
-
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
 
@@ -195,13 +192,6 @@ void JsTick(bool gameFunctionsAvailable)
 void PushJsTick(bool gameFunctionsAvailable)
 {
   g_pool.push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
-}
-
-size_t GetNthVTableElement(void* obj, size_t idx)
-{
-  using VTable = size_t*;
-  auto vtable = *(VTable*)obj;
-  return vtable[idx];
 }
 
 void OnUpdate()
