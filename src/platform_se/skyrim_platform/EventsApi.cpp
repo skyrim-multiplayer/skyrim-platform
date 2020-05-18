@@ -8,7 +8,6 @@
 #include <set>
 #include <unordered_map>
 
-#include "ConsoleApi.h"
 #include <RE\ConsoleLog.h>
 
 extern ctpl::thread_pool g_pool;
@@ -46,7 +45,6 @@ struct EventsGlobalState
     std::set<DWORD> inProgressThreads;
     std::vector<Handler> handlers;
   };
-
   HookInfo sendAnimationEvent;
 } g;
 
