@@ -10,8 +10,7 @@ struct ConsoleComand
   std::string shortName = "";
   uint16_t numArgs = 0;
   ObScript_Execute execute;
-  JsValue jsExecute =
-    JsValue::Function([](const JsFunctionArguments& args) { return JsValue::Bool(true); });
+  JsValue jsExecute;
   ObScriptCommand* myIter;
   ObScriptCommand myOriginalData;
 };

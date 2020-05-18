@@ -81,6 +81,8 @@ ConsoleApi::ConsoleComand ConsoleApi::FillCmdInfo(ObScriptCommand* cmd)
     cmdInfo.execute = cmd->execute;
     cmdInfo.myIter = cmd;
     cmdInfo.myOriginalData = *cmd;
+    cmdInfo.jsExecute = JsValue::Function(
+      [](const JsFunctionArguments& args) { return JsValue::Bool(true); });
   }
   return cmdInfo;
 }
@@ -203,25 +205,13 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
   RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
   std::string comandName = script->GetCommand();
   std::pair<const std::string, ConsoleComand>* iterator = nullptr;
-  
-  auto log = RE::ConsoleLog::GetSingleton();
-
-  //script->data->GetChunk()->AsString()->GetString().c_str();
-  /* log->Print("start");
-  std::string resS = script->data->GetChunk()->AsString()->GetString();
-   int  resI = script->data->GetChunk()->AsInteger()->GetInteger();
-  auto res = "res = " + resS + std::to_string(resI);
-  log->Print(res.data());*/
 
   auto func = [&](int) {
     try {
       for (auto& item : replacedConsoleCmd) {
         if (!stricmp(item.second.longName.data(), comandName.data()) ||
             !stricmp(item.second.shortName.data(), comandName.data())) {
-          
-            
-          //log->Print(param.paramData);
-          //log->Print("end");
+
           if (item.second.jsExecute.Call({}))
             iterator = &item;
         }
