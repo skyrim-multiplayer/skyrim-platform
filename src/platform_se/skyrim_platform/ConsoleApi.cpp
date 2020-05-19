@@ -5,7 +5,7 @@
 #include <RE/Script.h>
 #include <ctpl\ctpl_stl.h>
 #include <skse64_common\SafeWrite.h>
-
+#include <vector>
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
 
@@ -37,6 +37,14 @@ JsValue ConsoleApi::PrintConsole(const JsFunctionArguments& args)
 
   return JsValue::Undefined();
 }
+namespace {
+bool IsCommandNameEqual(const std::string& first, const std::string& second)
+{
+  return first.size() > 0 && second.size() > 0
+    ? stricmp(first.data(), second.data()) == 0
+    : false;
+}
+}
 
 void ConsoleApi::Clear()
 {
@@ -47,10 +55,10 @@ void ConsoleApi::Clear()
 
     if (!iter || !iter->longName || !log)
       continue;
-
+    std::string commandName = iter->longName;
     for (auto& item : replacedConsoleCmd) {
-      if (!stricmp(item.second.longName.data(), iter->longName) ||
-          !stricmp(item.second.shortName.data(), iter->shortName)) {
+      if (IsCommandNameEqual(item.second.longName, commandName) ||
+          IsCommandNameEqual(item.second.longName, commandName)) {
         log->Print(iter->longName);
         SafeWriteBuf((uintptr_t)iter, &(item.second.myOriginalData),
                      sizeof(item.second.myOriginalData));
@@ -163,19 +171,16 @@ void CreateExecuteProperty(
 }
 }
 
-JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
+bool ConsoleApi::FindComand(ObScriptCommand* iter,
+                            const std::string& comandName, uint32_t end,
+                            JsValue& res)
 {
-  auto comandName = args[1].ToString();
-  auto log = RE::ConsoleLog::GetSingleton();
-
-  for (ObScriptCommand* iter = g_firstConsoleCommand;
-       iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
-       ++iter) {
-    if (!stricmp(iter->longName, comandName.data()) ||
-        !stricmp(iter->shortName, comandName.data())) {
+  for (ObScriptCommand* _iter = iter; _iter->opcode < end; ++_iter) {
+    if (IsCommandNameEqual(_iter->longName, comandName) ||
+        IsCommandNameEqual(_iter->shortName, comandName)) {
       JsValue obj = JsValue::Object();
 
-      replacedConsoleCmd[comandName] = FillCmdInfo(iter);
+      replacedConsoleCmd[comandName] = FillCmdInfo(_iter);
       auto replaced = replacedConsoleCmd.find(comandName);
 
       CreateLongNameProperty(obj, &(*replaced));
@@ -183,15 +188,57 @@ JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
       CreateNumArgsProperty(obj, &(*replaced));
       CreateExecuteProperty(obj, &(*replaced));
 
-      ObScriptCommand cmd = *iter;
+      ObScriptCommand cmd = *_iter;
       cmd.execute = ConsoleApi::ConsoleComand_Execute;
-      SafeWriteBuf((uintptr_t)iter, &cmd, sizeof(cmd));
-      return obj;
+      SafeWriteBuf((uintptr_t)_iter, &cmd, sizeof(cmd));
+      res = obj;
+      return true;
     }
   }
-  return JsValue::Null();
+  return false;
+}
+JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
+{
+  auto comandName = args[1].ToString();
+  auto log = RE::ConsoleLog::GetSingleton();
+  log->Print("find start %s", comandName.data());
+
+  JsValue var = JsValue::Null();
+
+  bool res =
+    FindComand(g_firstConsoleCommand, comandName,
+               kObScript_NumConsoleCommands + kObScript_ConsoleOpBase, var);
+
+  if (!res)
+    FindComand(g_firstObScriptCommand, comandName,
+               kObScript_NumObScriptCommands + kObScript_ScriptOpBase, var);
+
+  return var;
 }
 
+namespace {
+void GetArgs(std::string comand, std::vector<std::string>& res)
+{
+  static const std::string delimiterComa = ".";
+  static const std::string delimiterSpase = " ";
+  size_t pos = comand.find(delimiterComa);
+  std::string token;
+
+  if (pos != std::string::npos) {
+    comand.erase(0, pos + delimiterComa.length());
+  }
+
+  while ((pos = comand.find(delimiterSpase)) != std::string::npos) {
+    token = comand.substr(0, pos);
+    res.push_back(token);
+    comand.erase(0, pos + delimiterSpase.length());
+  }
+
+  if (comand.size() >= 1)
+    res.push_back(comand);
+}
+}
+#include <RE/TESObjectREFR.h>
 bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        ScriptData* scriptData,
                                        TESObjectREFR* thisObj,
@@ -201,18 +248,29 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
 {
   if (!scriptObj)
     throw NullPointerException("scriptObj");
-
+  auto log = RE::ConsoleLog::GetSingleton();
   RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
-  std::string comandName = script->GetCommand();
+  std::string comand = script->GetCommand();
+  std::vector<std::string> params;
+  GetArgs(comand, params);
   std::pair<const std::string, ConsoleComand>* iterator = nullptr;
 
   auto func = [&](int) {
     try {
       for (auto& item : replacedConsoleCmd) {
-        if (!stricmp(item.second.longName.data(), comandName.data()) ||
-            !stricmp(item.second.shortName.data(), comandName.data())) {
+        if (IsCommandNameEqual(item.second.longName, params.at(0)) ||
+            IsCommandNameEqual(item.second.shortName, params.at(0))) {
 
-          if (item.second.jsExecute.Call({}))
+          std::vector<JsValue> args;
+          auto refr = reinterpret_cast<RE::TESObjectREFR*>(thisObj);
+          args.push_back(JsValue::Undefined());
+          args.push_back(JsValue::String(std::to_string(refr->formID)));
+
+          for (size_t i = 1; i < params.size(); ++i) {
+            args.push_back(JsValue::String(params[i]));
+          }
+
+          if (item.second.jsExecute.Call(args))
             iterator = &item;
         }
       }

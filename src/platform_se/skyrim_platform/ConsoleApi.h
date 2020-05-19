@@ -1,7 +1,7 @@
 #pragma once
 #include "JsEngine.h"
-#include <skse64\ObScript.h>
 #include <map>
+#include <skse64\ObScript.h>
 
 namespace ConsoleApi {
 struct ConsoleComand
@@ -18,6 +18,8 @@ static std::map<std::string, ConsoleComand> replacedConsoleCmd;
 JsValue PrintConsole(const JsFunctionArguments& args);
 void Clear();
 JsValue GetConsoleHookApi();
+bool FindComand(ObScriptCommand* iter,
+                               const std::string& comandName, uint32_t end, JsValue& res);
 JsValue FindConsoleComand(const JsFunctionArguments& args);
 
 inline void Register(JsValue& exports)
