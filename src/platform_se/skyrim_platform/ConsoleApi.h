@@ -16,6 +16,7 @@ struct ConsoleComand
 };
 static std::map<std::string, ConsoleComand> replacedConsoleCmd;
 JsValue PrintConsole(const JsFunctionArguments& args);
+void ClearComandHooks(ObScriptCommand* iter, uint32_t end);
 void Clear();
 JsValue GetConsoleHookApi();
 bool FindComand(ObScriptCommand* iter,

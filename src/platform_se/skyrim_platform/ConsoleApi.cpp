@@ -45,27 +45,35 @@ bool IsCommandNameEqual(const std::string& first, const std::string& second)
     : false;
 }
 }
-
-void ConsoleApi::Clear()
+void ConsoleApi::ClearComandHooks(ObScriptCommand* iter, uint32_t end)
 {
-  auto log = RE::ConsoleLog::GetSingleton();
-  for (ObScriptCommand* iter = g_firstConsoleCommand;
-       iter->opcode < kObScript_NumConsoleCommands + kObScript_ConsoleOpBase;
-       ++iter) {
+  for (ObScriptCommand* _iter = iter; _iter->opcode < end; ++_iter) {
 
-    if (!iter || !iter->longName || !log)
+    if (!_iter || !_iter->longName)
       continue;
-    std::string commandName = iter->longName;
+
+    std::string commandName = _iter->longName;
     for (auto& item : replacedConsoleCmd) {
       if (IsCommandNameEqual(item.second.longName, commandName) ||
           IsCommandNameEqual(item.second.longName, commandName)) {
-        log->Print(iter->longName);
-        SafeWriteBuf((uintptr_t)iter, &(item.second.myOriginalData),
+
+        SafeWriteBuf((uintptr_t)_iter, &(item.second.myOriginalData),
                      sizeof(item.second.myOriginalData));
         break;
       }
     }
   }
+}
+
+void ConsoleApi::Clear()
+{
+  auto log = RE::ConsoleLog::GetSingleton();
+
+  ClearComandHooks(g_firstConsoleCommand,
+                   kObScript_NumConsoleCommands + kObScript_ConsoleOpBase);
+  ClearComandHooks(g_firstObScriptCommand,
+                   kObScript_NumObScriptCommands + kObScript_ScriptOpBase);
+
   replacedConsoleCmd.clear();
 }
 
@@ -200,9 +208,6 @@ bool ConsoleApi::FindComand(ObScriptCommand* iter,
 JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
 {
   auto comandName = args[1].ToString();
-  auto log = RE::ConsoleLog::GetSingleton();
-  log->Print("find start %s", comandName.data());
-
   JsValue var = JsValue::Null();
 
   bool res =
@@ -238,6 +243,7 @@ void GetArgs(std::string comand, std::vector<std::string>& res)
     res.push_back(comand);
 }
 }
+
 #include <RE/TESObjectREFR.h>
 bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        ScriptData* scriptData,
@@ -248,7 +254,7 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
 {
   if (!scriptObj)
     throw NullPointerException("scriptObj");
-  auto log = RE::ConsoleLog::GetSingleton();
+
   RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
   std::string comand = script->GetCommand();
   std::vector<std::string> params;
