@@ -45,34 +45,13 @@ bool IsCommandNameEqual(const std::string& first, const std::string& second)
     : false;
 }
 }
-void ConsoleApi::ClearComandHooks(ObScriptCommand* iter, uint32_t end)
-{
-  for (ObScriptCommand* _iter = iter; _iter->opcode < end; ++_iter) {
-
-    if (!_iter || !_iter->longName)
-      continue;
-
-    std::string commandName = _iter->longName;
-    for (auto& item : replacedConsoleCmd) {
-      if (IsCommandNameEqual(item.second.longName, commandName) ||
-          IsCommandNameEqual(item.second.longName, commandName)) {
-
-        SafeWriteBuf((uintptr_t)_iter, &(item.second.myOriginalData),
-                     sizeof(item.second.myOriginalData));
-        break;
-      }
-    }
-  }
-}
 
 void ConsoleApi::Clear()
 {
-  auto log = RE::ConsoleLog::GetSingleton();
-
-  ClearComandHooks(g_firstConsoleCommand,
-                   kObScript_NumConsoleCommands + kObScript_ConsoleOpBase);
-  ClearComandHooks(g_firstObScriptCommand,
-                   kObScript_NumObScriptCommands + kObScript_ScriptOpBase);
+  for (auto& item : replacedConsoleCmd) {
+    SafeWriteBuf((uintptr_t)item.second.myIter, &(item.second.myOriginalData),
+                 sizeof(item.second.myOriginalData));
+  }
 
   replacedConsoleCmd.clear();
 }
