@@ -224,6 +224,8 @@ void GetArgs(std::string comand, std::vector<std::string>& res)
 }
 
 #include <RE/TESObjectREFR.h>
+#include <cstdlib>
+#include <iostream>
 bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        ScriptData* scriptData,
                                        TESObjectREFR* thisObj,
@@ -249,10 +251,13 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
           std::vector<JsValue> args;
           auto refr = reinterpret_cast<RE::TESObjectREFR*>(thisObj);
           args.push_back(JsValue::Undefined());
-          args.push_back(JsValue::String(std::to_string(refr->formID)));
+          args.push_back(JsValue::Double((double)refr->formID));
 
           for (size_t i = 1; i < params.size(); ++i) {
-            args.push_back(JsValue::String(params[i]));
+            char* p;
+            auto n = strtoul(params[i].c_str(), &p, i == 1 ? 16 : 10);
+            *p != 0 ? args.push_back(JsValue::String(params[i]))
+                    : args.push_back(JsValue::Double((double)n));
           }
 
           if (item.second.jsExecute.Call(args))
