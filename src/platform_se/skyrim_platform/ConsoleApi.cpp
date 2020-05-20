@@ -1,11 +1,15 @@
 #include "ConsoleApi.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
+#include <RE/CommandTable.h>
 #include <RE/ConsoleLog.h>
 #include <RE/Script.h>
+#include <RE/TESObjectREFR.h>
+#include <cstdlib>
 #include <ctpl\ctpl_stl.h>
 #include <skse64_common\SafeWrite.h>
 #include <vector>
+
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
 
@@ -221,11 +225,34 @@ void GetArgs(std::string comand, std::vector<std::string>& res)
   if (comand.size() >= 1)
     res.push_back(comand);
 }
+JsValue GetTypedArg(RE::SCRIPT_PARAM_TYPE type, std::string param)
+{
+  switch (type) {
+    case RE::SCRIPT_PARAM_TYPE::kStage:
+    case RE::SCRIPT_PARAM_TYPE::kInt:
+    case RE::SCRIPT_PARAM_TYPE::kFloat:
+      return JsValue::Double((double)strtoll(param.c_str(), nullptr, 10));
+
+    case RE::SCRIPT_PARAM_TYPE::kCoontainerRef:
+    case RE::SCRIPT_PARAM_TYPE::kInvObjectOrFormList:
+    case RE::SCRIPT_PARAM_TYPE::kSpellItem:
+    case RE::SCRIPT_PARAM_TYPE::kInventoryObject:
+    case RE::SCRIPT_PARAM_TYPE::kPerk:
+    case RE::SCRIPT_PARAM_TYPE::kActorBase:
+    case RE::SCRIPT_PARAM_TYPE::kObjectRef:
+      return JsValue::Double((double)strtoll(param.c_str(), nullptr, 16));
+
+    case RE::SCRIPT_PARAM_TYPE::kAxis:
+    case RE::SCRIPT_PARAM_TYPE::kActorValue:
+    case RE::SCRIPT_PARAM_TYPE::kChar:
+      return JsValue::String(param);
+
+    default:
+      return JsValue::Undefined();
+  }
+}
 }
 
-#include <RE/TESObjectREFR.h>
-#include <cstdlib>
-#include <iostream>
 bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        ScriptData* scriptData,
                                        TESObjectREFR* thisObj,
@@ -233,17 +260,18 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                                        Script* scriptObj, ScriptLocals* locals,
                                        double& result, UInt32& opcodeOffsetPtr)
 {
-  if (!scriptObj)
-    throw NullPointerException("scriptObj");
-
-  RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
-  std::string comand = script->GetCommand();
-  std::vector<std::string> params;
-  GetArgs(comand, params);
   std::pair<const std::string, ConsoleComand>* iterator = nullptr;
 
   auto func = [&](int) {
     try {
+      if (!scriptObj)
+        throw NullPointerException("scriptObj");
+
+      RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
+      std::string comand = script->GetCommand();
+      std::vector<std::string> params;
+      GetArgs(comand, params);
+
       for (auto& item : replacedConsoleCmd) {
         if (IsCommandNameEqual(item.second.longName, params.at(0)) ||
             IsCommandNameEqual(item.second.shortName, params.at(0))) {
@@ -251,13 +279,27 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
           std::vector<JsValue> args;
           auto refr = reinterpret_cast<RE::TESObjectREFR*>(thisObj);
           args.push_back(JsValue::Undefined());
-          args.push_back(JsValue::Double((double)refr->formID));
+          if (refr)
+            args.push_back(JsValue::Double((double)refr->formID));
 
+          auto log = RE::ConsoleLog::GetSingleton();
+          auto param =
+            reinterpret_cast<const RE::SCRIPT_PARAMETER*>(paramInfo);
           for (size_t i = 1; i < params.size(); ++i) {
-            char* p;
-            auto n = strtoul(params[i].c_str(), &p, i == 1 ? 16 : 10);
-            *p != 0 ? args.push_back(JsValue::String(params[i]))
-                    : args.push_back(JsValue::Double((double)n));
+            if (!param)
+              break;
+
+            JsValue arg = GetTypedArg(param[i - 1].paramType, params[i]);
+
+            if (arg.GetType() == JsValue::Type::Undefined) {
+              auto err = " typeId " +
+                std::to_string((uint32_t)param[i - 1].paramType) +
+                " not yet supported";
+
+             throw std::runtime_error(err.data());
+            }
+
+            args.push_back(arg);
           }
 
           if (item.second.jsExecute.Call(args))
