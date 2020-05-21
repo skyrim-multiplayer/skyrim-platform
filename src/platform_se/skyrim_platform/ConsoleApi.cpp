@@ -157,10 +157,15 @@ void CreateExecuteProperty(JsValue& obj, ConsoleComand* replaced)
 }
 
 namespace {
-std::pair<std::string, std::vector<std::string>> GetArgs(std::string comand)
+struct ParseCommandResult
 {
-  std::pair<std::string, std::vector<std::string>> res;
+  std::string commandName = "";
+  std::vector<std::string> params;
+};
 
+ParseCommandResult ParseCommand(std::string comand)
+{
+  ParseCommandResult res;
   static const std::string delimiterComa = ".";
   static const std::string delimiterSpase = " ";
   std::string token;
@@ -173,12 +178,13 @@ std::pair<std::string, std::vector<std::string>> GetArgs(std::string comand)
   while ((pos = comand.find(delimiterSpase)) != std::string::npos) {
 
     token = comand.substr(0, pos);
-    res.first.empty() ? res.first = token : res.second.push_back(token);
+    res.commandName.empty() ? res.commandName = token
+                            : res.params.push_back(token);
     comand.erase(0, pos + delimiterSpase.length());
   }
 
   if (comand.size() >= 1)
-    res.second.push_back(comand);
+    res.params.push_back(comand);
 
   return res;
 }
@@ -245,12 +251,13 @@ bool ConsoleComand_Execute(const ObScriptParam* paramInfo,
       RE::Script* script = reinterpret_cast<RE::Script*>(scriptObj);
 
       std::string comand = script->GetCommand();
-      auto params = GetArgs(comand);
+      auto parseCommandResult = ParseCommand(comand);
 
       for (auto& item : replacedConsoleCmd) {
-        if (AreCommandNamesValidAndEqual(item.second.longName, params.first) ||
+        if (AreCommandNamesValidAndEqual(item.second.longName,
+                                         parseCommandResult.commandName) ||
             AreCommandNamesValidAndEqual(item.second.shortName,
-                                         params.first)) {
+                                         parseCommandResult.commandName)) {
 
           std::vector<JsValue> args;
           args.push_back(JsValue::Undefined());
@@ -261,11 +268,12 @@ bool ConsoleComand_Execute(const ObScriptParam* paramInfo,
           auto param =
             reinterpret_cast<const RE::SCRIPT_PARAMETER*>(paramInfo);
 
-          for (size_t i = 0; i < params.second.size(); ++i) {
+          for (size_t i = 0; i < parseCommandResult.params.size(); ++i) {
             if (!param)
               break;
 
-            JsValue arg = GetTypedArg(param[i].paramType, params.second[i]);
+            JsValue arg =
+              GetTypedArg(param[i].paramType, parseCommandResult.params[i]);
 
             if (arg.GetType() == JsValue::Type::Undefined) {
               auto err = " typeId " +
