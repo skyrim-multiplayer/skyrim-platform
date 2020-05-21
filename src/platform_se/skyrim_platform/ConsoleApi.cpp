@@ -296,10 +296,9 @@ bool ConsoleComand_Execute(const ObScriptParam* paramInfo,
                              scriptObj, locals, result, opcodeOffsetPtr);
   return true;
 }
-}
 
-JsValue ConsoleApi::FindComand(ObScriptCommand* iter, size_t size,
-                               const std::string& comandName)
+JsValue FindComand(ObScriptCommand* iter, size_t size,
+                   const std::string& comandName)
 {
   for (size_t i = 0; i < size; ++i) {
     ObScriptCommand* _iter = &iter[i];
@@ -323,6 +322,7 @@ JsValue ConsoleApi::FindComand(ObScriptCommand* iter, size_t size,
     }
   }
   return JsValue::Null();
+}
 }
 
 JsValue ConsoleApi::FindConsoleComand(const JsFunctionArguments& args)
