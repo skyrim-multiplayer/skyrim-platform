@@ -24,12 +24,12 @@ export declare function getJsMemoryUsage(): number;
 export declare let storage: any;
 
 declare class ConsoleComand {
-    longName:string;
-    shortName:string;
-    numArgs:number;
-    execute:(...arguments: any[]) => boolean;
+    longName: string;
+    shortName: string;
+    numArgs: number;
+    execute: (...arguments: any[]) => boolean;
 }
-export declare function findConsoleCommand(cmdName:string): ConsoleComand;
+export declare function findConsoleCommand(cmdName: string): ConsoleComand;
 
 export enum MotionType {
     Dynamic = 1,

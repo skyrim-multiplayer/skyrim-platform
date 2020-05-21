@@ -6,10 +6,10 @@
 #include <RE/TESForm.h>
 #include <RE/TESObjectREFR.h>
 #include <cstdlib>
-#include <ctpl\ctpl_stl.h>
+#include <ctpl/ctpl_stl.h>
 #include <map>
-#include <skse64\ObScript.h>
-#include <skse64_common\SafeWrite.h>
+#include <skse64/ObScript.h>
+#include <skse64_common/SafeWrite.h>
 #include <vector>
 
 extern ctpl::thread_pool g_pool;
@@ -18,8 +18,8 @@ extern TaskQueue g_taskQueue;
 namespace {
 struct ConsoleComand
 {
-  std::string longName = "";
-  std::string shortName = "";
+  std::string longName;
+  std::string shortName;
   uint16_t numArgs = 0;
   ObScript_Execute execute;
   JsValue jsExecute;
@@ -159,7 +159,7 @@ void CreateExecuteProperty(JsValue& obj, ConsoleComand* replaced)
 namespace {
 struct ParseCommandResult
 {
-  std::string commandName = "";
+  std::string commandName;
   std::vector<std::string> params;
 };
 
