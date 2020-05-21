@@ -4,6 +4,7 @@
 #include <RE/CommandTable.h>
 #include <RE/ConsoleLog.h>
 #include <RE/Script.h>
+#include <RE/TESForm.h>
 #include <RE/TESObjectREFR.h>
 #include <cstdlib>
 #include <ctpl\ctpl_stl.h>
@@ -225,6 +226,37 @@ void GetArgs(std::string comand, std::vector<std::string>& res)
   if (comand.size() >= 1)
     res.push_back(comand);
 }
+
+enum class ObjectType
+{
+  String,
+  Int_Hex,
+};
+
+ObjectType DetermineType(const std::string& param)
+{
+  auto id = strtoul(param.c_str(), nullptr, 16);
+  auto formByEditorId = RE::TESForm::LookupByEditorID(param);
+  auto formById = RE::TESForm::LookupByID(id);
+
+  if (formByEditorId)
+    return ObjectType::String;
+  if (formById)
+    return ObjectType::Int_Hex;
+
+  auto err = "For param: " + param + " formId and editorId was not found";
+  throw std::runtime_error(err.data());
+  return ObjectType::String;
+}
+
+JsValue GetObject(const std::string& param)
+{
+  ObjectType type = DetermineType(param);
+  return type == ObjectType::Int_Hex
+    ? JsValue::Double((double)strtoll(param.c_str(), nullptr, 16))
+    : JsValue::String(param);
+}
+
 JsValue GetTypedArg(RE::SCRIPT_PARAM_TYPE type, std::string param)
 {
   switch (type) {
@@ -246,6 +278,9 @@ JsValue GetTypedArg(RE::SCRIPT_PARAM_TYPE type, std::string param)
     case RE::SCRIPT_PARAM_TYPE::kActorValue:
     case RE::SCRIPT_PARAM_TYPE::kChar:
       return JsValue::String(param);
+
+    case RE::SCRIPT_PARAM_TYPE::kQuest:
+      return GetObject(param);
 
     default:
       return JsValue::Undefined();
@@ -296,7 +331,7 @@ bool ConsoleApi::ConsoleComand_Execute(const ObScriptParam* paramInfo,
                 std::to_string((uint32_t)param[i - 1].paramType) +
                 " not yet supported";
 
-             throw std::runtime_error(err.data());
+              throw std::runtime_error(err.data());
             }
 
             args.push_back(arg);
