@@ -1,5 +1,6 @@
 #pragma once
 #include "JsEngine.h"
+
 #include <RE/TESObjectREFR.h>
 
 class SKSETaskInterface;
