@@ -227,11 +227,8 @@ JsValue GetTypedArg(RE::SCRIPT_PARAM_TYPE type, std::string param)
     case RE::SCRIPT_PARAM_TYPE::kChar:
       return JsValue::String(param);
 
-    case RE::SCRIPT_PARAM_TYPE::kQuest:
-      return GetObject(param);
-
     default:
-      return JsValue::Undefined();
+      return GetObject(param);
   }
 }
 
