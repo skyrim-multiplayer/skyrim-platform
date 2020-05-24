@@ -258,9 +258,11 @@ bool ConsoleComand_Execute(const ObScriptParam* paramInfo,
 
           std::vector<JsValue> args;
           args.push_back(JsValue::Undefined());
+          auto refr = reinterpret_cast<RE::TESObjectREFR*>(thisObj);
 
-          if (auto refr = reinterpret_cast<RE::TESObjectREFR*>(thisObj))
-            args.push_back(JsValue::Double((double)refr->formID));
+          refr ? args.push_back(JsValue::Double((double)refr->formID))
+               : args.push_back(JsValue::Double(0));
+            
 
           auto param =
             reinterpret_cast<const RE::SCRIPT_PARAMETER*>(paramInfo);
