@@ -1,13 +1,14 @@
 let fs = require('fs');
+let path = require('path');
 
 let prettify = (name, f = ''.toUpperCase) => {
     let c = f.apply(name.charAt(0));
-    return (name.toUpperCase() === name || name.toLowerCase() === name) 
-        ? c + name.slice(1).toLowerCase() 
+    return (name.toUpperCase() === name || name.toLowerCase() === name)
+        ? c + name.slice(1).toLowerCase()
         : c + name.slice(1);
 };
 
-const p = 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition\\Data\\Platform\\Output\\FunctionsDump.txt';
+const p = path.resolve(__dirname, 'FunctionsDump.txt')
 const source = JSON.parse(fs.readFileSync(p));
 const tab = '    ';
 const ignored = ['TESModPlatform.Add', 'Math'];
@@ -33,7 +34,7 @@ export declare function findConsoleCommand(cmdName: string): ConsoleComand;
 
 export enum MotionType {
     Dynamic = 1,
-    SphereInertia = 2, 
+    SphereInertia = 2,
     BoxInertia = 3,
     Keyframed = 4,
     Fixed = 5,
@@ -73,7 +74,7 @@ let dumped = [];
 let parseReturnValue = (v) => {
     switch (v.rawType) {
         case 'Int':
-        case 'Float': 
+        case 'Float':
             return 'number';
         case 'Bool':
             return 'boolean';
@@ -133,7 +134,7 @@ let dumpType = (data) => {
 
     output += `\n// Based on ${prettify(data.name)}.pex\n`;
 
-    output += data.parent 
+    output += data.parent
         ? `export declare class ${prettify(data.name)} extends ${prettify(data.parent.name)} {\n`
         : `export declare class ${prettify(data.name)} {\n`;
 
