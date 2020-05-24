@@ -5,11 +5,12 @@
 #include "NativeObject.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
+#include <RE/ScriptEventSourceHolder.h>
+#include <RE/TESActiveEffectApplyRemoveEvent.h>
+#include <RE\ConsoleLog.h>
 #include <map>
 #include <set>
 #include <unordered_map>
-
-#include <RE\ConsoleLog.h>
 
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
@@ -201,12 +202,69 @@ JsValue EventsApi::GetHooks()
 }
 
 namespace {
+class EventSinks
+  : public RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>
+  , public RE::BSTEventSink<RE::TESLoadGameEvent>
+{
+public:
+  EventSinks()
+  {
+    auto holder = RE::ScriptEventSourceHolder::GetSingleton();
+    if (!holder)
+      throw NullPointerException("holder");
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>*>(
+        this));
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESLoadGameEvent>*>(this));
+  }
+
+private:
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESLoadGameEvent* event_,
+    RE::BSTEventSource<RE::TESLoadGameEvent>* eventSource) override
+  {
+    RE::ConsoleLog::GetSingleton()->Print("lox");
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESActiveEffectApplyRemoveEvent* event_,
+    RE::BSTEventSource<RE::TESActiveEffectApplyRemoveEvent>* eventSource)
+    override
+  {
+    RE::ConsoleLog::GetSingleton()->Print("1");
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      RE::ConsoleLog::GetSingleton()->Print("2");
+      auto activeMgef = JsValue::Undefined();
+
+      auto caster = event.caster ? NativeValueCasts::NativeObjectToJsObject(
+                                     std::make_shared<CallNative::Object>(
+                                       "ObjectReference", event.caster.get()))
+                                 : JsValue::Null();
+      auto target = event.target ? NativeValueCasts::NativeObjectToJsObject(
+                                     std::make_shared<CallNative::Object>(
+                                       "ObjectReference", event.target.get()))
+                                 : JsValue::Null();
+
+      EventsApi::SendEvent(
+        "effectStart", { JsValue::Undefined(), activeMgef, caster, target });
+      RE::ConsoleLog::GetSingleton()->Print("3");
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+};
+
 JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
 {
+  static EventSinks g_sinks;
+
   auto eventName = args[1].ToString();
   auto callback = args[2];
 
-  std::set<std::string> events = { "tick", "update" };
+  std::set<std::string> events = { "tick", "update", "effectStart" };
 
   if (events.count(eventName) == 0)
     throw InvalidArgumentException("eventName", eventName);
