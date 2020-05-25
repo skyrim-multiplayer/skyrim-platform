@@ -220,8 +220,21 @@ JsValue EventsApi::GetHooks()
   return hooks;
 }
 
-;
+struct RE::TESActivateEvent
+{
+  TESObjectREFR* target; // 00
+  TESObjectREFR* caster; // 04
+};
+
 namespace {
+
+JsValue CreateObject(std::string type, void* form)
+{
+  return form ? NativeValueCasts::NativeObjectToJsObject(
+                  std::make_shared<CallNative::Object>(type.data(), form))
+              : JsValue::Null();
+}
+
 class EventSinks
   : public RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>
   , public RE::BSTEventSink<RE::TESLoadGameEvent>
@@ -242,6 +255,8 @@ class EventSinks
   , public RE::BSTEventSink<RE::TESMoveAttachDetachEvent>
   , public RE::BSTEventSink<RE::TESObjectLoadedEvent>
   , public RE::BSTEventSink<RE::TESWaitStopEvent>
+  , public RE::BSTEventSink<RE::TESActivateEvent>
+
 {
 public:
   EventSinks()
@@ -249,6 +264,8 @@ public:
     auto holder = RE::ScriptEventSourceHolder::GetSingleton();
     if (!holder)
       throw NullPointerException("holder");
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESActivateEvent>*>(this));
 
     holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESCellFullyLoadedEvent>*>(this));
@@ -311,17 +328,30 @@ public:
 
 private:
   RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESActivateEvent* event_,
+    RE::BSTEventSource<RE::TESActivateEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto target = CreateObject("ObjectReference", event.target);
+      auto caster = CreateObject("ObjectReference", event.caster);
+
+      EventsApi::SendEvent("activate",
+                           { JsValue::Undefined(), target, caster });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
     const RE::TESMoveAttachDetachEvent* event_,
     RE::BSTEventSource<RE::TESMoveAttachDetachEvent>* eventSource) override
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto movedRef = event.movedRef
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.movedRef.get()))
-        : JsValue::Null();
+      auto movedRef = CreateObject("ObjectReference", event.movedRef.get());
       auto isCellAttached = JsValue::Bool(event.isCellAttached);
+
       EventsApi::SendEvent("moveAttachDetach",
                            { JsValue::Undefined(), movedRef, isCellAttached });
     });
@@ -350,12 +380,9 @@ private:
     auto event = *event_;
     g_taskQueue.AddTask([event] {
       auto objectForm = RE::TESForm::LookupByID(event.formID);
-      auto object = objectForm
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Form", objectForm))
-        : JsValue::Null();
-
+      auto object = CreateObject("Form", objectForm);
       auto isLoaded = JsValue::Bool(event.loaded);
+
       EventsApi::SendEvent("objectLoaded",
                            { JsValue::Undefined(), object, isLoaded });
     });
@@ -369,11 +396,8 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto lockedObject = event.lockedObject
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.lockedObject.get()))
-        : JsValue::Null();
+      auto lockedObject =
+        CreateObject("ObjectReference", event.lockedObject.get());
       EventsApi::SendEvent("lockChanged",
                            { JsValue::Undefined(), lockedObject });
     });
@@ -387,10 +411,8 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto cell = event.cell
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Cell", event.cell))
-        : JsValue::Null();
+      auto cell = CreateObject("Cell", event.cell);
+
       EventsApi::SendEvent("cellFullyLoaded", { JsValue::Undefined(), cell });
     });
 
@@ -403,12 +425,9 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto ref = event.ref ? NativeValueCasts::NativeObjectToJsObject(
-                               std::make_shared<CallNative::Object>(
-                                 "ObjectReference", event.ref.get()))
-                           : JsValue::Null();
-
+      auto ref = CreateObject("ObjectReference", event.ref.get());
       auto isGrabbed = JsValue::Bool(event.grabbed);
+
       EventsApi::SendEvent("grabRelease",
                            { JsValue::Undefined(), ref, isGrabbed });
     });
@@ -432,11 +451,7 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto subject = event.subject
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.subject.get()))
-        : JsValue::Null();
+      auto subject = CreateObject("ObjectReference", event.subject.get());
       EventsApi::SendEvent("switchRaceComplete",
                            { JsValue::Undefined(), subject });
     });
@@ -477,11 +492,9 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto objectInitialized = event.objectInitialized
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>(
-              "ObjectReference", event.objectInitialized.get()))
-        : JsValue::Null();
+      auto objectInitialized =
+        CreateObject("ObjectReference", event.objectInitialized.get());
+
       EventsApi::SendEvent("scriptInit",
                            { JsValue::Undefined(), objectInitialized });
     });
@@ -494,10 +507,7 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto object = event.object ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.object.get()))
-                                 : JsValue::Null();
+      auto object = CreateObject("ObjectReference", event.object.get());
 
       EventsApi::SendEvent("reset", { JsValue::Undefined(), object });
     });
@@ -511,15 +521,8 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto target = event.targetActor
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.targetActor.get()))
-        : JsValue::Null();
-      auto actor = event.actor ? NativeValueCasts::NativeObjectToJsObject(
-                                   std::make_shared<CallNative::Object>(
-                                     "ObjectReference", event.actor.get()))
-                               : JsValue::Null();
+      auto target = CreateObject("ObjectReference", event.targetActor.get());
+      auto actor = CreateObject("ObjectReference", event.actor.get());
 
       auto isCombat = JsValue::Bool((uint8_t)event.state &
                                     (uint8_t)RE::ACTOR_COMBAT_STATE::kCombat);
@@ -540,16 +543,10 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto actorDying = event.actorDying
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.actorDying.get()))
-        : JsValue::Null();
-      auto actorKiller = event.actorKiller
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 event.actorKiller.get()))
-        : JsValue::Null();
+      auto actorDying =
+        CreateObject("ObjectReference", event.actorDying.get());
+      auto actorKiller =
+        CreateObject("ObjectReference", event.actorKiller.get());
 
       auto dead = JsValue::Bool(event.dead);
 
@@ -566,24 +563,13 @@ private:
     auto event = *event_;
     g_taskQueue.AddTask([event] {
       auto oldContainerRef = RE::TESForm::LookupByID(event.oldContainer);
-      auto oldContainer = oldContainerRef
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 oldContainerRef))
-        : JsValue::Null();
+      auto oldContainer = CreateObject("ObjectReference", oldContainerRef);
 
       auto newContainerRef = RE::TESForm::LookupByID(event.newContainer);
-      auto newContainer = newContainerRef
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ObjectReference",
-                                                 newContainerRef))
-        : JsValue::Null();
+      auto newContainer = CreateObject("ObjectReference", newContainerRef);
 
       auto baseObjForm = RE::TESForm::LookupByID(event.baseObj);
-      auto baseObj = baseObjForm
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Form", baseObjForm))
-        : JsValue::Null();
+      auto baseObj = CreateObject("Form", baseObjForm);
 
       auto itemCount = JsValue::Double(event.itemCount);
 
@@ -600,25 +586,14 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto target = event.target ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.target.get()))
-                                 : JsValue::Null();
-      auto agressor = event.cause ? NativeValueCasts::NativeObjectToJsObject(
-                                      std::make_shared<CallNative::Object>(
-                                        "ObjectReference", event.cause.get()))
-                                  : JsValue::Null();
+      auto target = CreateObject("ObjectReference", event.target.get());
+      auto agressor = CreateObject("ObjectReference", event.cause.get());
+
       auto sourceForm = RE::TESForm::LookupByID(event.source);
-      auto source = sourceForm
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Form", sourceForm))
-        : JsValue::Null();
+      auto source = CreateObject("Form", sourceForm);
 
       auto projectileForm = RE::TESForm::LookupByID(event.projectile);
-      auto projectile = projectileForm
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Projectile", projectileForm))
-        : JsValue::Null();
+      auto projectile = CreateObject("Projectile", projectileForm);
 
       auto isPowerAttack = JsValue::Bool(
         (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kPowerAttack);
@@ -643,16 +618,10 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto actor = event.actor ? NativeValueCasts::NativeObjectToJsObject(
-                                   std::make_shared<CallNative::Object>(
-                                     "ObjectReference", event.actor.get()))
-                               : JsValue::Null();
+      auto actor = CreateObject("ObjectReference", event.actor.get());
 
       auto baseObjectForm = RE::TESForm::LookupByID(event.baseObject);
-      auto baseObject = baseObjectForm
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("Form", baseObjectForm))
-        : JsValue::Null();
+      auto baseObject = CreateObject("Form", baseObjectForm);
 
       auto equipped = JsValue::Bool(event.equipped);
 
@@ -686,20 +655,9 @@ private:
         }
       }
 
-      auto activeMgef = activeEffect
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("ActiveMagicEffect",
-                                                 activeEffect))
-        : JsValue::Null();
-
-      auto caster = event.caster ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.caster.get()))
-                                 : JsValue::Null();
-      auto target = event.target ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.target.get()))
-                                 : JsValue::Null();
+      auto activeMgef = CreateObject("ActiveMagicEffect", activeEffect);
+      auto caster = CreateObject("ObjectReference", event.caster.get());
+      auto target = CreateObject("ObjectReference", event.target.get());
 
       auto isApplied = JsValue::Bool(event.isApplied);
 
@@ -715,22 +673,11 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto effect = reinterpret_cast<RE::EffectSetting*>(
-        RE::TESForm::LookupByID(event.magicEffect));
+      auto magicEffect = CreateObject(
+        "MagicEffect", RE::TESForm::LookupByID(event.magicEffect));
 
-      auto magicEffect = effect
-        ? NativeValueCasts::NativeObjectToJsObject(
-            std::make_shared<CallNative::Object>("MagicEffect", effect))
-        : JsValue::Null();
-
-      auto caster = event.caster ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.caster.get()))
-                                 : JsValue::Null();
-      auto target = event.target ? NativeValueCasts::NativeObjectToJsObject(
-                                     std::make_shared<CallNative::Object>(
-                                       "ObjectReference", event.target.get()))
-                                 : JsValue::Null();
+      auto caster = CreateObject("ObjectReference", event.caster.get());
+      auto target = CreateObject("ObjectReference", event.target.get());
 
       EventsApi::SendEvent(
         "magicEffectApply",
@@ -767,7 +714,8 @@ JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
                                    "lockChanged",
                                    "moveAttachDetach",
                                    "objectLoaded",
-                                   "waitStop" };
+                                   "waitStop",
+                                   "activate" };
 
   if (events.count(eventName) == 0)
     throw InvalidArgumentException("eventName", eventName);
