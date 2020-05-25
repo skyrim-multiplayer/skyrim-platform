@@ -5,19 +5,32 @@
 #include "NativeObject.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
+#include <RE/ActiveEffect.h>
 #include <RE/Actor.h>
+#include <RE/ConsoleLog.h>
 #include <RE/ScriptEventSourceHolder.h>
 #include <RE/TESActiveEffectApplyRemoveEvent.h>
+#include <RE/TESCellFullyLoadedEvent.h>
+#include <RE/TESCombatEvent.h>
 #include <RE/TESContainerChangedEvent.h>
 #include <RE/TESDeathEvent.h>
 #include <RE/TESEquipEvent.h>
+#include <RE/TESGrabReleaseEvent.h>
 #include <RE/TESHitEvent.h>
+#include <RE/TESInitScriptEvent.h>
+#include <RE/TESLockChangedEvent.h>
 #include <RE/TESMagicEffectApplyEvent.h>
-#include <RE\ActiveEffect.h>
-#include <RE\ConsoleLog.h>
+#include <RE/TESMoveAttachDetachEvent.h>
+#include <RE/TESObjectLoadedEvent.h>
+#include <RE/TESResetEvent.h>
+#include <RE/TESSwitchRaceCompleteEvent.h>
+#include <RE/TESTrackedStatsEvent.h>
+#include <RE/TESUniqueIDChangeEvent.h>
+#include <RE/TESWaitStopEvent.h>
 #include <map>
 #include <set>
 #include <unordered_map>
+
 extern ctpl::thread_pool g_pool;
 extern TaskQueue g_taskQueue;
 
@@ -207,6 +220,7 @@ JsValue EventsApi::GetHooks()
   return hooks;
 }
 
+;
 namespace {
 class EventSinks
   : public RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>
@@ -216,6 +230,18 @@ class EventSinks
   , public RE::BSTEventSink<RE::TESContainerChangedEvent>
   , public RE::BSTEventSink<RE::TESDeathEvent>
   , public RE::BSTEventSink<RE::TESMagicEffectApplyEvent>
+  , public RE::BSTEventSink<RE::TESCombatEvent>
+  , public RE::BSTEventSink<RE::TESResetEvent>
+  , public RE::BSTEventSink<RE::TESInitScriptEvent>
+  , public RE::BSTEventSink<RE::TESTrackedStatsEvent>
+  , public RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>
+  , public RE::BSTEventSink<RE::TESUniqueIDChangeEvent>
+  , public RE::BSTEventSink<RE::TESCellFullyLoadedEvent>
+  , public RE::BSTEventSink<RE::TESGrabReleaseEvent>
+  , public RE::BSTEventSink<RE::TESLockChangedEvent>
+  , public RE::BSTEventSink<RE::TESMoveAttachDetachEvent>
+  , public RE::BSTEventSink<RE::TESObjectLoadedEvent>
+  , public RE::BSTEventSink<RE::TESWaitStopEvent>
 {
 public:
   EventSinks()
@@ -223,6 +249,42 @@ public:
     auto holder = RE::ScriptEventSourceHolder::GetSingleton();
     if (!holder)
       throw NullPointerException("holder");
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESCellFullyLoadedEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESGrabReleaseEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESLockChangedEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESMoveAttachDetachEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESObjectLoadedEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESWaitStopEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESUniqueIDChangeEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESInitScriptEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESTrackedStatsEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESResetEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESCombatEvent>*>(this));
 
     holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>*>(
@@ -249,11 +311,225 @@ public:
 
 private:
   RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESMoveAttachDetachEvent* event_,
+    RE::BSTEventSource<RE::TESMoveAttachDetachEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto movedRef = event.movedRef
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 event.movedRef.get()))
+        : JsValue::Null();
+      auto isCellAttached = JsValue::Bool(event.isCellAttached);
+      EventsApi::SendEvent("moveAttachDetach",
+                           { JsValue::Undefined(), movedRef, isCellAttached });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESWaitStopEvent* event_,
+    RE::BSTEventSource<RE::TESWaitStopEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto interrupted = JsValue::Bool(event.interrupted);
+
+      EventsApi::SendEvent("waitStop", { JsValue::Undefined(), interrupted });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESObjectLoadedEvent* event_,
+    RE::BSTEventSource<RE::TESObjectLoadedEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto objectForm = RE::TESForm::LookupByID(event.formID);
+      auto object = objectForm
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Form", objectForm))
+        : JsValue::Null();
+
+      auto isLoaded = JsValue::Bool(event.loaded);
+      EventsApi::SendEvent("objectLoaded",
+                           { JsValue::Undefined(), object, isLoaded });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESLockChangedEvent* event_,
+    RE::BSTEventSource<RE::TESLockChangedEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto lockedObject = event.lockedObject
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 event.lockedObject.get()))
+        : JsValue::Null();
+      EventsApi::SendEvent("lockChanged",
+                           { JsValue::Undefined(), lockedObject });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESCellFullyLoadedEvent* event_,
+    RE::BSTEventSource<RE::TESCellFullyLoadedEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto cell = event.cell
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Cell", event.cell))
+        : JsValue::Null();
+      EventsApi::SendEvent("cellFullyLoaded", { JsValue::Undefined(), cell });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESGrabReleaseEvent* event_,
+    RE::BSTEventSource<RE::TESGrabReleaseEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto ref = event.ref ? NativeValueCasts::NativeObjectToJsObject(
+                               std::make_shared<CallNative::Object>(
+                                 "ObjectReference", event.ref.get()))
+                           : JsValue::Null();
+
+      auto isGrabbed = JsValue::Bool(event.grabbed);
+      EventsApi::SendEvent("grabRelease",
+                           { JsValue::Undefined(), ref, isGrabbed });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
     const RE::TESLoadGameEvent* event_,
     RE::BSTEventSource<RE::TESLoadGameEvent>* eventSource) override
   {
     g_taskQueue.AddTask(
       [] { EventsApi::SendEvent("loadGame", { JsValue::Undefined() }); });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESSwitchRaceCompleteEvent* event_,
+    RE::BSTEventSource<RE::TESSwitchRaceCompleteEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto subject = event.subject
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 event.subject.get()))
+        : JsValue::Null();
+      EventsApi::SendEvent("switchRaceComplete",
+                           { JsValue::Undefined(), subject });
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESUniqueIDChangeEvent* event_,
+    RE::BSTEventSource<RE::TESUniqueIDChangeEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto oldBaseID = JsValue::Double(event.oldBaseID);
+      auto newBaseID = JsValue::Double(event.newBaseID);
+      EventsApi::SendEvent("uniqueIdChange",
+                           { JsValue::Undefined(), oldBaseID, newBaseID });
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESTrackedStatsEvent* event_,
+    RE::BSTEventSource<RE::TESTrackedStatsEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto stat = JsValue::String(event.stat.data());
+      auto value = JsValue::Double(event.value);
+      EventsApi::SendEvent("trackedStats",
+                           { JsValue::Undefined(), stat, value });
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESInitScriptEvent* event_,
+    RE::BSTEventSource<RE::TESInitScriptEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto objectInitialized = event.objectInitialized
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>(
+              "ObjectReference", event.objectInitialized.get()))
+        : JsValue::Null();
+      EventsApi::SendEvent("scriptInit",
+                           { JsValue::Undefined(), objectInitialized });
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESResetEvent* event_,
+    RE::BSTEventSource<RE::TESResetEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto object = event.object ? NativeValueCasts::NativeObjectToJsObject(
+                                     std::make_shared<CallNative::Object>(
+                                       "ObjectReference", event.object.get()))
+                                 : JsValue::Null();
+
+      EventsApi::SendEvent("reset", { JsValue::Undefined(), object });
+    });
+
+    return RE::BSEventNotifyControl::kContinue;
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESCombatEvent* event_,
+    RE::BSTEventSource<RE::TESCombatEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto target = event.targetActor
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 event.targetActor.get()))
+        : JsValue::Null();
+      auto actor = event.actor ? NativeValueCasts::NativeObjectToJsObject(
+                                   std::make_shared<CallNative::Object>(
+                                     "ObjectReference", event.actor.get()))
+                               : JsValue::Null();
+
+      auto isCombat = JsValue::Bool((uint8_t)event.state &
+                                    (uint8_t)RE::ACTOR_COMBAT_STATE::kCombat);
+      auto isSearching = JsValue::Bool(
+        (uint8_t)event.state & (uint8_t)RE::ACTOR_COMBAT_STATE::kSearching);
+
+      EventsApi::SendEvent(
+        "combatState",
+        { JsValue::Undefined(), actor, target, isCombat, isSearching });
+    });
 
     return RE::BSEventNotifyControl::kContinue;
   }
@@ -471,11 +747,27 @@ JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
   auto eventName = args[1].ToString();
   auto callback = args[2];
 
-  std::set<std::string> events = {
-    "tick",    "update", "activeEffectApplyRemove", "magicEffectApply",
-    "equip",   "hit",    "containerChanged",        "death",
-    "loadGame"
-  };
+  std::set<std::string> events = { "tick",
+                                   "update",
+                                   "activeEffectApplyRemove",
+                                   "magicEffectApply",
+                                   "equip",
+                                   "hit",
+                                   "containerChanged",
+                                   "death",
+                                   "loadGame",
+                                   "combatState",
+                                   "reset",
+                                   "scriptInit",
+                                   "trackedStats",
+                                   "uniqueIdChange",
+                                   "switchRaceComplete",
+                                   "cellFullyLoaded",
+                                   "grabRelease",
+                                   "lockChanged",
+                                   "moveAttachDetach",
+                                   "objectLoaded",
+                                   "waitStop" };
 
   if (events.count(eventName) == 0)
     throw InvalidArgumentException("eventName", eventName);
