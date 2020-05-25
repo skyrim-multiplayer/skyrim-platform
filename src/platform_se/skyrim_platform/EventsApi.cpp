@@ -5,12 +5,15 @@
 #include "NativeObject.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
+#include <RE/Actor.h>
 #include <RE/ScriptEventSourceHolder.h>
 #include <RE/TESActiveEffectApplyRemoveEvent.h>
 #include <RE/TESContainerChangedEvent.h>
 #include <RE/TESDeathEvent.h>
 #include <RE/TESEquipEvent.h>
 #include <RE/TESHitEvent.h>
+#include <RE/TESMagicEffectApplyEvent.h>
+#include <RE\ActiveEffect.h>
 #include <RE\ConsoleLog.h>
 #include <map>
 #include <set>
@@ -212,6 +215,7 @@ class EventSinks
   , public RE::BSTEventSink<RE::TESHitEvent>
   , public RE::BSTEventSink<RE::TESContainerChangedEvent>
   , public RE::BSTEventSink<RE::TESDeathEvent>
+  , public RE::BSTEventSink<RE::TESMagicEffectApplyEvent>
 {
 public:
   EventSinks()
@@ -238,6 +242,9 @@ public:
 
     holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESDeathEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESMagicEffectApplyEvent>*>(this));
   }
 
 private:
@@ -245,6 +252,9 @@ private:
     const RE::TESLoadGameEvent* event_,
     RE::BSTEventSource<RE::TESLoadGameEvent>* eventSource) override
   {
+    g_taskQueue.AddTask(
+      [] { EventsApi::SendEvent("loadGame", { JsValue::Undefined() }); });
+
     return RE::BSEventNotifyControl::kContinue;
   }
 
@@ -279,9 +289,26 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto oldContainer = JsValue::Double(event.oldContainer);
-      auto newContainer = JsValue::Double(event.newContainer);
-      auto baseObj = JsValue::Double(event.baseObj);
+      auto oldContainerRef = RE::TESForm::LookupByID(event.oldContainer);
+      auto oldContainer = oldContainerRef
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 oldContainerRef))
+        : JsValue::Null();
+
+      auto newContainerRef = RE::TESForm::LookupByID(event.newContainer);
+      auto newContainer = newContainerRef
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ObjectReference",
+                                                 newContainerRef))
+        : JsValue::Null();
+
+      auto baseObjForm = RE::TESForm::LookupByID(event.baseObj);
+      auto baseObj = baseObjForm
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Form", baseObjForm))
+        : JsValue::Null();
+
       auto itemCount = JsValue::Double(event.itemCount);
 
       EventsApi::SendEvent("containerChanged",
@@ -305,12 +332,31 @@ private:
                                       std::make_shared<CallNative::Object>(
                                         "ObjectReference", event.cause.get()))
                                   : JsValue::Null();
+      auto sourceForm = RE::TESForm::LookupByID(event.source);
+      auto source = sourceForm
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Form", sourceForm))
+        : JsValue::Null();
 
-      auto source = JsValue::Double(event.source);
-      auto projectile = JsValue::Double(event.projectile);
+      auto projectileForm = RE::TESForm::LookupByID(event.projectile);
+      auto projectile = projectileForm
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Projectile", projectileForm))
+        : JsValue::Null();
 
-      EventsApi::SendEvent(
-        "hit", { JsValue::Undefined(), target, agressor, source, projectile });
+      auto isPowerAttack = JsValue::Bool(
+        (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kPowerAttack);
+      auto isSneakAttack = JsValue::Bool(
+        (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kSneakAttack);
+      auto isBashAttack = JsValue::Bool(
+        (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kBashAttack);
+      auto isHitBlocked = JsValue::Bool(
+        (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kHitBlocked);
+
+      EventsApi::SendEvent("hit",
+                           { JsValue::Undefined(), target, agressor, source,
+                             projectile, isPowerAttack, isSneakAttack,
+                             isBashAttack, isHitBlocked });
     });
     return RE::BSEventNotifyControl::kContinue;
   }
@@ -326,10 +372,16 @@ private:
                                      "ObjectReference", event.actor.get()))
                                : JsValue::Null();
 
-      auto baseObjId = JsValue::Double(event.baseObject);
+      auto baseObjectForm = RE::TESForm::LookupByID(event.baseObject);
+      auto baseObject = baseObjectForm
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("Form", baseObjectForm))
+        : JsValue::Null();
+
       auto equipped = JsValue::Bool(event.equipped);
+
       EventsApi::SendEvent(
-        "equip", { JsValue::Undefined(), actor, baseObjId, equipped });
+        "equip", { JsValue::Undefined(), actor, baseObject, equipped });
     });
 
     return RE::BSEventNotifyControl::kContinue;
@@ -342,7 +394,58 @@ private:
   {
     auto event = *event_;
     g_taskQueue.AddTask([event] {
-      auto activeMgef = JsValue::Undefined();
+      auto actor = reinterpret_cast<RE::Actor*>(event.target.get());
+      if (!actor)
+        throw NullPointerException("actor");
+
+      auto effectList = actor->GetActiveEffectList();
+      if (!effectList)
+        throw NullPointerException("effectList");
+
+      RE::ActiveEffect* activeEffect = nullptr;
+      for (auto effect : *effectList) {
+        if (effect && effect->usUniqueID == event.activeEffectUniqueID) {
+          activeEffect = effect;
+          break;
+        }
+      }
+
+      auto activeMgef = activeEffect
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("ActiveMagicEffect",
+                                                 activeEffect))
+        : JsValue::Null();
+
+      auto caster = event.caster ? NativeValueCasts::NativeObjectToJsObject(
+                                     std::make_shared<CallNative::Object>(
+                                       "ObjectReference", event.caster.get()))
+                                 : JsValue::Null();
+      auto target = event.target ? NativeValueCasts::NativeObjectToJsObject(
+                                     std::make_shared<CallNative::Object>(
+                                       "ObjectReference", event.target.get()))
+                                 : JsValue::Null();
+
+      auto isApplied = JsValue::Bool(event.isApplied);
+
+      EventsApi::SendEvent(
+        "activeEffectApplyRemove",
+        { JsValue::Undefined(), activeMgef, caster, target, isApplied });
+    });
+    return RE::BSEventNotifyControl::kContinue;
+  }
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESMagicEffectApplyEvent* event_,
+    RE::BSTEventSource<RE::TESMagicEffectApplyEvent>* eventSource) override
+  {
+    auto event = *event_;
+    g_taskQueue.AddTask([event] {
+      auto effect = reinterpret_cast<RE::EffectSetting*>(
+        RE::TESForm::LookupByID(event.magicEffect));
+
+      auto magicEffect = effect
+        ? NativeValueCasts::NativeObjectToJsObject(
+            std::make_shared<CallNative::Object>("MagicEffect", effect))
+        : JsValue::Null();
 
       auto caster = event.caster ? NativeValueCasts::NativeObjectToJsObject(
                                      std::make_shared<CallNative::Object>(
@@ -354,7 +457,8 @@ private:
                                  : JsValue::Null();
 
       EventsApi::SendEvent(
-        "effectStart", { JsValue::Undefined(), activeMgef, caster, target });
+        "magicEffectApply",
+        { JsValue::Undefined(), magicEffect, caster, target });
     });
     return RE::BSEventNotifyControl::kContinue;
   }
@@ -367,9 +471,11 @@ JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
   auto eventName = args[1].ToString();
   auto callback = args[2];
 
-  std::set<std::string> events = { "tick",  "update", "effectStart",
-                                   "equip", "hit",    "containerChanged",
-                                   "death" };
+  std::set<std::string> events = {
+    "tick",    "update", "activeEffectApplyRemove", "magicEffectApply",
+    "equip",   "hit",    "containerChanged",        "death",
+    "loadGame"
+  };
 
   if (events.count(eventName) == 0)
     throw InvalidArgumentException("eventName", eventName);
