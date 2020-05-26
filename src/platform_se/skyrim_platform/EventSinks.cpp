@@ -28,10 +28,14 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto target = CreateObject("ObjectReference", event.target.get());
-    auto caster = CreateObject("ObjectReference", event.caster.get());
+    auto obj = JsValue::Object();
 
-    EventsApi::SendEvent("activate", { JsValue::Undefined(), target, caster });
+    obj.SetProperty("target",
+                    CreateObject("ObjectReference", event.target.get()));
+    obj.SetProperty("caster",
+                    CreateObject("ObjectReference", event.caster.get()));
+
+    EventsApi::SendEvent("activate", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -43,11 +47,13 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto movedRef = CreateObject("ObjectReference", event.movedRef.get());
-    auto isCellAttached = JsValue::Bool(event.isCellAttached);
+    auto obj = JsValue::Object();
 
-    EventsApi::SendEvent("moveAttachDetach",
-                         { JsValue::Undefined(), movedRef, isCellAttached });
+    obj.SetProperty("movedRef",
+                    CreateObject("ObjectReference", event.movedRef.get()));
+
+    obj.SetProperty("isCellAttached", JsValue::Bool(event.isCellAttached));
+    EventsApi::SendEvent("moveAttachDetach", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -59,9 +65,10 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto interrupted = JsValue::Bool(event.interrupted);
+    auto obj = JsValue::Object();
+    obj.SetProperty("isInterrupted", JsValue::Bool(event.interrupted));
 
-    EventsApi::SendEvent("waitStop", { JsValue::Undefined(), interrupted });
+    EventsApi::SendEvent("waitStop", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -73,12 +80,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto objectForm = RE::TESForm::LookupByID(event.formID);
-    auto object = CreateObject("Form", objectForm);
-    auto isLoaded = JsValue::Bool(event.loaded);
+    auto obj = JsValue::Object();
+    obj.SetProperty(
+      "object", CreateObject("Form", RE::TESForm::LookupByID(event.formID)));
+    obj.SetProperty("isLoaded", JsValue::Bool(event.loaded));
 
-    EventsApi::SendEvent("objectLoaded",
-                         { JsValue::Undefined(), object, isLoaded });
+    EventsApi::SendEvent("objectLoaded", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -90,10 +97,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto lockedObject =
-      CreateObject("ObjectReference", event.lockedObject.get());
-    EventsApi::SendEvent("lockChanged",
-                         { JsValue::Undefined(), lockedObject });
+    auto obj = JsValue::Object();
+    obj.SetProperty("lockedObject",
+                    CreateObject("ObjectReference", event.lockedObject.get()));
+
+    EventsApi::SendEvent("lockChanged", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -105,9 +113,10 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto cell = CreateObject("Cell", event.cell);
+    auto obj = JsValue::Object();
+    obj.SetProperty("cell", CreateObject("Cell", event.cell));
 
-    EventsApi::SendEvent("cellFullyLoaded", { JsValue::Undefined(), cell });
+    EventsApi::SendEvent("cellFullyLoaded", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -119,11 +128,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto ref = CreateObject("ObjectReference", event.ref.get());
-    auto isGrabbed = JsValue::Bool(event.grabbed);
+    auto obj = JsValue::Object();
+    obj.SetProperty("refr", CreateObject("ObjectReference", event.ref.get()));
+    obj.SetProperty("isGrabbed", JsValue::Bool(event.grabbed));
 
-    EventsApi::SendEvent("grabRelease",
-                         { JsValue::Undefined(), ref, isGrabbed });
+    EventsApi::SendEvent("grabRelease", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -145,9 +154,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto subject = CreateObject("ObjectReference", event.subject.get());
-    EventsApi::SendEvent("switchRaceComplete",
-                         { JsValue::Undefined(), subject });
+    auto obj = JsValue::Object();
+    obj.SetProperty("subject",
+                    CreateObject("ObjectReference", event.subject.get()));
+
+    EventsApi::SendEvent("switchRaceComplete", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -158,10 +169,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto oldBaseID = JsValue::Double(event.oldBaseID);
-    auto newBaseID = JsValue::Double(event.newBaseID);
-    EventsApi::SendEvent("uniqueIdChange",
-                         { JsValue::Undefined(), oldBaseID, newBaseID });
+    auto obj = JsValue::Object();
+    obj.SetProperty("oldBaseID", JsValue::Double(event.oldBaseID));
+    obj.SetProperty("newBaseID", JsValue::Double(event.newBaseID));
+
+    EventsApi::SendEvent("uniqueIdChange", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -172,10 +184,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto stat = JsValue::String(event.stat.data());
-    auto value = JsValue::Double(event.value);
-    EventsApi::SendEvent("trackedStats",
-                         { JsValue::Undefined(), stat, value });
+    auto obj = JsValue::Object();
+    obj.SetProperty("statName", JsValue::String(event.stat.data()));
+    obj.SetProperty("newValue", JsValue::Double(event.value));
+
+    EventsApi::SendEvent("trackedStats", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -186,11 +199,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto objectInitialized =
-      CreateObject("ObjectReference", event.objectInitialized.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty(
+      "initializedObject",
+      CreateObject("ObjectReference", event.objectInitialized.get()));
 
-    EventsApi::SendEvent("scriptInit",
-                         { JsValue::Undefined(), objectInitialized });
+    EventsApi::SendEvent("scriptInit", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -201,9 +215,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto object = CreateObject("ObjectReference", event.object.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty("object",
+                    CreateObject("ObjectReference", event.object.get()));
 
-    EventsApi::SendEvent("reset", { JsValue::Undefined(), object });
+    EventsApi::SendEvent("reset", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -215,17 +231,20 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto target = CreateObject("ObjectReference", event.targetActor.get());
-    auto actor = CreateObject("ObjectReference", event.actor.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty("target",
+                    CreateObject("ObjectReference", event.targetActor.get()));
+    obj.SetProperty("actor",
+                    CreateObject("ObjectReference", event.actor.get()));
+    obj.SetProperty("isCombat",
+                    JsValue::Bool((uint8_t)event.state &
+                                  (uint8_t)RE::ACTOR_COMBAT_STATE::kCombat));
+    obj.SetProperty(
+      "isSearching",
+      JsValue::Bool((uint8_t)event.state &
+                    (uint8_t)RE::ACTOR_COMBAT_STATE::kSearching));
 
-    auto isCombat = JsValue::Bool((uint8_t)event.state &
-                                  (uint8_t)RE::ACTOR_COMBAT_STATE::kCombat);
-    auto isSearching = JsValue::Bool(
-      (uint8_t)event.state & (uint8_t)RE::ACTOR_COMBAT_STATE::kSearching);
-
-    EventsApi::SendEvent(
-      "combatState",
-      { JsValue::Undefined(), actor, target, isCombat, isSearching });
+    EventsApi::SendEvent("combatState", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -237,14 +256,15 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto actorDying = CreateObject("ObjectReference", event.actorDying.get());
-    auto actorKiller =
-      CreateObject("ObjectReference", event.actorKiller.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty("actorDying",
+                    CreateObject("ObjectReference", event.actorDying.get()));
+    obj.SetProperty("actorKiller",
+                    CreateObject("ObjectReference", event.actorKiller.get()));
 
-    auto dead = JsValue::Bool(event.dead);
-
-    EventsApi::SendEvent(
-      "death", { JsValue::Undefined(), actorDying, actorKiller, dead });
+    event.dead
+      ? EventsApi::SendEvent("deathEnd", { JsValue::Undefined(), obj })
+      : EventsApi::SendEvent("deathStart", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -255,20 +275,21 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
+    auto obj = JsValue::Object();
+
     auto oldContainerRef = RE::TESForm::LookupByID(event.oldContainer);
-    auto oldContainer = CreateObject("ObjectReference", oldContainerRef);
+    obj.SetProperty("oldContainer",
+                    CreateObject("ObjectReference", oldContainerRef));
 
     auto newContainerRef = RE::TESForm::LookupByID(event.newContainer);
-    auto newContainer = CreateObject("ObjectReference", newContainerRef);
+    obj.SetProperty("newContainer",
+                    CreateObject("ObjectReference", newContainerRef));
 
     auto baseObjForm = RE::TESForm::LookupByID(event.baseObj);
-    auto baseObj = CreateObject("Form", baseObjForm);
+    obj.SetProperty("baseObj", CreateObject("Form", baseObjForm));
+    obj.SetProperty("numItems", JsValue::Double(event.itemCount));
 
-    auto itemCount = JsValue::Double(event.itemCount);
-
-    EventsApi::SendEvent("containerChanged",
-                         { JsValue::Undefined(), oldContainer, newContainer,
-                           baseObj, itemCount });
+    EventsApi::SendEvent("containerChanged", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -279,28 +300,39 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto target = CreateObject("ObjectReference", event.target.get());
-    auto agressor = CreateObject("ObjectReference", event.cause.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty("target",
+                    CreateObject("ObjectReference", event.target.get()));
+    obj.SetProperty("agressor",
+                    CreateObject("ObjectReference", event.cause.get()));
 
     auto sourceForm = RE::TESForm::LookupByID(event.source);
-    auto source = CreateObject("Form", sourceForm);
+    obj.SetProperty("source", CreateObject("Form", sourceForm));
 
     auto projectileForm = RE::TESForm::LookupByID(event.projectile);
-    auto projectile = CreateObject("Projectile", projectileForm);
+    obj.SetProperty("projectile", CreateObject("Form", projectileForm));
 
-    auto isPowerAttack = JsValue::Bool(
-      (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kPowerAttack);
-    auto isSneakAttack = JsValue::Bool(
-      (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kSneakAttack);
-    auto isBashAttack = JsValue::Bool(
-      (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kBashAttack);
-    auto isHitBlocked = JsValue::Bool(
-      (uint8_t)event.flags & (uint8_t)RE::TESHitEvent::Flag::kHitBlocked);
+    obj.SetProperty(
+      "isPowerAttack",
+      JsValue::Bool((uint8_t)event.flags &
+                    (uint8_t)RE::TESHitEvent::Flag::kPowerAttack));
 
-    EventsApi::SendEvent("hit",
-                         { JsValue::Undefined(), target, agressor, source,
-                           projectile, isPowerAttack, isSneakAttack,
-                           isBashAttack, isHitBlocked });
+    obj.SetProperty(
+      "isSneakAttack",
+      JsValue::Bool((uint8_t)event.flags &
+                    (uint8_t)RE::TESHitEvent::Flag::kSneakAttack));
+
+    obj.SetProperty(
+      "isBashAttack",
+      JsValue::Bool((uint8_t)event.flags &
+                    (uint8_t)RE::TESHitEvent::Flag::kBashAttack));
+
+    obj.SetProperty(
+      "isHitBlocked",
+      JsValue::Bool((uint8_t)event.flags &
+                    (uint8_t)RE::TESHitEvent::Flag::kHitBlocked));
+
+    EventsApi::SendEvent("hit", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -311,15 +343,16 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto actor = CreateObject("ObjectReference", event.actor.get());
+    auto obj = JsValue::Object();
+    obj.SetProperty("actor",
+                    CreateObject("ObjectReference", event.actor.get()));
 
     auto baseObjectForm = RE::TESForm::LookupByID(event.baseObject);
-    auto baseObject = CreateObject("Form", baseObjectForm);
+    obj.SetProperty("baseObj", CreateObject("Form", baseObjectForm));
 
-    auto equipped = JsValue::Bool(event.equipped);
-
-    EventsApi::SendEvent(
-      "equip", { JsValue::Undefined(), actor, baseObject, equipped });
+    event.equipped
+      ? EventsApi::SendEvent("equip", { JsValue::Undefined(), obj })
+      : EventsApi::SendEvent("unEquip", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -335,6 +368,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
     if (!actor)
       throw NullPointerException("actor");
 
+    if (actor->formType != RE::FormType::ActorCharacter)
+      return;
+
+    auto obj = JsValue::Object();
+
     auto effectList = actor->GetActiveEffectList();
     if (!effectList)
       throw NullPointerException("effectList");
@@ -347,15 +385,15 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
       }
     }
 
-    auto activeMgef = CreateObject("ActiveMagicEffect", activeEffect);
-    auto caster = CreateObject("ObjectReference", event.caster.get());
-    auto target = CreateObject("ObjectReference", event.target.get());
+    obj.SetProperty("effect", CreateObject("ActiveMagicEffect", activeEffect));
+    obj.SetProperty("caster",
+                    CreateObject("ObjectReference", event.caster.get()));
+    obj.SetProperty("target",
+                    CreateObject("ObjectReference", event.target.get()));
 
-    auto isApplied = JsValue::Bool(event.isApplied);
-
-    EventsApi::SendEvent(
-      "activeEffectApplyRemove",
-      { JsValue::Undefined(), activeMgef, caster, target, isApplied });
+    event.isApplied
+      ? EventsApi::SendEvent("effectStart", { JsValue::Undefined(), obj })
+      : EventsApi::SendEvent("effectFinish", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -366,15 +404,22 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 {
   auto event = *event_;
   g_taskQueue.AddTask([event] {
-    auto magicEffect =
-      CreateObject("MagicEffect", RE::TESForm::LookupByID(event.magicEffect));
+    auto obj = JsValue::Object();
 
-    auto caster = CreateObject("ObjectReference", event.caster.get());
-    auto target = CreateObject("ObjectReference", event.target.get());
+  auto effect = RE::TESForm::LookupByID(event.magicEffect);
 
-    EventsApi::SendEvent(
-      "magicEffectApply",
-      { JsValue::Undefined(), magicEffect, caster, target });
+  if (effect && effect->formType != RE::FormType::MagicEffect)
+    return;
+
+    obj.SetProperty(
+      "effect", CreateObject("MagicEffect", effect));
+
+    obj.SetProperty("caster",
+                    CreateObject("ObjectReference", event.caster.get()));
+    obj.SetProperty("target",
+                    CreateObject("ObjectReference", event.target.get()));
+
+    EventsApi::SendEvent("magicEffectApply", { JsValue::Undefined(), obj });
   });
   return RE::BSEventNotifyControl::kContinue;
 }
