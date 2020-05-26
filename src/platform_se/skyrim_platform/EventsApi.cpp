@@ -6,7 +6,6 @@
 #include "NativeObject.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
-#include <RE/ConsoleLog.h>
 #include <map>
 #include <set>
 #include <unordered_map>
