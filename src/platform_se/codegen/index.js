@@ -29,12 +29,13 @@ export declare function on(eventName: 'tick', callback: () => void): void;
 export declare function once(eventName: 'tick', callback: () => void): void;
 
 export interface ActivateEvent{
-    target: ObjectReference, 
+    target: ObjectReference 
     caster: ObjectReference
+    isCrimeToActivate :boolean
 }
 
 export interface MoveAttachDetachEvent{
-    movedRef: ObjectReference, 
+    movedRef: ObjectReference 
     isCellAttached: boolean
 }
 export interface WaitStopEvent{ 
@@ -64,6 +65,8 @@ export interface SwitchRaceCompleteEvent{
 export interface UniqueIDChangeEvent{ 
     oldBaseID: number
     newBaseID: number
+    oldUniqueID: number
+    newUniqueID: number
 }
 
 export interface TrackedStatsEvent{ 
@@ -96,6 +99,8 @@ export interface ContainerChangedEvent{
     newContainer: ObjectReference
     baseObj: Form
     numItems: number
+    uniqueID: number
+    reference: ObjectReference
 }
 
 export interface HitEvent{ 
@@ -112,6 +117,8 @@ export interface HitEvent{
 export interface EquipEvent{ 
     actor: ObjectReference
     baseObj: Form
+    uniqueId: number
+    originalRefr: ObjectReference
 }
 
 export interface ActiveEffectApplyRemoveEvent{ 

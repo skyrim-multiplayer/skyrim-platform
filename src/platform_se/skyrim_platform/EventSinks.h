@@ -55,22 +55,37 @@ public:
       dynamic_cast<RE::BSTEventSink<RE::TESActivateEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESCellFullyLoadedEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESGrabReleaseEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESLockChangedEvent>*>(this));
-
-    holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESMoveAttachDetachEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESObjectLoadedEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESHitEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESWaitStopEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESEquipEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESLoadGameEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESDeathEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESContainerChangedEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESMagicEffectApplyEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESResetEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESInitScriptEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESCombatEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESTrackedStatsEvent>*>(this));
 
     holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESUniqueIDChangeEvent>*>(this));
@@ -79,38 +94,23 @@ public:
       dynamic_cast<RE::BSTEventSink<RE::TESSwitchRaceCompleteEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESInitScriptEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESGrabReleaseEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESTrackedStatsEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESCellFullyLoadedEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESResetEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESLockChangedEvent>*>(this));
 
     holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESCombatEvent>*>(this));
+      dynamic_cast<RE::BSTEventSink<RE::TESObjectLoadedEvent>*>(this));
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESWaitStopEvent>*>(this));
 
     holder->AddEventSink(
       dynamic_cast<RE::BSTEventSink<RE::TESActiveEffectApplyRemoveEvent>*>(
         this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESLoadGameEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESEquipEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESHitEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESContainerChangedEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESDeathEvent>*>(this));
-
-    holder->AddEventSink(
-      dynamic_cast<RE::BSTEventSink<RE::TESMagicEffectApplyEvent>*>(this));
   }
 
 private:
