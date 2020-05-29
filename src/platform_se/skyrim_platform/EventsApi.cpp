@@ -213,7 +213,7 @@ JsValue AddCallback(const JsFunctionArguments& args, bool isOnce = false)
                                    "effectFinish",
                                    "magicEffectApply",
                                    "equip",
-                                   "unEquip",
+                                   "unequip",
                                    "hit",
                                    "containerChanged",
                                    "deathStart",

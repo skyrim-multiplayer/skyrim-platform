@@ -4,6 +4,7 @@
 #include "NativeValueCasts.h"
 #include <RE/ActiveEffect.h>
 #include <RE/Actor.h>
+#include <RE/EffectSetting.h>
 #include <RE/TESObjectCELL.h>
 
 extern TaskQueue g_taskQueue;
@@ -20,6 +21,13 @@ JsValue CreateObject(const char* type, void* form)
   return form ? NativeValueCasts::NativeObjectToJsObject(
                   std::make_shared<CallNative::Object>(type, form))
               : JsValue::Null();
+}
+
+bool IsReferenceOrActor(RE::TESForm* target)
+{
+  return target ? (target->formType == RE::FormType::Reference) ||
+      (target->formType == RE::FormType::ActorCharacter)
+                : false;
 }
 }
 
@@ -42,7 +50,7 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
       "caster",
       CreateObject("ObjectReference", RE::TESForm::LookupByID(casterId)));
 
-    auto targetRefr = target && target->formType == RE::FormType::Reference
+    auto targetRefr = IsReferenceOrActor(target)
       ? reinterpret_cast<RE::TESObjectREFR*>(target)
       : nullptr;
 
@@ -475,7 +483,7 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
     obj.SetProperty("uniqueId", JsValue::Double(uniqueId));
 
     equipped ? EventsApi::SendEvent("equip", { JsValue::Undefined(), obj })
-             : EventsApi::SendEvent("unEquip", { JsValue::Undefined(), obj });
+             : EventsApi::SendEvent("unequip", { JsValue::Undefined(), obj });
   });
 
   return RE::BSEventNotifyControl::kContinue;
@@ -493,37 +501,36 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
   auto isApplied = event_ ? event_->isApplied : 0;
   auto activeEffectUniqueID = event_ ? event_->activeEffectUniqueID : 0;
+  RE::ActiveEffect* activeEffect = nullptr;
 
-  g_taskQueue.AddTask([casterId, targetId, isApplied, activeEffectUniqueID] {
-    auto actor =
-      reinterpret_cast<RE::Actor*>(RE::TESForm::LookupByID(targetId));
-    if (!actor)
-      throw NullPointerException("actor");
-
-    if (actor->formType != RE::FormType::ActorCharacter)
-      return;
-
-    auto obj = JsValue::Object();
-
-    auto effectList = actor->GetActiveEffectList();
-    if (!effectList)
-      throw NullPointerException("effectList");
-
-    RE::ActiveEffect* activeEffect = nullptr;
-    for (auto effect : *effectList) {
-      if (effect && effect->usUniqueID == activeEffectUniqueID) {
-        activeEffect = effect;
-        break;
+  auto actor = reinterpret_cast<RE::Actor*>(target);
+  if (actor && actor->formType == RE::FormType::ActorCharacter) {
+    if (auto effectList = actor->GetActiveEffectList()) {
+      for (auto effect : *effectList) {
+        if (effect && effect->usUniqueID == activeEffectUniqueID) {
+          activeEffect = effect;
+          break;
+        }
       }
     }
+  }
 
-    /// TODO when add support for types that are not descendants of the Form
-    // obj.SetProperty("effect", CreateObject("ActiveMagicEffect",
-    // activeEffect));
+  auto activeEffectBase =
+    activeEffect ? activeEffect->GetBaseObject() : nullptr;
 
-    obj.SetProperty(
-      "caster",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(casterId)));
+  auto activeEffectBaseId = activeEffectBase ? activeEffectBase->formID : 0;
+
+  g_taskQueue.AddTask([casterId, targetId, isApplied, activeEffectBaseId] {
+    auto obj = JsValue::Object();
+
+    obj.SetProperty("effect",
+                    CreateObject("MagicEffect",
+                                 RE::TESForm::LookupByID(activeEffectBaseId)));
+
+    auto caster = RE::TESForm::LookupByID(casterId);
+    auto casterForJs = IsReferenceOrActor(caster) ? caster : nullptr;
+
+    obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
 
     obj.SetProperty(
       "target",
@@ -558,9 +565,10 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
     obj.SetProperty("effect", CreateObject("MagicEffect", effect));
 
-    obj.SetProperty(
-      "caster",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(casterId)));
+    auto caster = RE::TESForm::LookupByID(casterId);
+    auto casterForJs = IsReferenceOrActor(caster) ? caster : nullptr;
+
+    obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
 
     obj.SetProperty(
       "target",

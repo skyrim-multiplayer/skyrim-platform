@@ -28,108 +28,108 @@ export declare function once(eventName: 'update', callback: () => void): void;
 export declare function on(eventName: 'tick', callback: () => void): void;
 export declare function once(eventName: 'tick', callback: () => void): void;
 
-export interface ActivateEvent{
-    target: ObjectReference 
-    caster: ObjectReference
-    isCrimeToActivate :boolean
+export interface ActivateEvent {
+    target: ObjectReference,
+    caster: ObjectReference,
+    isCrimeToActivate: boolean
 }
 
-export interface MoveAttachDetachEvent{
-    movedRef: ObjectReference 
+export interface MoveAttachDetachEvent {
+    movedRef: ObjectReference,
     isCellAttached: boolean
 }
-export interface WaitStopEvent{ 
+export interface WaitStopEvent { 
     isInterrupted: boolean
 }
-export interface ObjectLoadedEvent{ 
-    object: Form
+export interface ObjectLoadedEvent { 
+    object: Form,
     isLoaded: boolean
 }
-export interface LockChangedEvent{ 
+export interface LockChangedEvent { 
     lockedObject: ObjectReference
 }
 
-export interface CellFullyLoadedEvent{ 
+export interface CellFullyLoadedEvent { 
     cell: Cell
 }
 
-export interface GrabReleaseEvent{ 
-    refr: ObjectReference
+export interface GrabReleaseEvent { 
+    refr: ObjectReference,
     isGrabbed: boolean
 }
 
-export interface SwitchRaceCompleteEvent{ 
+export interface SwitchRaceCompleteEvent { 
     subject: ObjectReference
 }
 
-export interface UniqueIDChangeEvent{ 
-    oldBaseID: number
-    newBaseID: number
-    oldUniqueID: number
+export interface UniqueIDChangeEvent { 
+    oldBaseID: number,
+    newBaseID: number,
+    oldUniqueID: number,
     newUniqueID: number
 }
 
-export interface TrackedStatsEvent{ 
-    statName: string
+export interface TrackedStatsEvent { 
+    statName: string,
     newValue: number
 }
 
-export interface InitScriptEvent{ 
+export interface InitScriptEvent { 
     initializedObject: ObjectReference
 }
 
-export interface ResetEvent{ 
+export interface ResetEvent {
     object: ObjectReference
 }
 
-export interface CombatEvent{ 
-    target: ObjectReference
-    actor: ObjectReference
-    isCombat: boolean
+export interface CombatEvent { 
+    target: ObjectReference,
+    actor: ObjectReference,
+    isCombat: boolean,
     isSearching: boolean
 }
 
-export interface DeathEvent{ 
-    actorDying: ObjectReference
+export interface DeathEvent { 
+    actorDying: ObjectReference,
     actorKiller: ObjectReference
 }
 
-export interface ContainerChangedEvent{ 
-    oldContainer: ObjectReference
-    newContainer: ObjectReference
-    baseObj: Form
-    numItems: number
-    uniqueID: number
+export interface ContainerChangedEvent { 
+    oldContainer: ObjectReference,
+    newContainer: ObjectReference,
+    baseObj: Form,
+    numItems: number,
+    uniqueID: number,
     reference: ObjectReference
 }
 
-export interface HitEvent{ 
-    target: ObjectReference
-    agressor: ObjectReference
-    source: Form
-    projectile: Projectile
-    isPowerAttack: boolean
-    isSneakAttack: boolean
-    isBashAttack: boolean
+export interface HitEvent { 
+    target: ObjectReference,
+    agressor: ObjectReference,
+    source: Form,
+    projectile: Projectile,
+    isPowerAttack: boolean,
+    isSneakAttack: boolean,
+    isBashAttack: boolean,
     isHitBlocked: boolean
 }
 
-export interface EquipEvent{ 
-    actor: ObjectReference
-    baseObj: Form
-    uniqueId: number
+export interface EquipEvent { 
+    actor: ObjectReference,
+    baseObj: Form,
+    uniqueId: number,
     originalRefr: ObjectReference
 }
 
-export interface ActiveEffectApplyRemoveEvent{ 
-    effect: ActiveMagicEffect
-    caster: ObjectReference
+export interface ActiveEffectApplyRemoveEvent { 
+    effect: ActiveMagicEffect,
+    caster: ObjectReference,
     target: ObjectReference
 }
 
-export interface MagicEffectApplyEvent{ 
-    effect: MagicEffect
-    caster: ObjectReference
+export interface MagicEffectApplyEvent { 
+    effect: MagicEffect,
+    caster: ObjectReference,
     target: ObjectReference
 }
 
@@ -187,8 +187,8 @@ export declare function once(eventName: 'containerChanged', callback: (even:Cont
 export declare function on(eventName: 'hit', callback: (even:HitEvent) => void): void;
 export declare function once(eventName: 'hit', callback: (even:HitEvent) => void): void;
 
-export declare function on(eventName: 'unEquip', callback: (even:EquipEvent) => void): void;
-export declare function once(eventName: 'unEquip', callback: (even:EquipEvent) => void): void;
+export declare function on(eventName: 'unequip', callback: (even:EquipEvent) => void): void;
+export declare function once(eventName: 'unequip', callback: (even:EquipEvent) => void): void;
 
 export declare function on(eventName: 'equip', callback: (even:EquipEvent) => void): void;
 export declare function once(eventName: 'equip', callback: (even:EquipEvent) => void): void;
