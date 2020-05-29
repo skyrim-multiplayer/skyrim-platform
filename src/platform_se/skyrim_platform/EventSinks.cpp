@@ -41,14 +41,16 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto targetId = targetRefr ? targetRefr->formID : 0;
   auto casterId = casterRefr ? casterRefr->formID : 0;
 
-  g_taskQueue.AddTask([targetId, casterId] {
+  g_taskQueue.AddTask([targetId, casterId, targetRefr, casterRefr] {
     auto obj = JsValue::Object();
 
     auto target = RE::TESForm::LookupByID(targetId);
+    target = target == targetRefr ? target : nullptr;
     obj.SetProperty("target", CreateObject("ObjectReference", target));
-    obj.SetProperty(
-      "caster",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(casterId)));
+
+    auto caster = RE::TESForm::LookupByID(casterId);
+    caster = caster == casterRefr ? caster : nullptr;
+    obj.SetProperty("caster", CreateObject("ObjectReference", caster));
 
     auto targetRefr = IsReferenceOrActor(target)
       ? reinterpret_cast<RE::TESObjectREFR*>(target)
@@ -73,12 +75,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto targetId = movedRef ? movedRef->formID : 0;
   auto isCellAttached = event_ ? event_->isCellAttached : 0;
 
-  g_taskQueue.AddTask([targetId, isCellAttached] {
+  g_taskQueue.AddTask([targetId, isCellAttached, movedRef] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "movedRef",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(targetId)));
+    auto target = RE::TESForm::LookupByID(targetId);
+    target = target == movedRef ? target : nullptr;
+    obj.SetProperty("movedRef", CreateObject("ObjectReference", target));
 
     obj.SetProperty("isCellAttached", JsValue::Bool(isCellAttached));
     EventsApi::SendEvent("moveAttachDetach", { JsValue::Undefined(), obj });
@@ -132,12 +134,13 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto lockedObject = event_ ? event_->lockedObject : nullptr;
   auto lockedObjectId = lockedObject ? lockedObject->formID : 0;
 
-  g_taskQueue.AddTask([lockedObjectId] {
+  g_taskQueue.AddTask([lockedObjectId, lockedObject] {
     auto obj = JsValue::Object();
 
+    auto lockedObject = RE::TESForm::LookupByID(lockedObjectId);
+    lockedObject = lockedObject == lockedObject ? lockedObject : nullptr;
     obj.SetProperty("lockedObject",
-                    CreateObject("ObjectReference",
-                                 RE::TESForm::LookupByID(lockedObjectId)));
+                    CreateObject("ObjectReference", lockedObject));
 
     EventsApi::SendEvent("lockChanged", { JsValue::Undefined(), obj });
   });
@@ -152,11 +155,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto cell = event_ ? event_->cell : nullptr;
   auto cellId = cell ? cell->formID : 0;
 
-  g_taskQueue.AddTask([cellId] {
+  g_taskQueue.AddTask([cellId, cell] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty("cell",
-                    CreateObject("Cell", RE::TESForm::LookupByID(cellId)));
+    auto cell_ = RE::TESForm::LookupByID(cellId);
+    cell_ = cell_ == cell ? cell_ : nullptr;
+    obj.SetProperty("cell", CreateObject("Cell", cell_));
 
     EventsApi::SendEvent("cellFullyLoaded", { JsValue::Undefined(), obj });
   });
@@ -172,11 +176,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto refId = ref ? ref->formID : 0;
   auto grabbed = event_ ? event_->grabbed : 0;
 
-  g_taskQueue.AddTask([refId, grabbed] {
+  g_taskQueue.AddTask([refId, grabbed, ref] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "refr", CreateObject("ObjectReference", RE::TESForm::LookupByID(refId)));
+    auto reference = RE::TESForm::LookupByID(refId);
+    reference = reference == ref ? reference : nullptr;
+    obj.SetProperty("refr", CreateObject("ObjectReference", reference));
 
     obj.SetProperty("isGrabbed", JsValue::Bool(grabbed));
 
@@ -203,12 +208,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto subject = event_ ? event_->subject.get() : nullptr;
   auto subjectId = subject ? subject->formID : 0;
 
-  g_taskQueue.AddTask([subjectId] {
+  g_taskQueue.AddTask([subjectId, subject] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "subject",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(subjectId)));
+    auto subjectLocal = RE::TESForm::LookupByID(subjectId);
+    subjectLocal = subjectLocal == subject ? subjectLocal : nullptr;
+    obj.SetProperty("subject", CreateObject("ObjectReference", subjectLocal));
 
     EventsApi::SendEvent("switchRaceComplete", { JsValue::Undefined(), obj });
   });
@@ -263,13 +268,16 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto objectInitialized = event_ ? event_->objectInitialized.get() : nullptr;
   auto objectInitializedId = objectInitialized ? objectInitialized->formID : 0;
 
-  g_taskQueue.AddTask([objectInitializedId] {
+  g_taskQueue.AddTask([objectInitializedId, objectInitialized] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "initializedObject",
-      CreateObject("ObjectReference",
-                   RE::TESForm::LookupByID(objectInitializedId)));
+    auto objectInitializedLocal = RE::TESForm::LookupByID(objectInitializedId);
+    objectInitializedLocal = objectInitializedLocal == objectInitialized
+      ? objectInitializedLocal
+      : nullptr;
+
+    obj.SetProperty("initializedObject",
+                    CreateObject("ObjectReference", objectInitializedLocal));
 
     EventsApi::SendEvent("scriptInit", { JsValue::Undefined(), obj });
   });
@@ -283,12 +291,13 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto object = event_ ? event_->object.get() : nullptr;
   auto objectId = object ? object->formID : 0;
 
-  g_taskQueue.AddTask([objectId] {
+  g_taskQueue.AddTask([objectId, object] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "object",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(objectId)));
+    auto objectIdLocal = RE::TESForm::LookupByID(objectId);
+    objectIdLocal = objectIdLocal == object ? objectIdLocal : nullptr;
+
+    obj.SetProperty("object", CreateObject("ObjectReference", objectIdLocal));
 
     EventsApi::SendEvent("reset", { JsValue::Undefined(), obj });
   });
@@ -308,26 +317,30 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
   auto state = event_ ? (uint32_t)event_->state : 0;
 
-  g_taskQueue.AddTask([targetActorId, actorId, state] {
-    auto obj = JsValue::Object();
-    obj.SetProperty(
-      "target",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(targetActorId)));
+  g_taskQueue.AddTask(
+    [targetActorId, actorId, state, targetActorRefr, actorRefr] {
+      auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "actor",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(actorId)));
+      auto targetActorLocal = RE::TESForm::LookupByID(targetActorId);
+      targetActorLocal =
+        targetActorLocal == targetActorRefr ? targetActorLocal : nullptr;
+      obj.SetProperty("target",
+                      CreateObject("ObjectReference", targetActorLocal));
 
-    obj.SetProperty(
-      "isCombat",
-      JsValue::Bool(state & (uint32_t)RE::ACTOR_COMBAT_STATE::kCombat));
+      auto actorLocal = RE::TESForm::LookupByID(actorId);
+      actorLocal = actorLocal == actorRefr ? actorLocal : nullptr;
+      obj.SetProperty("actor", CreateObject("ObjectReference", actorLocal));
 
-    obj.SetProperty(
-      "isSearching",
-      JsValue::Bool(state & (uint32_t)RE::ACTOR_COMBAT_STATE::kSearching));
+      obj.SetProperty(
+        "isCombat",
+        JsValue::Bool(state & (uint32_t)RE::ACTOR_COMBAT_STATE::kCombat));
 
-    EventsApi::SendEvent("combatState", { JsValue::Undefined(), obj });
-  });
+      obj.SetProperty(
+        "isSearching",
+        JsValue::Bool(state & (uint32_t)RE::ACTOR_COMBAT_STATE::kSearching));
+
+      EventsApi::SendEvent("combatState", { JsValue::Undefined(), obj });
+    });
 
   return RE::BSEventNotifyControl::kContinue;
 }
@@ -344,20 +357,25 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
   auto dead = event_ ? event_->dead : 0;
 
-  g_taskQueue.AddTask([actorDyingId, actorKillerId, dead] {
-    auto obj = JsValue::Object();
+  g_taskQueue.AddTask(
+    [actorDyingId, actorKillerId, dead, actorDyingRefr, actorKillerRefr] {
+      auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "actorDying",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(actorDyingId)));
+      auto actorDyingLocal = RE::TESForm::LookupByID(actorDyingId);
+      actorDyingLocal =
+        actorDyingLocal == actorDyingRefr ? actorDyingLocal : nullptr;
+      obj.SetProperty("actorDying",
+                      CreateObject("ObjectReference", actorDyingLocal));
 
-    obj.SetProperty(
-      "actorKiller",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(actorKillerId)));
+      auto actorKillerLocal = RE::TESForm::LookupByID(actorKillerId);
+      actorKillerLocal =
+        actorKillerLocal == actorKillerRefr ? actorKillerLocal : nullptr;
+      obj.SetProperty("actorKiller",
+                      CreateObject("ObjectReference", actorKillerLocal));
 
-    dead ? EventsApi::SendEvent("deathEnd", { JsValue::Undefined(), obj })
-         : EventsApi::SendEvent("deathStart", { JsValue::Undefined(), obj });
-  });
+      dead ? EventsApi::SendEvent("deathEnd", { JsValue::Undefined(), obj })
+           : EventsApi::SendEvent("deathStart", { JsValue::Undefined(), obj });
+    });
   return RE::BSEventNotifyControl::kContinue;
 }
 
@@ -415,41 +433,43 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto projectileId = event_ ? event_->projectile : 0;
   uint8_t flags = event_ ? (uint8_t)event_->flags : 0;
 
-  g_taskQueue.AddTask([targetId, causeId, sourceId, projectileId, flags] {
-    auto obj = JsValue::Object();
-    obj.SetProperty(
-      "target",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(targetId)));
+  g_taskQueue.AddTask(
+    [targetId, causeId, sourceId, projectileId, flags, targetRefr, causeRefr] {
+      auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "agressor",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(causeId)));
+      auto targetLocal = RE::TESForm::LookupByID(targetId);
+      targetLocal = targetLocal == targetRefr ? targetLocal : nullptr;
+      obj.SetProperty("target", CreateObject("ObjectReference", targetLocal));
 
-    obj.SetProperty("source",
-                    CreateObject("Form", RE::TESForm::LookupByID(sourceId)));
+      auto causeLocal = RE::TESForm::LookupByID(causeId);
+      causeLocal = causeLocal == causeRefr ? causeLocal : nullptr;
+      obj.SetProperty("agressor", CreateObject("ObjectReference", causeLocal));
 
-    obj.SetProperty(
-      "projectile",
-      CreateObject("Form", RE::TESForm::LookupByID(projectileId)));
+      obj.SetProperty("source",
+                      CreateObject("Form", RE::TESForm::LookupByID(sourceId)));
 
-    obj.SetProperty(
-      "isPowerAttack",
-      JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kPowerAttack));
+      obj.SetProperty(
+        "projectile",
+        CreateObject("Form", RE::TESForm::LookupByID(projectileId)));
 
-    obj.SetProperty(
-      "isSneakAttack",
-      JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kSneakAttack));
+      obj.SetProperty(
+        "isPowerAttack",
+        JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kPowerAttack));
 
-    obj.SetProperty(
-      "isBashAttack",
-      JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kBashAttack));
+      obj.SetProperty(
+        "isSneakAttack",
+        JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kSneakAttack));
 
-    obj.SetProperty(
-      "isHitBlocked",
-      JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kHitBlocked));
+      obj.SetProperty(
+        "isBashAttack",
+        JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kBashAttack));
 
-    EventsApi::SendEvent("hit", { JsValue::Undefined(), obj });
-  });
+      obj.SetProperty(
+        "isHitBlocked",
+        JsValue::Bool(flags & (uint8_t)RE::TESHitEvent::Flag::kHitBlocked));
+
+      EventsApi::SendEvent("hit", { JsValue::Undefined(), obj });
+    });
   return RE::BSEventNotifyControl::kContinue;
 }
 
@@ -466,12 +486,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto uniqueId = event_ ? event_->uniqueID : 0;
 
   g_taskQueue.AddTask([actorId, baseObjectId, equipped, uniqueId,
-                       originalRefrId] {
+                       originalRefrId, actorRefr] {
     auto obj = JsValue::Object();
 
-    obj.SetProperty(
-      "actor",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(actorId)));
+    auto actorLocal = RE::TESForm::LookupByID(actorId);
+    actorLocal = actorLocal == actorRefr ? actorLocal : nullptr;
+    obj.SetProperty("actor", CreateObject("ObjectReference", actorLocal));
 
     obj.SetProperty(
       "baseObj", CreateObject("Form", RE::TESForm::LookupByID(baseObjectId)));
@@ -520,21 +540,25 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
   auto activeEffectBaseId = activeEffectBase ? activeEffectBase->formID : 0;
 
-  g_taskQueue.AddTask([casterId, targetId, isApplied, activeEffectBaseId] {
+  g_taskQueue.AddTask([casterId, targetId, isApplied, activeEffectBaseId,
+                       caster, target] {
     auto obj = JsValue::Object();
 
     obj.SetProperty("effect",
                     CreateObject("MagicEffect",
                                  RE::TESForm::LookupByID(activeEffectBaseId)));
 
-    auto caster = RE::TESForm::LookupByID(casterId);
-    auto casterForJs = IsReferenceOrActor(caster) ? caster : nullptr;
+    auto casterLocal = RE::TESForm::LookupByID(casterId);
+    casterLocal = casterLocal == caster ? casterLocal : nullptr;
+    auto casterForJs = IsReferenceOrActor(casterLocal) ? casterLocal : nullptr;
 
     obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
 
-    obj.SetProperty(
-      "target",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(targetId)));
+    auto targetLocal = RE::TESForm::LookupByID(targetId);
+    targetLocal = targetLocal == target ? targetLocal : nullptr;
+    auto targetForJs = IsReferenceOrActor(targetLocal) ? targetLocal : nullptr;
+
+    obj.SetProperty("target", CreateObject("ObjectReference", targetLocal));
 
     isApplied
       ? EventsApi::SendEvent("effectStart", { JsValue::Undefined(), obj })
@@ -555,7 +579,7 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
   auto casterId = caster ? caster->formID : 0;
   auto targetId = target ? target->formID : 0;
 
-  g_taskQueue.AddTask([effectId, casterId, targetId] {
+  g_taskQueue.AddTask([effectId, casterId, targetId, caster, target] {
     auto obj = JsValue::Object();
 
     auto effect = RE::TESForm::LookupByID(effectId);
@@ -565,14 +589,17 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
     obj.SetProperty("effect", CreateObject("MagicEffect", effect));
 
-    auto caster = RE::TESForm::LookupByID(casterId);
-    auto casterForJs = IsReferenceOrActor(caster) ? caster : nullptr;
+    auto casterLocal = RE::TESForm::LookupByID(casterId);
+    casterLocal = casterLocal == caster ? casterLocal : nullptr;
+    auto casterForJs = IsReferenceOrActor(casterLocal) ? casterLocal : nullptr;
 
     obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
 
-    obj.SetProperty(
-      "target",
-      CreateObject("ObjectReference", RE::TESForm::LookupByID(targetId)));
+    auto targetLocal = RE::TESForm::LookupByID(targetId);
+    targetLocal = targetLocal == target ? targetLocal : nullptr;
+    auto targetForJs = IsReferenceOrActor(targetLocal) ? targetLocal : nullptr;
+
+    obj.SetProperty("target", CreateObject("ObjectReference", targetLocal));
 
     EventsApi::SendEvent("magicEffectApply", { JsValue::Undefined(), obj });
   });
