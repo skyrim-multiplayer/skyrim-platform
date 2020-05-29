@@ -142,24 +142,26 @@ on('tick', () => {
 // Тут нет доступа к игровым методам.
 });
 ```
-* А также на игровые события такие как `effectStart`, `effectFinish`, `magicEffectApply`, `equip`, `unequip`, `hit`, `containerChanged`, `deathStart`, `deathEnd`,  `loadGame`, `combatState`, `reset`, `scriptInit`, `trackedStats`, `uniqueIdChange`, `switchRaceComplete`, `cellFullyLoaded`, `grabRelease`, `lockChanged`, `moveAttachDetach`, `objectLoaded`, `waitStop`, `activate`.
+* А также на игровые события, такие как `effectStart`, `effectFinish`, `magicEffectApply`, `equip`, `unequip`, `hit`, `containerChanged`, `deathStart`, `deathEnd`,  `loadGame`, `combatState`, `reset`, `scriptInit`, `trackedStats`, `uniqueIdChange`, `switchRaceComplete`, `cellFullyLoaded`, `grabRelease`, `lockChanged`, `moveAttachDetach`, `objectLoaded`, `waitStop`, `activate`.
 
-*Подписаться на каждое игровое событие можно как на постоянной основе так и один раз.
+* С помощью `on` можно навсегда подписаться на событие.
 ```typescript
 import { on } from  "../skyrimPlatform"
-on("equip", (even)=>{
+on("equip", (even) => {
 	printConsole(`actor: ${even.actor.getBaseObject().getName()}`);
 	printConsole(`object: ${even.baseObj.getName()}`);
 });
 ```
+* С помощью `once` можно добавить обработчик, который вызовется единожды при следующем срабатывании события.
 ```typescript
 import { once } from  "../skyrimPlatform"
-once("equip", (even)=>{
+once("equip", (even) => {
 	printConsole(`actor: ${even.actor.getBaseObject().getName()}`);
 	printConsole(`object: ${even.baseObj.getName()}`);
 });
 ```
 * В переменной `even` всегда содержатся переменные касающиеся того события на которое вы подписаны.
+
 ### Хуки
 * Хуки позволяют перехватывать запуск и завершение некоторых функций движка игры.
 * Поддерживаемые хуки в данный момент: `sendAnimationEvent`
