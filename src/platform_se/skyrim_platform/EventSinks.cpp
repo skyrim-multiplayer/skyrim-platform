@@ -22,13 +22,6 @@ JsValue CreateObject(const char* type, void* form)
                   std::make_shared<CallNative::Object>(type, form))
               : JsValue::Null();
 }
-
-bool IsReferenceOrActor(RE::TESForm* target)
-{
-  return target ? (target->formType == RE::FormType::Reference) ||
-      (target->formType == RE::FormType::ActorCharacter)
-                : false;
-}
 }
 
 RE::BSEventNotifyControl EventSinks::ProcessEvent(
@@ -52,13 +45,12 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
     caster = caster == casterRefr ? caster : nullptr;
     obj.SetProperty("caster", CreateObject("ObjectReference", caster));
 
-    auto targetRefr = IsReferenceOrActor(target)
-      ? reinterpret_cast<RE::TESObjectREFR*>(target)
-      : nullptr;
+    auto targetRefr_ = reinterpret_cast<RE::TESObjectREFR*>(target);
 
     obj.SetProperty("isCrimeToActivate",
-                    targetRefr ? JsValue::Bool(targetRefr->IsCrimeToActivate())
-                               : JsValue::Undefined());
+                    targetRefr_
+                      ? JsValue::Bool(targetRefr_->IsCrimeToActivate())
+                      : JsValue::Undefined());
 
     EventsApi::SendEvent("activate", { JsValue::Undefined(), obj });
   });
@@ -550,13 +542,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
     auto casterLocal = RE::TESForm::LookupByID(casterId);
     casterLocal = casterLocal == caster ? casterLocal : nullptr;
-    auto casterForJs = IsReferenceOrActor(casterLocal) ? casterLocal : nullptr;
 
-    obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
+    obj.SetProperty("caster", CreateObject("ObjectReference", casterLocal));
 
     auto targetLocal = RE::TESForm::LookupByID(targetId);
     targetLocal = targetLocal == target ? targetLocal : nullptr;
-    auto targetForJs = IsReferenceOrActor(targetLocal) ? targetLocal : nullptr;
 
     obj.SetProperty("target", CreateObject("ObjectReference", targetLocal));
 
@@ -591,13 +581,11 @@ RE::BSEventNotifyControl EventSinks::ProcessEvent(
 
     auto casterLocal = RE::TESForm::LookupByID(casterId);
     casterLocal = casterLocal == caster ? casterLocal : nullptr;
-    auto casterForJs = IsReferenceOrActor(casterLocal) ? casterLocal : nullptr;
 
-    obj.SetProperty("caster", CreateObject("ObjectReference", casterForJs));
+    obj.SetProperty("caster", CreateObject("ObjectReference", casterLocal));
 
     auto targetLocal = RE::TESForm::LookupByID(targetId);
     targetLocal = targetLocal == target ? targetLocal : nullptr;
-    auto targetForJs = IsReferenceOrActor(targetLocal) ? targetLocal : nullptr;
 
     obj.SetProperty("target", CreateObject("ObjectReference", targetLocal));
 
