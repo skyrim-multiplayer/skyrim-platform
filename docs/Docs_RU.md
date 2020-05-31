@@ -210,6 +210,15 @@ getAV.execute = (refrId: number, arg: string) => {
 };
 ```
 
+### HTTP-запросы (experimental)
+SkyrimPlatform предоставляет ограниченную поддержку HTTP-запросов.
+В данный момент только `get` доступен.
+```typescript
+import { HttpClient, } from  "../skyrimPlatform";
+let http = new HttpClient('vk.com', 80);
+http.get('/').then(response => printConsole(response.body));
+```
+
 ### Hot Reload
 * Hot Reload для SkyrimPlatform-плагинов поддерживается. Изменение содержимого `Data/Platform/Plugins` вызывает перезагрузку всех плагинов без перезапуска игры.
 * Для полноценного использования это фичи, т.е. перезагрузки вашего плагина при Ctrl+S, возьмите за основу пример плагина https://github.com/skyrim-multiplayer/skyrimplatform-plugin-example
