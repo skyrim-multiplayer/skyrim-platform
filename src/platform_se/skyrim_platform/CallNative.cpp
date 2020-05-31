@@ -150,7 +150,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
                              std::string(classFunc) + "' ");
   }
 
-  if (self.index() != GetIndexFor<ObjectPtr>())
+  if (!funcInfo->IsGlobal() && self.index() != GetIndexFor<ObjectPtr>())
     throw std::runtime_error("Expected self to be an object");
 
   auto& selfObjPtr = std::get<ObjectPtr>(self);
