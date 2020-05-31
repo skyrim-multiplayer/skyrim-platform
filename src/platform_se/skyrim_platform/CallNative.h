@@ -52,7 +52,7 @@ struct Arguments
   RE::VMStackID stackId;
   const std::string& className;
   const std::string& classFunc;
-  ObjectPtr self;
+  const ObjectPtr self;
   const AnySafe* args;
   size_t numArgs;
   FunctionInfoProvider& provider;
