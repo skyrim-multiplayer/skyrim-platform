@@ -150,13 +150,24 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
                              std::string(classFunc) + "' ");
   }
 
+  RE::TESForm* rawSelf = nullptr;
+  if (!funcInfo->IsGlobal()) {
+    if (self.index() != GetIndexFor<ObjectPtr>())
+      std::runtime_error("Expected self to be an object");
+
+    ObjectPtr p;
+    try {
+      p = std::get<ObjectPtr>(self);
+    } catch (std::exception& e) {
+      throw std::runtime_error("std::get<ObjectPtr>(self) failed");
+    }
+
+    if (p)
+      rawSelf = (RE::TESForm*)p->GetNativeObjectPtr();
+  }
+
   if (!funcInfo->IsGlobal() && self.index() != GetIndexFor<ObjectPtr>())
     throw std::runtime_error("Expected self to be an object");
-
-  auto selfObjPtr =
-    funcInfo->IsGlobal() ? ObjectPtr() : std::get<ObjectPtr>(self);
-  RE::TESForm* rawSelf =
-    selfObjPtr ? (RE::TESForm*)selfObjPtr->GetNativeObjectPtr() : nullptr;
 
   if (rawSelf && funcInfo->IsGlobal()) {
     throw std::runtime_error("Expected self to be null ('" +
@@ -231,7 +242,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
       (void*)numArgs);
     auto fsClassName = AnySafeToVariable(className).GetString();
     auto fsClassFunc = AnySafeToVariable(classFunc).GetString();
-    auto selfScriptObject = selfObjPtr
+    auto selfScriptObject = rawSelf
       ? VariableAccess::GetObjectSmartPtr(AnySafeToVariable(self))
       : RE::BSTSmartPointer<RE::BSScript::Object>();
 
