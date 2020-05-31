@@ -14,6 +14,11 @@
 RE::BSScript::Variable CallNative::AnySafeToVariable(
   const CallNative::AnySafe& v, bool treatNumberAsInt = false)
 {
+  if (v.valueless_by_exception()) {
+    RE::BSScript::Variable res;
+    res.SetNone();
+    return res;
+  }
   return std::visit(
     overloaded{ [&](double f) {
                  RE::BSScript::Variable res;
