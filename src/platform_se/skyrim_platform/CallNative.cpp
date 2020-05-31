@@ -157,22 +157,9 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
 
   RE::TESForm* rawSelf = nullptr;
   if (!funcInfo->IsGlobal()) {
-    if (self.index() != GetIndexFor<ObjectPtr>())
-      std::runtime_error("Expected self to be an object");
-
-    ObjectPtr p;
-    try {
-      p = std::get<ObjectPtr>(self);
-    } catch (std::exception& e) {
-      throw std::runtime_error("std::get<ObjectPtr>(self) failed");
-    }
-
-    if (p)
-      rawSelf = (RE::TESForm*)p->GetNativeObjectPtr();
+    if (self)
+      rawSelf = (RE::TESForm*)self->GetNativeObjectPtr();
   }
-
-  if (!funcInfo->IsGlobal() && self.index() != GetIndexFor<ObjectPtr>())
-    throw std::runtime_error("Expected self to be an object");
 
   if (rawSelf && funcInfo->IsGlobal()) {
     throw std::runtime_error("Expected self to be null ('" +

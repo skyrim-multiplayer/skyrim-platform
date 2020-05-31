@@ -35,6 +35,7 @@ CallNative::ObjectPtr NativeValueCasts::JsObjectToNativeObject(
       if (!nativeObj)
         throw std::runtime_error(
           "This JavaScript object is not a valid game object");
+
       return nativeObj->Get();
     }
     default:
