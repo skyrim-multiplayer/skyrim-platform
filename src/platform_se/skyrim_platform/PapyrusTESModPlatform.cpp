@@ -5,8 +5,8 @@
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
 #include <RE/ConsoleLog.h>
+#include <RE/ScriptEventSourceHolder.h>
 #include <RE/SkyrimVM.h>
-#include <RE\ScriptEventSourceHolder.h>
 #include <mutex>
 #include <skse64/GameReferences.h>
 #include <unordered_map>
@@ -48,6 +48,7 @@ public:
     const RE::BSTSmartPointer<RE::BSScript::Object>& a_object) override{};
 };
 
+// This class has been added as an issue 52 workaround
 class LoadGameEvent : public RE::BSTEventSink<RE::TESLoadGameEvent>
 {
 public:
