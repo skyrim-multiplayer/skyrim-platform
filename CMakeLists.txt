@@ -9,6 +9,17 @@ if (NOT EXISTS ${SKYRIM_DIR}/SkyrimSE.exe)
   message(FATAL_ERROR "Bad SKYRIM_DIR: ${SKYRIM_DIR}")
 endif()
 
+include(src/cmake/CMakeRC.cmake)
+
+ # assets
+  if(NOT TARGET skyrim_plugin_resources)
+    set(ASSET_FILES ${CMAKE_SOURCE_DIR}/src/platform_se/skyrim_platform/savefile/template.ess)
+    cmrc_add_resource_library(skyrim_plugin_resources ${ASSET_FILES}
+      ALIAS assets NAMESPACE skyrim_plugin_resources WHENCE src
+    )
+  endif()
+
+
 include(src/cmake/cmake_generate.cmake)
 
 # Clear CMake cache after changing this
