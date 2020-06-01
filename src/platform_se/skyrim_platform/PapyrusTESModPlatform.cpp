@@ -5,8 +5,8 @@
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
 #include <RE/ConsoleLog.h>
+#include <RE/ScriptEventSourceHolder.h>
 #include <RE/SkyrimVM.h>
-#include <RE\ScriptEventSourceHolder.h>
 #include <mutex>
 #include <skse64/GameReferences.h>
 #include <unordered_map>
