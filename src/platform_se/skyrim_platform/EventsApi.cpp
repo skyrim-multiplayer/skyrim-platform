@@ -6,11 +6,14 @@
 #include "NativeObject.h"
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
+#include "ThreadPoolWrapper.h"
 #include <map>
 #include <set>
 #include <unordered_map>
 
-extern ctpl::thread_pool g_pool;
+#include <RE\ConsoleLog.h>
+
+extern ThreadPoolWrapper g_pool;
 extern TaskQueue g_taskQueue;
 
 struct EventsGlobalState
@@ -141,7 +144,7 @@ void EventsApi::SendAnimationEventEnter(uint32_t selfId,
       });
     }
   };
-  g_pool.push(f).wait();
+  g_pool.Push(f).wait();
 }
 
 void EventsApi::SendAnimationEventLeave(bool animationSucceeded) noexcept
@@ -170,7 +173,7 @@ void EventsApi::SendAnimationEventLeave(bool animationSucceeded) noexcept
       });
     }
   };
-  g_pool.push(f).wait();
+  g_pool.Push(f).wait();
 }
 
 namespace {

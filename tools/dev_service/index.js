@@ -53,11 +53,15 @@ fs.watch(bin, (eventType, fileName) => {
     cp(binPath('SkyrimPlatform.pdb'), './dist');
     cp(binPath('ChakraCore.dll'), './dist');
     cp(binPath('SkyrimPlatform.dll'), './dist/Data/SKSE/Plugins');
-		cp(path.join(bin, `pex/TESModPlatform.pex`), './dist/Data/Scripts');
+    cp(path.join(bin, `pex/TESModPlatform.pex`), './dist/Data/Scripts');
+    cp(path.join(bin, `_codegen/skyrimPlatform.ts`), './dist/Data/Platform/Modules');
     cp(path.join(sourceDir, 'tools/system_polyfill/dist/___systemPolyfill.js'),
       './dist/Data/Platform/Distribution'
     );
+    fs.copySync(path.join(sourceDir, 'tools/plugin-example'), './dist/Data/Platform/plugin-example');
     fs.copySync(path.join(sourceDir, 'requirements'), './dist');
+    fs.removeSync('./dist/Data/Platform/plugin-example/node_modules');
+    fs.removeSync('./dist/Data/Platform/plugin-example/dist');
 
     fs.copySync('./dist', config.SkyrimSEFolder);
 

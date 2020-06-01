@@ -308,7 +308,7 @@ JsValue JsValue::Call(const std::vector<JsValue>& arguments, bool ctor) const
   return JsValue(res);
 }
 
-void JsValue::SetProperty(const JsValue& key, const JsValue& newValue)
+void JsValue::SetProperty(const JsValue& key, const JsValue& newValue) const
 {
   switch (key.GetType()) {
     case Type::Number: {
@@ -329,7 +329,7 @@ void JsValue::SetProperty(const JsValue& key, const JsValue& newValue)
 }
 
 void JsValue::SetProperty(const char* propertyName, const FunctionT& getter,
-                          const FunctionT& setter)
+                          const FunctionT& setter) const
 {
   JsValue descriptor = JsValue::Object();
   JsValue propName = JsValue::String(propertyName);
@@ -469,7 +469,8 @@ void JsEngine::ResetContext(TaskQueue* taskQueue)
       auto reason = JsValueAccess::Ctor(reason_);
       auto stack = reason.GetProperty("stack").ToString();
       ss << "Unhandled promise rejection" << std::endl;
-      ss << ((stack == "undefined") ? reason.ToString() : stack);
+      ss << ((stack == "undefined") ? reason.ToString()
+                                    : reason.ToString() + "\n" + stack);
       std::string str = ss.str();
       q->AddTask([str] { throw std::runtime_error(str); });
     },

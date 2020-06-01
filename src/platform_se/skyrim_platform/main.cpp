@@ -4,19 +4,21 @@
 #include "DirectoryMonitor.h"
 #include "DumpFunctions.h"
 #include "EventsApi.h"
+#include "HttpClient.h"
+#include "HttpClientApi.h"
 #include "JsEngine.h"
 #include "MyUpdateTask.h"
 #include "PapyrusTESModPlatform.h"
 #include "SkyrimPlatformProxy.h"
 #include "SystemPolyfill.h"
 #include "TaskQueue.h"
+#include "ThreadPoolWrapper.h"
 #include <RE/ConsoleLog.h>
 #include <SKSE/API.h>
 #include <SKSE/Interfaces.h>
 #include <SKSE/Stubs.h>
 #include <Windows.h>
 #include <atomic>
-#include <ctpl/ctpl_stl.h>
 #include <memory>
 #include <mutex>
 #include <shlobj.h>
@@ -36,7 +38,8 @@ void SetupFridaHooks();
 
 static SKSETaskInterface* g_taskInterface = nullptr;
 static SKSEMessagingInterface* g_messaging = nullptr;
-ctpl::thread_pool g_pool(1);
+ThreadPoolWrapper g_pool;
+HttpClient g_httpClient;
 
 CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 TaskQueue g_taskQueue;
@@ -110,6 +113,7 @@ void JsTick(bool gameFunctionsAvailable)
           devApi, &engine,
           { { "skyrimPlatform",
               [it](JsValue e) {
+                HttpClientApi::Register(e);
                 ConsoleApi::Register(e);
                 DevApi::Register(e, &engine, {}, it);
                 EventsApi::Register(e);
@@ -151,7 +155,9 @@ void JsTick(bool gameFunctionsAvailable)
       g_taskQueue.Update();
       g_nativeCallRequirements.jsThrQ->Update();
     }
-
+    if (!gameFunctionsAvailable) {
+      g_httpClient.Update();
+    }
     EventsApi::SendEvent(gameFunctionsAvailable ? "update" : "tick", {});
 
   } catch (std::exception& e) {
@@ -192,7 +198,7 @@ void JsTick(bool gameFunctionsAvailable)
 
 void PushJsTick(bool gameFunctionsAvailable)
 {
-  g_pool.push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
+  g_pool.Push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
 }
 
 void OnUpdate()

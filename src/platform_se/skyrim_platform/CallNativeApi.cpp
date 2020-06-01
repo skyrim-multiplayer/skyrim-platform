@@ -4,15 +4,7 @@
 #include "NativeValueCasts.h"
 #include "NullPointerException.h"
 #include "VmProvider.h"
-
-namespace {
-inline JsValue CreatePromise(const JsValue& resolver)
-{
-  thread_local auto g_standardPromise =
-    JsValue::GlobalObject().GetProperty("Promise");
-  return g_standardPromise.Constructor({ g_standardPromise, resolver });
-}
-}
+#include "CreatePromise.h"
 
 JsValue CallNativeApi::CallNative(
   const JsFunctionArguments& args,
@@ -41,18 +33,19 @@ JsValue CallNativeApi::CallNative(
     throw NullPointerException("gameThrQ");
   if (!requirements.jsThrQ)
     throw NullPointerException("jsThrQ");
-  CallNative::Arguments callNativeArgs{ requirements.vm,
-                                        requirements.stackId,
-                                        className,
-                                        functionName,
-                                        NativeValueCasts::JsValueToNativeValue(
-                                          self),
-                                        nativeArgs,
-                                        n,
-                                        provider,
-                                        *requirements.gameThrQ,
-                                        *requirements.jsThrQ,
-                                        nullptr };
+  CallNative::Arguments callNativeArgs{
+    requirements.vm,
+    requirements.stackId,
+    className,
+    functionName,
+    NativeValueCasts::JsObjectToNativeObject(self),
+    nativeArgs,
+    n,
+    provider,
+    *requirements.gameThrQ,
+    *requirements.jsThrQ,
+    nullptr
+  };
 
   auto f = provider.GetFunctionInfo(className, functionName);
   if (f && f->IsLatent()) {
