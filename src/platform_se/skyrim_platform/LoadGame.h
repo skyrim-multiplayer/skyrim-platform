@@ -17,9 +17,29 @@ struct GlobalVariables;
 
 class LoadGame
 {
-  class Time;
-
 public:
+  class Time
+  {
+  public:
+    void Set(uint8_t inS, uint8_t inM, uint8_t inH)
+    {
+      seconds = inS;
+      minutes = inM;
+      hours = inH;
+      hasData = true;
+    }
+
+    bool IsSet(void) { return hasData; }
+
+    uint8_t GetSeconds(void) { return seconds; }
+    uint8_t GetMinutes(void) { return minutes; }
+    uint8_t GetHours(void) { return hours; }
+
+  private:
+    uint8_t seconds = 0, minutes = 0, hours = 0;
+    bool hasData = false;
+  };
+
   static void Run(const std::array<float, 3>& pos,
                   const std::array<float, 3>& angle, uint32_t cellOrWorld,
                   Time* time = nullptr, SaveFile_::Weather* _weather = nullptr,

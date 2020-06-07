@@ -1,9 +1,9 @@
 #include "LoadGame.h"
 #include "cmrc/cmrc.hpp"
-#include "savefile/ChangeFormNPC.h"
-#include "savefile/Reader.h"
-#include "savefile/SeekerOfDifferences.h"
-#include "savefile/Writer.h"
+#include "savefile/SFChangeFormNPC.h"
+#include "savefile/SFReader.h"
+#include "savefile/SFSeekerOfDifferences.h"
+#include "savefile/SFWriter.h"
 #include <GameData.h>
 #include <filesystem>
 #include <fstream>
@@ -15,48 +15,6 @@
 namespace fs = std::filesystem;
 
 CMRC_DECLARE(skyrim_plugin_resources);
-
-class LoadGame::Time
-{
-public:
-  Time() { Clear(); }
-  ~Time() {}
-
-  void Clear(void)
-  {
-    seconds = minutes = hours = 0;
-    hasData = false;
-  }
-
-  void SetToNow(void) { Set(1, 2, 3); }
-
-  void Set(UInt8 inS, UInt8 inM, UInt8 inH)
-  {
-    seconds = inS;
-    minutes = inM;
-    hours = inH;
-    hasData = true;
-  }
-
-  bool IsSet(void) { return hasData; }
-
-  UInt8 GetSeconds(void)
-  {
-    return seconds;
-  }
-  UInt8 GetMinutes(void)
-  {
-    return minutes;
-  }
-  UInt8 GetHours(void)
-  {
-    return hours;
-  }
-
-private:
-  UInt8 seconds, minutes, hours;
-  bool hasData;
-};
 
 void LoadGame::Run(const std::array<float, 3>& pos,
                    const std::array<float, 3>& angle, uint32_t cellOrWorld,
@@ -90,7 +48,7 @@ void LoadGame::Run(const std::array<float, 3>& pos,
   ModifyPlayerFormNPC(save, changeFormNPC);
   ModifyEssStructure(save, pos, angle, cellOrWorld);
 
-  auto name = "SKYMP2020-" + GenerateGuid();
+  auto name = "TESMODPLATFORM-" + GenerateGuid();
   if (!SaveFile_::Writer(save).CreateSaveFile(GetSaveFullPath(name)))
     throw std::runtime_error("CreateSaveFile failed");
 
@@ -102,8 +60,9 @@ void LoadGame::Run(const std::array<float, 3>& pos,
 
 fs::path LoadGame::GetSaveFullPath(const std::string& name)
 {
-  return GetPathToMyDocuments() + L"\\My Games\\Skyrim\\Saves\\" +
-    StringToWstring(name) + L".ess";
+  return GetPathToMyDocuments() +
+    L"\\My Games\\Skyrim Special Edition\\Saves\\" + StringToWstring(name) +
+    L".ess";
 }
 
 std::wstring LoadGame::GetPathToMyDocuments()
@@ -139,7 +98,7 @@ void LoadGame::ModifySaveTime(std::shared_ptr<SaveFile_::SaveFile>& save,
     return;
 
   if (!time->IsSet())
-    throw std::runtime_error("Time data not fill");
+    throw std::runtime_error("Time data is not filled");
 
   SaveFile_::RefID gameHourID = 0x38;
 

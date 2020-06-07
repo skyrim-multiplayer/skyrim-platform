@@ -1,6 +1,5 @@
 #pragma once
-
-#include "SaveFileStructure.h"
+#include "SFStructure.h"
 
 namespace SaveFile_ {
 class Reader

@@ -1,5 +1,5 @@
 #pragma once
-#include "SaveFileStructure.h"
+#include "SFStructure.h"
 #include <cstdint>
 #include <optional>
 #include <vector>

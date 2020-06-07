@@ -1,5 +1,5 @@
 #pragma once
-#include "SaveFileStructure.h"
+#include "SFStructure.h"
 #include <array>
 #include <fstream>
 #include <zlib.h>

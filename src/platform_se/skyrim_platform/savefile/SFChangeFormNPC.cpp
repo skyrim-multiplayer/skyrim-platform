@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "ChangeFormNPC.h"
+#include "SFChangeFormNPC.h"
 
 namespace {
 enum Flags

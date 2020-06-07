@@ -1,4 +1,4 @@
-#include "Reader.h"
+#include "SFReader.h"
 #include <cassert>
 #include <fstream>
 #include <iostream>

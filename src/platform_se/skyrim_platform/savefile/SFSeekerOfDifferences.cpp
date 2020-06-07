@@ -1,5 +1,5 @@
 
-#include "SeekerOfDifferences.h"
+#include "SFSeekerOfDifferences.h"
 #include <cassert>
 #include <iostream>
 #include <stdexcept>
@@ -7,7 +7,7 @@
 #include <bitset>
 #include <string>
 
-#include "ChangeFormNPC.h"
+#include "SFChangeFormNPC.h"
 namespace {
 // Example program
 
