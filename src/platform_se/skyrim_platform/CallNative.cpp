@@ -6,6 +6,7 @@
 #include "StringHolder.h"
 #include "VmCall.h"
 #include "VmCallback.h"
+#include <RE/Actor.h>
 #include <RE/BSScript/PackUnpack.h>
 #include <RE/BSScript/StackFrame.h>
 #include <RE/SkyrimVM.h>
@@ -135,6 +136,16 @@ CallNative::AnySafe VariableToAnySafe(
       throw std::runtime_error("Unknown function return type");
   }
 }
+
+template <class T>
+T ExtractValue(const CallNative::AnySafe& var)
+{
+  try {
+    return std::get<T>(var);
+  } catch (const std::bad_variant_access&) {
+    throw std::runtime_error("Bad variant access");
+  }
+}
 }
 
 CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
@@ -221,6 +232,51 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
     auto form =
       RE::TESForm::LookupByID((uint32_t)std::get<double>(args_.args[0]));
     return form ? std::make_shared<Object>("Form", form) : ObjectPtr();
+  }
+
+  if (!stricmp(className.data(), "Actor") &&
+      !stricmp(classFunc.data(), "addItem") && rawSelf &&
+      (rawSelf->formType == RE::FormType::ActorCharacter)) {
+
+    if (auto actor = reinterpret_cast<RE::Actor*>(rawSelf)) {
+
+      auto obj = ExtractValue<CallNative::ObjectPtr>(args_.args[0]);
+      int32_t count = ExtractValue<double>(args_.args[1]);
+
+      if (!obj)
+        throw std::runtime_error("addItem object equal null");
+
+      RE::TESBoundObject* boundObject =
+        reinterpret_cast<RE::TESBoundObject*>(obj->GetNativeObjectPtr());
+
+      actor->AddObjectToContainer(boundObject, nullptr, count, nullptr);
+    }
+  }
+
+  if (!stricmp(className.data(), "Actor") &&
+      !stricmp(classFunc.data(), "removeItem") && rawSelf &&
+      (rawSelf->formType == RE::FormType::ActorCharacter)) {
+
+    if (auto actor = reinterpret_cast<RE::Actor*>(rawSelf)) {
+
+      auto obj = ExtractValue<CallNative::ObjectPtr>(args_.args[0]);
+      int32_t count = ExtractValue<double>(args_.args[1]);
+      auto objToMove = ExtractValue<CallNative::ObjectPtr>(args_.args[3]);
+
+      if (!obj)
+        throw std::runtime_error("removeItem object equal null");
+
+      RE::TESBoundObject* boundObject =
+        reinterpret_cast<RE::TESBoundObject*>(obj->GetNativeObjectPtr());
+
+      RE::TESObjectREFR* refrToMove = nullptr;
+      if (objToMove)
+        refrToMove = reinterpret_cast<RE::TESObjectREFR*>(
+          objToMove->GetNativeObjectPtr());
+
+      actor->RemoveItem(boundObject, count, RE::ITEM_REMOVE_REASON::kRemove,
+                        nullptr, refrToMove);
+    }
   }
 
   auto topArgs = stackIterator->second->top->args;
