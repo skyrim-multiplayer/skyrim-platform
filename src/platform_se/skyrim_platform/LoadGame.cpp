@@ -1,10 +1,14 @@
 #include "LoadGame.h"
+#include "NullPointerException.h"
+#include "PapyrusTESModPlatform.h"
 #include "cmrc/cmrc.hpp"
 #include "savefile/SFChangeFormNPC.h"
 #include "savefile/SFReader.h"
 #include "savefile/SFSeekerOfDifferences.h"
 #include "savefile/SFWriter.h"
 #include <GameData.h>
+#include <RE/ScriptEventSourceHolder.h>
+#include <RE/TESLoadGameEvent.h>
 #include <filesystem>
 #include <fstream>
 #include <shlobj.h>
@@ -15,6 +19,58 @@
 namespace fs = std::filesystem;
 
 CMRC_DECLARE(skyrim_plugin_resources);
+
+constexpr auto g_saveFilePrefix = "TESMODPLATFORM-";
+
+class LoadGameEventSink : public RE::BSTEventSink<RE::TESLoadGameEvent>
+{
+public:
+  LoadGameEventSink()
+  {
+    auto holder = RE::ScriptEventSourceHolder::GetSingleton();
+    if (!holder)
+      throw NullPointerException("holder");
+
+    holder->AddEventSink(
+      dynamic_cast<RE::BSTEventSink<RE::TESLoadGameEvent>*>(this));
+  }
+
+  RE::BSEventNotifyControl ProcessEvent(
+    const RE::TESLoadGameEvent* event,
+    RE::BSTEventSource<RE::TESLoadGameEvent>* eventSource) override
+  {
+    std::thread([] {
+      // A way to wait 5 seconds game time
+      for (int i = 0; i < 50; ++i) {
+        auto n = TESModPlatform::GetNumPapyrusUpdates();
+        while (n == TESModPlatform::GetNumPapyrusUpdates())
+          Sleep(20);
+        Sleep(80);
+      }
+
+      // Allow MoveRefrToPosition again
+      TESModPlatform::BlockMoveRefrToPosition(false);
+
+      // Removes our temporary save files
+      try {
+        std::filesystem::path path = LoadGame::GetPathToMyDocuments() +
+          L"\\My Games\\Skyrim Special Edition\\Saves\\";
+
+        for (auto& file : std::filesystem::directory_iterator(path)) {
+          if (file.path().filename().generic_string().find(g_saveFilePrefix) !=
+              std::string::npos)
+            try {
+              std::filesystem::remove(file);
+            } catch (...) {
+              // I have no idea how to handle these exceptions properly
+            }
+        }
+      } catch (...) {
+      }
+    }).detach();
+    return RE::BSEventNotifyControl::kContinue;
+  }
+};
 
 void LoadGame::Run(const std::array<float, 3>& pos,
                    const std::array<float, 3>& angle, uint32_t cellOrWorld,
@@ -48,12 +104,15 @@ void LoadGame::Run(const std::array<float, 3>& pos,
   ModifyPlayerFormNPC(save, changeFormNPC);
   ModifyEssStructure(save, pos, angle, cellOrWorld);
 
-  auto name = "TESMODPLATFORM-" + GenerateGuid();
+  auto name = g_saveFilePrefix + GenerateGuid();
   if (!SaveFile_::Writer(save).CreateSaveFile(GetSaveFullPath(name)))
     throw std::runtime_error("CreateSaveFile failed");
 
+  TESModPlatform::BlockMoveRefrToPosition(true);
+  static LoadGameEventSink g_sink;
+
   if (auto mgr = BGSSaveLoadManager::GetSingleton())
-    return mgr->RequestLoad(name.data());
+    return mgr->Load(name.data());
   else
     throw std::runtime_error("BGSSaveLoadManager is nullptr");
 }
