@@ -84,8 +84,9 @@ let testCallStaticNoArgs = () => {
 
     let ironSword = Game.getFormEx(0x12eb7);
     let n = Game.getPlayer().getItemCount(ironSword);
-    Game.getPlayer().addItem(ironSword, 1, true);
+    let addItemReturnValue = Game.getPlayer().addItem(ironSword, 1, true);
     expect(Game.getPlayer().getItemCount(ironSword)).to.be.eql(n + 1);
+    expect(addItemReturnValue).to.be.null;
 
     // TODO: Test for ObjectReference (заспавнить сундук и попытаться добавить в него предмет)
     // TODO: Попытаться добавить в инвентарь форму, не являющуюся предметом (Weather, например)
