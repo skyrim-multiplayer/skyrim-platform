@@ -136,16 +136,6 @@ CallNative::AnySafe VariableToAnySafe(
       throw std::runtime_error("Unknown function return type");
   }
 }
-
-template <class T>
-T ExtractValue(const CallNative::AnySafe& var)
-{
-  try {
-    return std::get<T>(var);
-  } catch (const std::bad_variant_access&) {
-    throw std::runtime_error("Bad variant access");
-  }
-}
 }
 
 CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
@@ -240,8 +230,8 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
 
     if (auto actor = reinterpret_cast<RE::Actor*>(rawSelf)) {
 
-      auto obj = ExtractValue<CallNative::ObjectPtr>(args_.args[0]);
-      int32_t count = ExtractValue<double>(args_.args[1]);
+      auto obj = std::get<CallNative::ObjectPtr>(args_.args[0]);
+      int32_t count = std::get<double>(args_.args[1]);
 
       if (!obj)
         throw std::runtime_error("addItem object equal null");
@@ -259,10 +249,10 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
 
     if (auto actor = reinterpret_cast<RE::Actor*>(rawSelf)) {
 
-      auto obj = ExtractValue<CallNative::ObjectPtr>(args_.args[0]);
-      int32_t count = ExtractValue<double>(args_.args[1]);
-      auto objToMove = ExtractValue<CallNative::ObjectPtr>(args_.args[3]);
-
+      auto obj = std::get<CallNative::ObjectPtr>(args_.args[0]);
+      int32_t count = std::get<double>(args_.args[1]);
+      auto objToMove = std::get<CallNative::ObjectPtr>(args_.args[3]);
+        
       if (!obj)
         throw std::runtime_error("removeItem object equal null");
 
