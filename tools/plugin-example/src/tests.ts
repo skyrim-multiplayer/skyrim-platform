@@ -91,6 +91,8 @@ let testCallStaticNoArgs = () => {
     // TODO: Попытаться добавить в инвентарь форму, не являющуюся предметом (Weather, например)
     // TODO: Попытаться добавить в инвентарь не форму, а TESObjectREFR или Actor
 
+    // Аналогично для removeItem
+
     printConsole('Test passed');
 };
 
