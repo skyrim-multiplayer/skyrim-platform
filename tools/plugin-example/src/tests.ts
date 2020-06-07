@@ -90,8 +90,12 @@ let testCallStaticNoArgs = () => {
     // TODO: Test for ObjectReference (заспавнить сундук и попытаться добавить в него предмет)
     // TODO: Попытаться добавить в инвентарь форму, не являющуюся предметом (Weather, например)
     // TODO: Попытаться добавить в инвентарь не форму, а TESObjectREFR или Actor
-
     // Аналогично для removeItem
+
+    // TODO: removeItem с правильным параметром objToMove (TESObjectREFR и Actor)
+    // TODO: removeItem с НЕправильным параметром objToMove (скажем, Weather, а не TESObjectREFR)
+
+    // TODO: removeItem с отрицательным count должна отбирать все предметы
 
     printConsole('Test passed');
 };
