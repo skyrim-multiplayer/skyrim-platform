@@ -269,10 +269,9 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
       RE::TESBoundObject* boundObject =
         reinterpret_cast<RE::TESBoundObject*>(obj->GetNativeObjectPtr());
 
-      RE::TESObjectREFR* refrToMove = nullptr;
-      if (objToMove)
-        refrToMove = reinterpret_cast<RE::TESObjectREFR*>(
-          objToMove->GetNativeObjectPtr());
+      RE::TESObjectREFR* refrToMove = objToMove
+        ? reinterpret_cast<RE::TESObjectREFR*>(objToMove->GetNativeObjectPtr())
+        : nullptr;
 
       actor->RemoveItem(boundObject, count, RE::ITEM_REMOVE_REASON::kRemove,
                         nullptr, refrToMove);
