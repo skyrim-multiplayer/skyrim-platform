@@ -3,5 +3,5 @@
 class FlowManager
 {
 public:
-  void static CloseProcess(std::wstring pName);
+  static void CloseProcess(std::wstring pName);
 };
