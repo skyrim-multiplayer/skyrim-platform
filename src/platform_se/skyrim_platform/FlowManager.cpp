@@ -21,8 +21,8 @@ void FlowManager::CloseProcess(std::wstring pName)
       pids.emplace_back(entry.th32ProcessID);
     }
   } while (Process32NextW(snap, &entry));
-  for (auto& proces : pids) {
-    HANDLE h = OpenProcess(PROCESS_TERMINATE, TRUE, proces);
+  for (auto& process : pids) {
+    HANDLE h = OpenProcess(PROCESS_TERMINATE, TRUE, process);
     TerminateProcess(h, 0);
   }
 }
