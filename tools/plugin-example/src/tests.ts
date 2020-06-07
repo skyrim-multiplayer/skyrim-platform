@@ -81,7 +81,16 @@ let testCallStaticNoArgs = () => {
     expect(ffRefrId).to.be.greaterThan(0xff000000);
     expect(Game.getFormEx(ffRefrId)).not.to.be.null;
     expect(Game.getFormEx(ffRefrId).getFormID()).to.be.eql(ffRefrId);
-    
+
+    let ironSword = Game.getFormEx(0x12eb7);
+    let n = Game.getPlayer().getItemCount(ironSword);
+    Game.getPlayer().addItem(ironSword, 1, true);
+    expect(Game.getPlayer().getItemCount(ironSword)).to.be.eql(n + 1);
+
+    // TODO: Test for ObjectReference (заспавнить сундук и попытаться добавить в него предмет)
+    // TODO: Попытаться добавить в инвентарь форму, не являющуюся предметом (Weather, например)
+    // TODO: Попытаться добавить в инвентарь не форму, а TESObjectREFR или Actor
+
     printConsole('Test passed');
 };
 
