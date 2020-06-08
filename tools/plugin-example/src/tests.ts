@@ -97,7 +97,7 @@ let testCallStaticNoArgs = () => {
     expect(barrelRef.getItemCount(ironSword)).to.be.eql(10);
     barrelRef.removeItem(ironSword, 5, true, Game.getPlayer());
     expect(barrelRef.getItemCount(ironSword)).to.be.eql(5);
-    expect(Game.getPlayer().getItemCount(ironSword)).to.eql(5 + n +1);
+    expect(Game.getPlayer().getItemCount(ironSword)).to.eql(5 + n + 1);
 
     Game.getPlayer().addItem(barrelRef, 10, false);
     Game.getPlayer().removeItem(barrelRef, 10, false, null);
