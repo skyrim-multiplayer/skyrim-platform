@@ -10,8 +10,8 @@
 #include <RE/BSScript/PackUnpack.h>
 #include <RE/BSScript/StackFrame.h>
 #include <RE/SkyrimVM.h>
-#include <optional>
 #include <limits>
+#include <optional>
 
 RE::BSScript::Variable CallNative::AnySafeToVariable(
   const CallNative::AnySafe& v, bool treatNumberAsInt = false)
