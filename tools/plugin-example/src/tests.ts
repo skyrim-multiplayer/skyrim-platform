@@ -88,15 +88,27 @@ let testCallStaticNoArgs = () => {
     expect(Game.getPlayer().getItemCount(ironSword)).to.be.eql(n + 1);
     expect(addItemReturnValue).to.be.null;
 
-    // TODO: Test for ObjectReference (заспавнить сундук и попытаться добавить в него предмет)
-    // TODO: Попытаться добавить в инвентарь форму, не являющуюся предметом (Weather, например)
-    // TODO: Попытаться добавить в инвентарь не форму, а TESObjectREFR или Actor
-    // Аналогично для removeItem
+    let barrel = Game.getFormEx(0x60752);
+    let barrelRef = Game.getPlayer().placeAtMe(barrel, 1, true,false);
+    expect(barrelRef).to.not.be.null;
 
-    // TODO: removeItem с правильным параметром objToMove (TESObjectREFR и Actor)
-    // TODO: removeItem с НЕправильным параметром objToMove (скажем, Weather, а не TESObjectREFR)
+    expect(barrelRef.getItemCount(ironSword)).to.be.eql(0);
+    barrelRef.addItem(ironSword, 10, false);
+    expect(barrelRef.getItemCount(ironSword)).to.be.eql(10);
+    barrelRef.removeItem(ironSword, 5, true, Game.getPlayer());
+    expect(barrelRef.getItemCount(ironSword)).to.be.eql(5);
+    expect(Game.getPlayer().getItemCount(ironSword)).to.eql(5 + n +1);
 
-    // TODO: removeItem с отрицательным count должна отбирать все предметы
+    Game.getPlayer().addItem(barrelRef, 10, false);
+    Game.getPlayer().removeItem(barrelRef, 10, false, null);
+
+    let blackreachWeather = Game.getFormEx(0x48c14);
+    Game.getPlayer().addItem(blackreachWeather, 1, false);
+    Game.getPlayer().removeItem(blackreachWeather, 1, false, null);
+
+    expect(barrelRef.getItemCount(ironSword)).to.not.eql(0);
+    barrelRef.removeItem(ironSword, -1, true, null);
+    expect(barrelRef.getItemCount(ironSword)).to.be.eql(0);
 
     printConsole('Test passed');
 };
