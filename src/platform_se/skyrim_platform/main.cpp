@@ -59,8 +59,7 @@ std::string ReadFile(const std::filesystem::path& p)
   return content.str();
 }
 
-// https://stackoverflow.com/questions/874134/find-out-if-string-ends-with-another-string-in-c
-inline bool ends_with(std::wstring const& value, std::wstring const& ending)
+bool EndsWith(const std::wstring& value, const std::wstring& ending)
 {
   if (ending.size() > value.size())
     return false;
@@ -144,33 +143,29 @@ void JsTick(bool gameFunctionsAvailable)
         engine->ResetContext(&g_taskQueue);
       }
 
-      std::map<std::string, std::string> settingsByPluginName;
+      thread_local JsValue g_jAllSettings = JsValue::Object();
       std::vector<std::filesystem::path> scriptsToExecute;
 
       for (auto& it : std::filesystem::directory_iterator(fileDir)) {
 
         std::filesystem::path p = it.is_directory() ? it / "index.js" : it;
 
-        if (ends_with(p.wstring(), L"-settings.txt")) {
+        if (EndsWith(p.wstring(), L"-settings.txt")) {
           auto s = p.filename().wstring();
           s.resize(s.size() - strlen("-settings.txt"));
 
           auto pluginName = std::filesystem::path(s).string();
           SafePrint("Found settings file: " + p.string() + " for plugin " +
                     pluginName);
-          settingsByPluginName[pluginName] = ReadFile(p);
+
+          auto standardJson = JsValue::GlobalObject().GetProperty("JSON");
+          auto parsedSettings = standardJson.GetProperty("parse").Call(
+            { standardJson, ReadFile(p) });
+          g_jAllSettings.SetProperty(pluginName, parsedSettings);
           continue;
         }
 
         scriptsToExecute.push_back(p);
-      }
-
-      thread_local JsValue g_jAllSettings = JsValue::Object();
-      for (auto& [pluginName, settingsString] : settingsByPluginName) {
-        auto standardJson = JsValue::GlobalObject().GetProperty("JSON");
-        auto parsedSettings = standardJson.GetProperty("parse").Call(
-          { standardJson, settingsString });
-        g_jAllSettings.SetProperty(pluginName, parsedSettings);
       }
 
       for (auto& scriptPath : scriptsToExecute) {
