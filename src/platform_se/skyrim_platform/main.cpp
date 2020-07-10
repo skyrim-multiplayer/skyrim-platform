@@ -22,6 +22,7 @@
 #include <SKSE/Stubs.h>
 #include <Windows.h>
 #include <atomic>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <shlobj.h>
@@ -56,6 +57,45 @@ std::string ReadFile(const std::filesystem::path& p)
   content << t.rdbuf();
 
   return content.str();
+}
+
+// https://stackoverflow.com/questions/874134/find-out-if-string-ends-with-another-string-in-c
+inline bool ends_with(std::wstring const& value, std::wstring const& ending)
+{
+  if (ending.size() > value.size())
+    return false;
+  return std::equal(ending.rbegin(), ending.rend(), value.rbegin());
+}
+
+void SafePrint(std::string what)
+{
+  std::string tmp;
+
+  auto console = RE::ConsoleLog::GetSingleton();
+  if (!console)
+    return;
+
+  size_t i = 0;
+
+  auto safePrint = [what, console, &i](std::string msg) {
+    if (msg.size() > 128) {
+      msg.resize(128);
+      msg += '...';
+    }
+    console->Print("%s%s", (i ? "" : "[Exception] "), msg.data());
+    ++i;
+  };
+
+  for (size_t i = 0; i < what.size(); ++i) {
+    if (what[i] == '\n') {
+      safePrint(tmp);
+      tmp.clear();
+    } else {
+      tmp += what[i];
+    }
+  }
+  if (!tmp.empty())
+    safePrint(tmp);
 }
 
 void JsTick(bool gameFunctionsAvailable)
@@ -104,23 +144,49 @@ void JsTick(bool gameFunctionsAvailable)
         engine->ResetContext(&g_taskQueue);
       }
 
+      std::map<std::string, std::string> settingsByPluginName;
+      std::vector<std::filesystem::path> scriptsToExecute;
+
       for (auto& it : std::filesystem::directory_iterator(fileDir)) {
 
         std::filesystem::path p = it.is_directory() ? it / "index.js" : it;
 
-        auto scriptSrc = ReadFile(p);
+        if (ends_with(p.wstring(), L"-settings.txt")) {
+          auto s = p.filename().wstring();
+          s.resize(s.size() - strlen("-settings.txt"));
+
+          auto pluginName = std::filesystem::path(s).string();
+          SafePrint("Found settings file: " + p.string() + " for plugin " +
+                    pluginName);
+          settingsByPluginName[pluginName] = ReadFile(p);
+          continue;
+        }
+
+        scriptsToExecute.push_back(p);
+      }
+
+      thread_local JsValue g_jAllSettings = JsValue::Object();
+      for (auto& [pluginName, settingsString] : settingsByPluginName) {
+        auto standardJson = JsValue::GlobalObject().GetProperty("JSON");
+        auto parsedSettings = standardJson.GetProperty("parse").Call(
+          { standardJson, settingsString });
+        g_jAllSettings.SetProperty(pluginName, parsedSettings);
+      }
+
+      for (auto& scriptPath : scriptsToExecute) {
+        auto scriptSrc = ReadFile(scriptPath);
 
         // We will be able to use require() and log()
         JsValue devApi = JsValue::Object();
         DevApi::Register(
           devApi, &engine,
           { { "skyrimPlatform",
-              [it](JsValue e) {
+              [fileDir](JsValue e) {
                 LoadGameApi::Register(e);
                 MpClientPluginApi::Register(e);
                 HttpClientApi::Register(e);
                 ConsoleApi::Register(e);
-                DevApi::Register(e, &engine, {}, it);
+                DevApi::Register(e, &engine, {}, fileDir);
                 EventsApi::Register(e);
                 CallNativeApi::Register(
                   e, [] { return g_nativeCallRequirements; });
@@ -130,10 +196,16 @@ void JsTick(bool gameFunctionsAvailable)
                     [](const JsFunctionArguments& args) -> JsValue {
                       return (double)engine->GetMemoryUsage();
                     }));
+                e.SetProperty(
+                  "settings",
+                  [&](const JsFunctionArguments& args) {
+                    return g_jAllSettings;
+                  },
+                  nullptr);
 
                 return SkyrimPlatformProxy::Attach(e);
               } } },
-          it);
+          fileDir);
 
         JsValue consoleApi = JsValue::Object();
         ConsoleApi::Register(consoleApi);
@@ -142,17 +214,12 @@ void JsTick(bool gameFunctionsAvailable)
         JsValue::GlobalObject().SetProperty(
           "log", consoleApi.GetProperty("printConsole"));
 
-        if (JsValue::GlobalObject().GetProperty("storage").GetType() ==
-            JsValue::Undefined().GetType()) {
-          JsValue::GlobalObject().SetProperty("storage", JsValue::Object());
-        }
-
-        auto fileName = std::filesystem::path(it).filename();
         engine->RunScript(
           ReadFile(std::filesystem::path("Data/Platform/Distribution") /
                    "___systemPolyfill.js"),
           "___systemPolyfill.js");
-        engine->RunScript(scriptSrc, fileName.string()).ToString();
+        engine->RunScript(scriptSrc, scriptPath.filename().string())
+          .ToString();
       }
     }
 
@@ -168,35 +235,13 @@ void JsTick(bool gameFunctionsAvailable)
   } catch (std::exception& e) {
     if (auto console = RE::ConsoleLog::GetSingleton()) {
       std::string what = e.what();
-      std::string tmp;
 
       while (what.size() > sizeof("Error: ") - 1 &&
              !memcmp(what.data(), "Error: ", sizeof("Error: ") - 1)) {
         what = { what.begin() + sizeof("Error: ") - 1, what.end() };
       }
 
-      size_t i = 0;
-
-      auto safePrint = [what, console, &i](std::string msg) {
-        if (msg.size() > 128) {
-          msg.resize(128);
-          msg += '...';
-        }
-        console->Print("%s%s", (i ? "" : "[Exception] "), msg.data());
-        ++i;
-      };
-
-      for (size_t i = 0; i < what.size(); ++i) {
-        if (what[i] == '\n') {
-          safePrint(tmp);
-          tmp.clear();
-        } else {
-          tmp += what[i];
-        }
-      }
-      if (!tmp.empty())
-        safePrint(tmp);
-      // console->Print("[Exception] %s", e.what());
+      SafePrint(what);
     }
   }
 }
