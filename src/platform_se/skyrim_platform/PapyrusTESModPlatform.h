@@ -1,8 +1,13 @@
 #pragma once
+#pragma once
 #include <RE/Actor.h>
+#include <RE/BGSColorForm.h>
 #include <RE/BSScript/ISavePatcherInterface.h>
 #include <RE/BSScript/TypeTraits.h>
+#include <RE/BSScript/VMArray.h>
+#include <RE/TESNPC.h>
 #include <RE/TESObjectCELL.h>
+#include <RE/TESRace.h>
 #include <RE/TESWorldSpace.h>
 #include <cstdint>
 #include <functional>
@@ -43,6 +48,37 @@ SInt32 GetNthVtableElement(RE::BSScript::IVirtualMachine* vm,
 
 bool IsPlayerRunningEnabled(RE::BSScript::IVirtualMachine* vm,
                             RE::VMStackID stackId, RE::StaticFunctionTag*);
+
+RE::BGSColorForm* GetSkinColor(RE::BSScript::IVirtualMachine* vm,
+                               RE::VMStackID stackId, RE::StaticFunctionTag*,
+                               RE::TESNPC* base);
+
+RE::TESNPC* CreateNpc(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                      RE::StaticFunctionTag*);
+
+void SetNpcSex(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+               RE::StaticFunctionTag*, RE::TESNPC* npc, SInt32 sex);
+
+void SetNpcRace(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                RE::StaticFunctionTag*, RE::TESNPC* npc, RE::TESRace* race);
+
+void SetNpcSkinColor(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                     RE::StaticFunctionTag*, RE::TESNPC* npc,
+                     SInt32 skinColor);
+
+void SetNpcHairColor(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                     RE::StaticFunctionTag*, RE::TESNPC* npc,
+                     SInt32 skinColor);
+
+void ResizeHeadpartsArray(RE::BSScript::IVirtualMachine* vm,
+                          RE::VMStackID stackId, RE::StaticFunctionTag*,
+                          RE::TESNPC* npc, SInt32 size);
+
+void ResizeTintsArray(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                      RE::StaticFunctionTag*, SInt32 size);
+
+void SetFormIdUnsafe(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                     RE::StaticFunctionTag*, RE::TESForm* form, UInt32 newId);
 
 // Threadsafe
 void BlockMoveRefrToPosition(bool blocked);

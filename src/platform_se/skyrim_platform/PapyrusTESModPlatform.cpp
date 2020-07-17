@@ -5,13 +5,23 @@
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
 #include <RE/ConsoleLog.h>
+#include <RE/Offsets.h>
+#include <RE/PlayerCharacter.h>
 #include <RE/PlayerControls.h>
 #include <RE/ScriptEventSourceHolder.h>
 #include <RE/SkyrimVM.h>
+#include <RE/TESNPC.h>
 #include <atomic>
 #include <mutex>
+#include <skse64/GameForms.h> // IFormFactory::GetFactoryForType
 #include <skse64/GameReferences.h>
 #include <unordered_map>
+#include <unordered_set>
+
+#define COLOR_ALPHA(in) ((in >> 24) & 0xFF)
+#define COLOR_RED(in) ((in >> 16) & 0xFF)
+#define COLOR_GREEN(in) ((in >> 8) & 0xFF)
+#define COLOR_BLUE(in) ((in >> 0) & 0xFF)
 
 extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 
@@ -185,6 +195,219 @@ bool TESModPlatform::IsPlayerRunningEnabled(RE::BSScript::IVirtualMachine* vm,
   return false;
 }
 
+RE::BGSColorForm* TESModPlatform::GetSkinColor(
+  RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+  RE::StaticFunctionTag*, RE::TESNPC* base)
+{
+  auto factory = IFormFactory::GetFactoryForType(BGSColorForm::kTypeID);
+  if (!factory)
+    return nullptr;
+  auto col = (RE::BGSColorForm*)factory->Create();
+  if (!col)
+    return nullptr;
+  col->color = base->bodyTintColor;
+  return col;
+}
+
+inline uint32_t AllocateFormId()
+{
+  static uint32_t g_formId = 0xffffffff;
+  return g_formId--;
+}
+
+RE::TESNPC* TESModPlatform::CreateNpc(RE::BSScript::IVirtualMachine* vm,
+                                      RE::VMStackID stackId,
+                                      RE::StaticFunctionTag*)
+{
+  auto factory = IFormFactory::GetFactoryForType(TESNPC::kTypeID);
+  if (!factory)
+    return nullptr;
+
+  auto npc = (RE::TESNPC*)factory->Create();
+  if (!npc)
+    return nullptr;
+
+  enum
+  {
+    AADeleteWhenDoneTestJeremyRegular = 0x0010D13E
+  };
+  const auto srcNpc =
+    (TESNPC*)LookupFormByID(AADeleteWhenDoneTestJeremyRegular);
+  assert(srcNpc);
+  assert(srcNpc->formType == kFormType_NPC);
+  if (!srcNpc || srcNpc->formType != kFormType_NPC)
+    return nullptr;
+  auto backup = npc->formID;
+  memcpy(npc, srcNpc, sizeof TESNPC);
+  npc->formID = backup;
+  return (RE::TESNPC*)npc;
+
+  /* auto factory = IFormFactory::GetFactoryForType(TESNPC::kTypeID);
+   if (!factory)
+     return nullptr;
+
+   return (RE::TESNPC*)factory->Create();*/
+
+  /*auto npc = (TESNPC*)malloc(sizeof TESNPC);
+  if (!npc)
+    return nullptr;
+
+  enum
+  {
+    AADeleteWhenDoneTestJeremyRegular = 0x0010D13E
+  };
+  const auto srcNpc =
+    (TESNPC*)LookupFormByID(AADeleteWhenDoneTestJeremyRegular);
+  assert(srcNpc);
+  assert(srcNpc->formType == kFormType_NPC);
+  if (!srcNpc || srcNpc->formType != kFormType_NPC)
+    return nullptr;
+  memcpy(npc, srcNpc, sizeof TESNPC);
+
+  npc->actorData.voiceType = (BGSVoiceType*)LookupFormByID(0x0002F7C3);
+  npc->formID = 0;
+
+  npc->SetFormID(AllocateFormId(), 1);
+  return (RE::TESNPC*)npc;*/
+}
+
+void TESModPlatform::SetNpcSex(RE::BSScript::IVirtualMachine* vm,
+                               RE::VMStackID stackId, RE::StaticFunctionTag*,
+                               RE::TESNPC* npc, SInt32 sex)
+{
+  if (npc) {
+    if (sex == 1)
+      npc->actorData.actorBaseFlags |= RE::ACTOR_BASE_DATA::Flag::kFemale;
+    else
+      npc->actorData.actorBaseFlags &= ~RE::ACTOR_BASE_DATA::Flag::kFemale;
+  }
+}
+
+void TESModPlatform::SetNpcRace(RE::BSScript::IVirtualMachine* vm,
+                                RE::VMStackID stackId, RE::StaticFunctionTag*,
+                                RE::TESNPC* npc, RE::TESRace* race)
+{
+  if (npc && race)
+    npc->race = race;
+}
+
+void TESModPlatform::SetNpcSkinColor(RE::BSScript::IVirtualMachine* vm,
+                                     RE::VMStackID stackId,
+                                     RE::StaticFunctionTag*, RE::TESNPC* npc,
+                                     SInt32 color)
+{
+  if (!npc)
+    return;
+  npc->bodyTintColor.red = COLOR_RED(color);
+  npc->bodyTintColor.green = COLOR_GREEN(color);
+  npc->bodyTintColor.blue = COLOR_BLUE(color);
+}
+
+void TESModPlatform::SetNpcHairColor(RE::BSScript::IVirtualMachine* vm,
+                                     RE::VMStackID stackId,
+                                     RE::StaticFunctionTag*, RE::TESNPC* npc,
+                                     SInt32 color)
+{
+  if (!npc)
+    return;
+  if (!npc->headRelatedData) {
+    npc->headRelatedData =
+      (RE::TESNPC::HeadRelatedData*)malloc(sizeof RE::TESNPC::HeadRelatedData);
+    if (!npc->headRelatedData)
+      return;
+    npc->headRelatedData->faceDetails = nullptr;
+  }
+
+  auto factory = IFormFactory::GetFactoryForType(BGSColorForm::kTypeID);
+  if (!factory)
+    return;
+
+  npc->headRelatedData->hairColor = (RE::BGSColorForm*)factory->Create();
+  if (!npc->headRelatedData->hairColor)
+    return;
+
+  auto& c = npc->headRelatedData->hairColor->color;
+  c.red = COLOR_RED(color);
+  c.green = COLOR_GREEN(color);
+  c.blue = COLOR_BLUE(color);
+}
+
+void TESModPlatform::ResizeHeadpartsArray(RE::BSScript::IVirtualMachine* vm,
+                                          RE::VMStackID stackId,
+                                          RE::StaticFunctionTag*,
+                                          RE::TESNPC* npc, SInt32 newSize)
+{
+  if (!npc)
+    return;
+  if (newSize <= 0) {
+    npc->headParts = nullptr;
+    npc->numHeadParts = 0;
+  } else {
+    npc->headParts = new RE::BGSHeadPart*[newSize];
+    npc->numHeadParts = (uint8_t)newSize;
+    for (SInt8 i = 0; i < npc->numHeadParts; ++i)
+      npc->headParts[i] = nullptr;
+  }
+
+  /*if (!npc)
+    return;
+  if (index < 0) {
+    npc->headParts = nullptr;
+    npc->numHeadParts = 0;
+  } else {
+    int newHeadpartsCount = index + 1;
+
+    std::vector<RE::BGSHeadPart*> prev;
+    if (npc->headParts)
+      for (size_t i = 0; i < npc->numHeadParts; ++i)
+        prev.push_back(npc->headParts[i]);
+
+    npc->headParts = new RE::BGSHeadPart*[newHeadpartsCount];
+    npc->numHeadParts = (uint8_t)newHeadpartsCount;
+  }*/
+
+  /*if (!npc ||
+      std::find(headparts.begin(), headparts.end(), nullptr) !=
+        headparts.end())
+    return;
+
+  if (headparts.size() > 0) {
+    npc->headParts = new RE::BGSHeadPart*[headparts.size()];
+    npc->numHeadParts = (uint8_t)headparts.size();
+  } else {
+    npc->headParts = nullptr;
+    npc->numHeadParts = 0;
+  }
+
+  for (size_t i = 0; i < headparts.size(); ++i)
+    npc->headParts[i] = headparts[i];*/
+}
+
+void TESModPlatform::ResizeTintsArray(RE::BSScript::IVirtualMachine* vm,
+                                      RE::VMStackID stackId,
+                                      RE::StaticFunctionTag*, SInt32 newSize)
+{
+  PlayerCharacter* pc = *g_thePlayer;
+  RE::PlayerCharacter* rePc = (RE::PlayerCharacter*)pc;
+  if (!rePc)
+    return;
+  if (newSize < 0 || newSize > 1024)
+    return;
+  auto prevSize = rePc->tintMasks.size();
+  rePc->tintMasks.resize(newSize);
+  for (size_t i = prevSize; i < rePc->tintMasks.size(); ++i) {
+    rePc->tintMasks[i] = (RE::TintMask*)new TintMask;
+  }
+}
+
+void TESModPlatform::SetFormIdUnsafe(RE::BSScript::IVirtualMachine* vm,
+                                     RE::VMStackID stackId,
+                                     RE::StaticFunctionTag*, RE::TESForm* form,
+                                     UInt32 newId)
+{
+  form->formID = newId;
+}
+
 int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
 {
   std::lock_guard l(share.m);
@@ -255,6 +478,58 @@ bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
     new RE::BSScript::NativeFunction<true, decltype(IsPlayerRunningEnabled),
                                      bool, RE::StaticFunctionTag*>(
       "IsPlayerRunningEnabled", "TESModPlatform", IsPlayerRunningEnabled));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(GetSkinColor),
+                                     RE::BGSColorForm*, RE::StaticFunctionTag*,
+                                     RE::TESNPC*>(
+      "GetSkinColor", "TESModPlatform", GetSkinColor));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(CreateNpc), RE::TESNPC*,
+                                     RE::StaticFunctionTag*>(
+      "CreateNpc", "TESModPlatform", CreateNpc));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(SetNpcSex), void,
+                                     RE::StaticFunctionTag*, RE::TESNPC*,
+                                     SInt32>("SetNpcSex", "TESModPlatform",
+                                             SetNpcSex));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(SetNpcRace), void,
+                                     RE::StaticFunctionTag*, RE::TESNPC*,
+                                     RE::TESRace*>(
+      "SetNpcRace", "TESModPlatform", SetNpcRace));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(SetNpcSkinColor), void,
+                                     RE::StaticFunctionTag*, RE::TESNPC*,
+                                     SInt32>(
+      "SetNpcSkinColor", "TESModPlatform", SetNpcSkinColor));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(SetNpcHairColor), void,
+                                     RE::StaticFunctionTag*, RE::TESNPC*,
+                                     SInt32>(
+      "SetNpcHairColor", "TESModPlatform", SetNpcHairColor));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(ResizeHeadpartsArray),
+                                     void, RE::StaticFunctionTag*, RE::TESNPC*,
+                                     SInt32>(
+      "ResizeHeadpartsArray", "TESModPlatform", ResizeHeadpartsArray));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(ResizeTintsArray), void,
+                                     RE::StaticFunctionTag*, SInt32>(
+      "ResizeTintsArray", "TESModPlatform", ResizeTintsArray));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(SetFormIdUnsafe), void,
+                                     RE::StaticFunctionTag*, RE::TESForm*,
+                                     SInt32>(
+      "SetFormIdUnsafe", "TESModPlatform", SetFormIdUnsafe));
 
   static LoadGameEvent loadGameEvent;
 
