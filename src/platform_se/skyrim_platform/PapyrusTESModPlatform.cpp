@@ -240,6 +240,30 @@ RE::TESNPC* TESModPlatform::CreateNpc(RE::BSScript::IVirtualMachine* vm,
   auto backup = npc->formID;
   memcpy(npc, srcNpc, sizeof TESNPC);
   npc->formID = backup;
+
+  auto npc_ = (TESNPC*)npc;
+  npc_->container.entries = nullptr;
+  npc_->container.numEntries = 0;
+  npc_->faction = nullptr;
+  npc_->nextTemplate = nullptr;
+  npc_->actorData.flags |= (1 << 7);  // pcLevelMult
+  npc_->actorData.flags |= (1 << 5);  // unique
+  npc_->actorData.flags |= (1 << 14); // simpleActor, Disables face animations
+
+  // Clear AI Packages to prevent idle animations with Furniture
+  enum
+  {
+    DoNothing = 0x654e2,
+    DefaultMoveToCustom02IgnoreCombat = 0x6af62
+  };
+  auto doNothing = (TESPackage*)LookupFormByID(DoNothing);
+  auto flagsSource = (TESPackage*)LookupFormByID(
+    DefaultMoveToCustom02IgnoreCombat); // ignore combat && no
+                                        // combat alert
+  doNothing->packageFlags = flagsSource->packageFlags;
+  npc_->aiForm.unk18.unk0 = doNothing;
+  npc_->aiForm.unk18.next = nullptr;
+
   return (RE::TESNPC*)npc;
 
   /* auto factory = IFormFactory::GetFactoryForType(TESNPC::kTypeID);
