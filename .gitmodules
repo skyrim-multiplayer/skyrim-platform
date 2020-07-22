@@ -1,6 +1,3 @@
 [submodule "submodules/CommonLibSSE"]
 	path = submodules/CommonLibSSE
 	url = https://github.com/Ryan-rsm-McKenzie/CommonLibSSE.git
-[submodule "submodules/DirectXTex"]
-	path = submodules/DirectXTex
-	url = https://github.com/microsoft/DirectXTex.git
