@@ -67,7 +67,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDuration",
-          "offset": "8433435856",
+          "offset": "8081507536",
           "returnType": {
             "rawType": "Float"
           },
@@ -77,7 +77,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagnitude",
-          "offset": "8433435888",
+          "offset": "8081507568",
           "returnType": {
             "rawType": "Float"
           },
@@ -98,7 +98,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetTimeElapsed",
-          "offset": "8433435824",
+          "offset": "8081507504",
           "returnType": {
             "rawType": "Float"
           },
@@ -115,7 +115,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForActorAction",
-          "offset": "8433436736",
+          "offset": "8081508416",
           "returnType": {
             "rawType": "None"
           },
@@ -149,7 +149,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCameraState",
-          "offset": "8433436608",
+          "offset": "8081508288",
           "returnType": {
             "rawType": "None"
           },
@@ -166,7 +166,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForControl",
-          "offset": "8433436032",
+          "offset": "8081507712",
           "returnType": {
             "rawType": "None"
           },
@@ -176,7 +176,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCrosshairRef",
-          "offset": "8433436672",
+          "offset": "8081508352",
           "returnType": {
             "rawType": "None"
           },
@@ -193,7 +193,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForKey",
-          "offset": "8433435920",
+          "offset": "8081507600",
           "returnType": {
             "rawType": "None"
           },
@@ -235,7 +235,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForMenu",
-          "offset": "8433436160",
+          "offset": "8081507840",
           "returnType": {
             "rawType": "None"
           },
@@ -258,7 +258,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForModEvent",
-          "offset": "8433436288",
+          "offset": "8081507968",
           "returnType": {
             "rawType": "None"
           },
@@ -268,7 +268,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForNiNodeUpdate",
-          "offset": "8433436864",
+          "offset": "8081508544",
           "returnType": {
             "rawType": "None"
           },
@@ -463,7 +463,7 @@
           ],
           "isLatent": false,
           "name": "SendModEvent",
-          "offset": "8433436464",
+          "offset": "8081508144",
           "returnType": {
             "rawType": "None"
           },
@@ -500,7 +500,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForActorAction",
-          "offset": "8433436784",
+          "offset": "8081508464",
           "returnType": {
             "rawType": "None"
           },
@@ -510,7 +510,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllControls",
-          "offset": "8433436128",
+          "offset": "8081507808",
           "returnType": {
             "rawType": "None"
           },
@@ -520,7 +520,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllKeys",
-          "offset": "8433436016",
+          "offset": "8081507696",
           "returnType": {
             "rawType": "None"
           },
@@ -530,7 +530,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllMenus",
-          "offset": "8433436256",
+          "offset": "8081507936",
           "returnType": {
             "rawType": "None"
           },
@@ -540,7 +540,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllModEvents",
-          "offset": "8433436448",
+          "offset": "8081508128",
           "returnType": {
             "rawType": "None"
           },
@@ -574,7 +574,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCameraState",
-          "offset": "8433436640",
+          "offset": "8081508320",
           "returnType": {
             "rawType": "None"
           },
@@ -591,7 +591,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForControl",
-          "offset": "8433436080",
+          "offset": "8081507760",
           "returnType": {
             "rawType": "None"
           },
@@ -601,7 +601,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCrosshairRef",
-          "offset": "8433436704",
+          "offset": "8081508384",
           "returnType": {
             "rawType": "None"
           },
@@ -618,7 +618,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForKey",
-          "offset": "8433435968",
+          "offset": "8081507648",
           "returnType": {
             "rawType": "None"
           },
@@ -660,7 +660,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForMenu",
-          "offset": "8433436208",
+          "offset": "8081507888",
           "returnType": {
             "rawType": "None"
           },
@@ -677,7 +677,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForModEvent",
-          "offset": "8433436400",
+          "offset": "8081508080",
           "returnType": {
             "rawType": "None"
           },
@@ -687,7 +687,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForNiNodeUpdate",
-          "offset": "8433436832",
+          "offset": "8081508512",
           "returnType": {
             "rawType": "None"
           },
@@ -872,7 +872,7 @@
           ],
           "isLatent": false,
           "name": "ChangeHeadPart",
-          "offset": "8433451568",
+          "offset": "8081523248",
           "returnType": {
             "rawType": "None"
           },
@@ -912,7 +912,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "ClearForcedMovement",
-          "offset": "4794894186639032320",
+          "offset": "53903505835556889",
           "returnType": {
             "rawType": "None"
           },
@@ -1127,7 +1127,7 @@
           ],
           "isLatent": false,
           "name": "EquipItemById",
-          "offset": "8433450144",
+          "offset": "8081521824",
           "returnType": {
             "rawType": "None"
           },
@@ -1163,7 +1163,7 @@
           ],
           "isLatent": false,
           "name": "EquipItemEx",
-          "offset": "8433449312",
+          "offset": "8081520992",
           "returnType": {
             "rawType": "None"
           },
@@ -1267,11 +1267,11 @@
           ],
           "isLatent": false,
           "name": "ForceMovementDirection",
-          "offset": "4695664262891044864",
+          "offset": "25472632",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -1302,11 +1302,11 @@
           ],
           "isLatent": false,
           "name": "ForceMovementDirectionRamp",
-          "offset": "4653228706106310656",
+          "offset": "18446604199435134080",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -1331,7 +1331,7 @@
           ],
           "isLatent": false,
           "name": "ForceMovementRotationSpeed",
-          "offset": "18446603522425113216",
+          "offset": "18446604199431314800",
           "returnType": {
             "rawType": "None"
           },
@@ -1366,7 +1366,7 @@
           ],
           "isLatent": false,
           "name": "ForceMovementRotationSpeedRamp",
-          "offset": "4654215315928776704",
+          "offset": "4652910296613060608",
           "returnType": {
             "rawType": "None"
           },
@@ -1383,11 +1383,11 @@
           ],
           "isLatent": false,
           "name": "ForceMovementSpeed",
-          "offset": "24513714034406287",
+          "offset": "4657356592786767872",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": true
+          "useLongSignature": false
         },
         {
           "arguments": [
@@ -1406,11 +1406,11 @@
           ],
           "isLatent": false,
           "name": "ForceMovementSpeedRamp",
-          "offset": "4679066804157284352",
+          "offset": "18446604199416815104",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -1435,7 +1435,7 @@
           ],
           "isLatent": false,
           "name": "ForceTargetAngle",
-          "offset": "12605948693859464591",
+          "offset": "18446604199426387736",
           "returnType": {
             "rawType": "None"
           },
@@ -1464,11 +1464,11 @@
           ],
           "isLatent": false,
           "name": "ForceTargetDirection",
-          "offset": "4657356594879528960",
+          "offset": "25472632",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -1481,7 +1481,7 @@
           ],
           "isLatent": false,
           "name": "ForceTargetSpeed",
-          "offset": "9398047489851417",
+          "offset": "4670190195585384448",
           "returnType": {
             "rawType": "None"
           },
@@ -1648,7 +1648,7 @@
           ],
           "isLatent": false,
           "name": "GetEquippedItemId",
-          "offset": "8433449008",
+          "offset": "8081520688",
           "returnType": {
             "rawType": "Int"
           },
@@ -1682,7 +1682,7 @@
           ],
           "isLatent": false,
           "name": "GetEquippedObject",
-          "offset": "8433448944",
+          "offset": "8081520624",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -1800,7 +1800,7 @@
           ],
           "isLatent": false,
           "name": "GetFactions",
-          "offset": "8433452544",
+          "offset": "8081524224",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -1831,7 +1831,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFurnitureReference",
-          "offset": "8433452160",
+          "offset": "8081523840",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -1931,7 +1931,7 @@
           ],
           "isLatent": false,
           "name": "GetNthSpell",
-          "offset": "8433449248",
+          "offset": "8081520928",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -2001,7 +2001,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSpellCount",
-          "offset": "8433449232",
+          "offset": "8081520912",
           "returnType": {
             "rawType": "Int"
           },
@@ -2038,7 +2038,7 @@
           ],
           "isLatent": false,
           "name": "GetWornForm",
-          "offset": "8433448672",
+          "offset": "8081520352",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -2056,7 +2056,7 @@
           ],
           "isLatent": false,
           "name": "GetWornItemId",
-          "offset": "8433448800",
+          "offset": "8081520480",
           "returnType": {
             "rawType": "Int"
           },
@@ -2217,7 +2217,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsAIEnabled",
-          "offset": "8433452016",
+          "offset": "8081523696",
           "returnType": {
             "rawType": "Bool"
           },
@@ -2559,7 +2559,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsSwimming",
-          "offset": "8433452096",
+          "offset": "8081523776",
           "returnType": {
             "rawType": "Bool"
           },
@@ -2859,7 +2859,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "QueueNiNodeUpdate",
-          "offset": "8433451392",
+          "offset": "8081523072",
           "returnType": {
             "rawType": "None"
           },
@@ -2869,7 +2869,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegenerateHead",
-          "offset": "8433451488",
+          "offset": "8081523168",
           "returnType": {
             "rawType": "None"
           },
@@ -2976,7 +2976,7 @@
           ],
           "isLatent": false,
           "name": "ReplaceHeadPart",
-          "offset": "8433451744",
+          "offset": "8081523424",
           "returnType": {
             "rawType": "None"
           },
@@ -2986,7 +2986,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "ResetAI",
-          "offset": "8433452048",
+          "offset": "8081523728",
           "returnType": {
             "rawType": "None"
           },
@@ -2996,7 +2996,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "ResetExpressionOverrides",
-          "offset": "8433452464",
+          "offset": "8081524144",
           "returnType": {
             "rawType": "None"
           },
@@ -3336,7 +3336,7 @@
           ],
           "isLatent": false,
           "name": "SetExpressionModifier",
-          "offset": "8433452384",
+          "offset": "8081524064",
           "returnType": {
             "rawType": "None"
           },
@@ -3382,7 +3382,7 @@
           ],
           "isLatent": false,
           "name": "SetExpressionPhoneme",
-          "offset": "8433452304",
+          "offset": "8081523984",
           "returnType": {
             "rawType": "None"
           },
@@ -3769,7 +3769,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "SheatheWeapon",
-          "offset": "8433452128",
+          "offset": "8081523808",
           "returnType": {
             "rawType": "None"
           },
@@ -4007,7 +4007,7 @@
           ],
           "isLatent": false,
           "name": "UnequipItemEx",
-          "offset": "8433450800",
+          "offset": "8081522480",
           "returnType": {
             "rawType": "None"
           },
@@ -4083,7 +4083,7 @@
           ],
           "isLatent": false,
           "name": "UpdateWeight",
-          "offset": "8433451904",
+          "offset": "8081523584",
           "returnType": {
             "rawType": "None"
           },
@@ -4138,7 +4138,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCombatStyle",
-          "offset": "8433464928",
+          "offset": "8081536608",
           "returnType": {
             "objectTypeName": "CombatStyle",
             "rawType": "Object"
@@ -4166,7 +4166,7 @@
           ],
           "isLatent": false,
           "name": "GetFaceMorph",
-          "offset": "8433465648",
+          "offset": "8081537328",
           "returnType": {
             "rawType": "Float"
           },
@@ -4183,7 +4183,7 @@
           ],
           "isLatent": false,
           "name": "GetFacePreset",
-          "offset": "8433465728",
+          "offset": "8081537408",
           "returnType": {
             "rawType": "Int"
           },
@@ -4193,7 +4193,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFaceTextureSet",
-          "offset": "8433465856",
+          "offset": "8081537536",
           "returnType": {
             "objectTypeName": "TextureSet",
             "rawType": "Object"
@@ -4215,7 +4215,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHairColor",
-          "offset": "8433465792",
+          "offset": "8081537472",
           "returnType": {
             "objectTypeName": "ColorForm",
             "rawType": "Object"
@@ -4226,7 +4226,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHeight",
-          "offset": "8433465200",
+          "offset": "8081536880",
           "returnType": {
             "rawType": "Float"
           },
@@ -4243,7 +4243,7 @@
           ],
           "isLatent": false,
           "name": "GetIndexOfHeadPartByType",
-          "offset": "8433465360",
+          "offset": "8081537040",
           "returnType": {
             "rawType": "Int"
           },
@@ -4260,7 +4260,7 @@
           ],
           "isLatent": false,
           "name": "GetIndexOfOverlayHeadPartByType",
-          "offset": "8433465536",
+          "offset": "8081537216",
           "returnType": {
             "rawType": "Int"
           },
@@ -4277,7 +4277,7 @@
           ],
           "isLatent": false,
           "name": "GetNthHeadPart",
-          "offset": "8433465264",
+          "offset": "8081536944",
           "returnType": {
             "objectTypeName": "HeadPart",
             "rawType": "Object"
@@ -4295,7 +4295,7 @@
           ],
           "isLatent": false,
           "name": "GetNthOverlayHeadPart",
-          "offset": "8433465456",
+          "offset": "8081537136",
           "returnType": {
             "objectTypeName": "HeadPart",
             "rawType": "Object"
@@ -4313,7 +4313,7 @@
           ],
           "isLatent": false,
           "name": "GetNthSpell",
-          "offset": "8433465072",
+          "offset": "8081536752",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -4324,7 +4324,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumHeadParts",
-          "offset": "8433465248",
+          "offset": "8081536928",
           "returnType": {
             "rawType": "Int"
           },
@@ -4334,7 +4334,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumOverlayHeadParts",
-          "offset": "8433465440",
+          "offset": "8081537120",
           "returnType": {
             "rawType": "Int"
           },
@@ -4351,7 +4351,7 @@
           ],
           "isLatent": false,
           "name": "GetOutfit",
-          "offset": "8433464976",
+          "offset": "8081536656",
           "returnType": {
             "objectTypeName": "Outfit",
             "rawType": "Object"
@@ -4383,7 +4383,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkin",
-          "offset": "8433465904",
+          "offset": "8081537584",
           "returnType": {
             "objectTypeName": "Armor",
             "rawType": "Object"
@@ -4394,7 +4394,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkinFar",
-          "offset": "8433465936",
+          "offset": "8081537616",
           "returnType": {
             "objectTypeName": "Armor",
             "rawType": "Object"
@@ -4405,7 +4405,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSpellCount",
-          "offset": "8433465040",
+          "offset": "8081536720",
           "returnType": {
             "rawType": "Int"
           },
@@ -4415,7 +4415,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetTemplate",
-          "offset": "8433465968",
+          "offset": "8081537648",
           "returnType": {
             "objectTypeName": "ActorBase",
             "rawType": "Object"
@@ -4426,7 +4426,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetVoiceType",
-          "offset": "8433465120",
+          "offset": "8081536800",
           "returnType": {
             "objectTypeName": "VoiceType",
             "rawType": "Object"
@@ -4437,7 +4437,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWeight",
-          "offset": "8433465152",
+          "offset": "8081536832",
           "returnType": {
             "rawType": "Float"
           },
@@ -4495,7 +4495,7 @@
           ],
           "isLatent": false,
           "name": "SetClass",
-          "offset": "8433465008",
+          "offset": "8081536688",
           "returnType": {
             "rawType": "None"
           },
@@ -4513,7 +4513,7 @@
           ],
           "isLatent": false,
           "name": "SetCombatStyle",
-          "offset": "8433464944",
+          "offset": "8081536624",
           "returnType": {
             "rawType": "None"
           },
@@ -4553,7 +4553,7 @@
           ],
           "isLatent": false,
           "name": "SetFaceMorph",
-          "offset": "8433465696",
+          "offset": "8081537376",
           "returnType": {
             "rawType": "None"
           },
@@ -4576,7 +4576,7 @@
           ],
           "isLatent": false,
           "name": "SetFacePreset",
-          "offset": "8433465760",
+          "offset": "8081537440",
           "returnType": {
             "rawType": "None"
           },
@@ -4594,7 +4594,7 @@
           ],
           "isLatent": false,
           "name": "SetFaceTextureSet",
-          "offset": "8433465888",
+          "offset": "8081537568",
           "returnType": {
             "rawType": "None"
           },
@@ -4612,7 +4612,7 @@
           ],
           "isLatent": false,
           "name": "SetHairColor",
-          "offset": "8433465824",
+          "offset": "8081537504",
           "returnType": {
             "rawType": "None"
           },
@@ -4629,7 +4629,7 @@
           ],
           "isLatent": false,
           "name": "SetHeight",
-          "offset": "8433465232",
+          "offset": "8081536912",
           "returnType": {
             "rawType": "None"
           },
@@ -4670,7 +4670,7 @@
           ],
           "isLatent": false,
           "name": "SetNthHeadPart",
-          "offset": "8433465312",
+          "offset": "8081536992",
           "returnType": {
             "rawType": "None"
           },
@@ -4729,7 +4729,7 @@
           ],
           "isLatent": false,
           "name": "SetSkin",
-          "offset": "8433465920",
+          "offset": "8081537600",
           "returnType": {
             "rawType": "None"
           },
@@ -4747,7 +4747,7 @@
           ],
           "isLatent": false,
           "name": "SetSkinFar",
-          "offset": "8433465952",
+          "offset": "8081537632",
           "returnType": {
             "rawType": "None"
           },
@@ -4765,7 +4765,7 @@
           ],
           "isLatent": false,
           "name": "SetVoiceType",
-          "offset": "8433465136",
+          "offset": "8081536816",
           "returnType": {
             "rawType": "None"
           },
@@ -4782,7 +4782,7 @@
           ],
           "isLatent": false,
           "name": "SetWeight",
-          "offset": "8433465184",
+          "offset": "8081536864",
           "returnType": {
             "rawType": "None"
           },
@@ -4804,7 +4804,7 @@
           ],
           "isLatent": false,
           "name": "GetActorValueInfoByID",
-          "offset": "8433479264",
+          "offset": "8081550944",
           "returnType": {
             "objectTypeName": "ActorValueInfo",
             "rawType": "Object"
@@ -4822,7 +4822,7 @@
           ],
           "isLatent": false,
           "name": "GetActorValueInfoByName",
-          "offset": "8433479200",
+          "offset": "8081550880",
           "returnType": {
             "objectTypeName": "ActorValueInfo",
             "rawType": "Object"
@@ -4842,7 +4842,7 @@
           ],
           "isLatent": false,
           "name": "AddSkillExperience",
-          "offset": "8433479984",
+          "offset": "8081551664",
           "returnType": {
             "rawType": "None"
           },
@@ -4860,7 +4860,7 @@
           ],
           "isLatent": false,
           "name": "GetBaseValue",
-          "offset": "8433480944",
+          "offset": "8081552624",
           "returnType": {
             "rawType": "Float"
           },
@@ -4878,7 +4878,7 @@
           ],
           "isLatent": false,
           "name": "GetCurrentValue",
-          "offset": "8433480864",
+          "offset": "8081552544",
           "returnType": {
             "rawType": "Float"
           },
@@ -4895,7 +4895,7 @@
           ],
           "isLatent": false,
           "name": "GetExperienceForLevel",
-          "offset": "8433480064",
+          "offset": "8081551744",
           "returnType": {
             "rawType": "Float"
           },
@@ -4913,7 +4913,7 @@
           ],
           "isLatent": false,
           "name": "GetMaximumValue",
-          "offset": "8433481024",
+          "offset": "8081552704",
           "returnType": {
             "rawType": "Float"
           },
@@ -4950,7 +4950,7 @@
           ],
           "isLatent": false,
           "name": "GetPerkTree",
-          "offset": "8433480560",
+          "offset": "8081552240",
           "returnType": {
             "rawType": "None"
           },
@@ -4980,7 +4980,7 @@
           ],
           "isLatent": false,
           "name": "GetPerks",
-          "offset": "8433480640",
+          "offset": "8081552320",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -4990,7 +4990,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillExperience",
-          "offset": "8433479664",
+          "offset": "8081551344",
           "returnType": {
             "rawType": "Float"
           },
@@ -5000,7 +5000,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillImproveMult",
-          "offset": "8433479504",
+          "offset": "8081551184",
           "returnType": {
             "rawType": "Float"
           },
@@ -5010,7 +5010,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillImproveOffset",
-          "offset": "8433479584",
+          "offset": "8081551264",
           "returnType": {
             "rawType": "Float"
           },
@@ -5020,7 +5020,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillLegendaryLevel",
-          "offset": "8433480272",
+          "offset": "8081551952",
           "returnType": {
             "rawType": "Int"
           },
@@ -5030,7 +5030,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillOffsetMult",
-          "offset": "8433479424",
+          "offset": "8081551104",
           "returnType": {
             "rawType": "Float"
           },
@@ -5040,7 +5040,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillUseMult",
-          "offset": "8433479344",
+          "offset": "8081551024",
           "returnType": {
             "rawType": "Float"
           },
@@ -5050,7 +5050,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsSkill",
-          "offset": "8433479312",
+          "offset": "8081550992",
           "returnType": {
             "rawType": "Bool"
           },
@@ -5067,7 +5067,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillExperience",
-          "offset": "8433479840",
+          "offset": "8081551520",
           "returnType": {
             "rawType": "None"
           },
@@ -5084,7 +5084,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillImproveMult",
-          "offset": "8433479552",
+          "offset": "8081551232",
           "returnType": {
             "rawType": "None"
           },
@@ -5101,7 +5101,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillImproveOffset",
-          "offset": "8433479632",
+          "offset": "8081551312",
           "returnType": {
             "rawType": "None"
           },
@@ -5118,7 +5118,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillLegendaryLevel",
-          "offset": "8433480416",
+          "offset": "8081552096",
           "returnType": {
             "rawType": "None"
           },
@@ -5135,7 +5135,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillOffsetMult",
-          "offset": "8433479472",
+          "offset": "8081551152",
           "returnType": {
             "rawType": "None"
           },
@@ -5152,7 +5152,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillUseMult",
-          "offset": "8433479392",
+          "offset": "8081551072",
           "returnType": {
             "rawType": "None"
           },
@@ -5168,7 +5168,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetID",
-          "offset": "8433489568",
+          "offset": "8081561248",
           "returnType": {
             "rawType": "Int"
           },
@@ -5178,7 +5178,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetName",
-          "offset": "8433489504",
+          "offset": "8081561184",
           "returnType": {
             "rawType": "String"
           },
@@ -5206,7 +5206,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForActorAction",
-          "offset": "8433490416",
+          "offset": "8081562096",
           "returnType": {
             "rawType": "None"
           },
@@ -5240,7 +5240,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCameraState",
-          "offset": "8433490288",
+          "offset": "8081561968",
           "returnType": {
             "rawType": "None"
           },
@@ -5257,7 +5257,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForControl",
-          "offset": "8433489696",
+          "offset": "8081561376",
           "returnType": {
             "rawType": "None"
           },
@@ -5267,7 +5267,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCrosshairRef",
-          "offset": "8433490352",
+          "offset": "8081562032",
           "returnType": {
             "rawType": "None"
           },
@@ -5284,7 +5284,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForKey",
-          "offset": "8433489584",
+          "offset": "8081561264",
           "returnType": {
             "rawType": "None"
           },
@@ -5326,7 +5326,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForMenu",
-          "offset": "8433489824",
+          "offset": "8081561504",
           "returnType": {
             "rawType": "None"
           },
@@ -5349,7 +5349,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForModEvent",
-          "offset": "8433489952",
+          "offset": "8081561632",
           "returnType": {
             "rawType": "None"
           },
@@ -5359,7 +5359,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForNiNodeUpdate",
-          "offset": "8433490544",
+          "offset": "8081562224",
           "returnType": {
             "rawType": "None"
           },
@@ -5526,7 +5526,7 @@
           ],
           "isLatent": false,
           "name": "SendModEvent",
-          "offset": "8433490128",
+          "offset": "8081561808",
           "returnType": {
             "rawType": "None"
           },
@@ -5563,7 +5563,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForActorAction",
-          "offset": "8433490464",
+          "offset": "8081562144",
           "returnType": {
             "rawType": "None"
           },
@@ -5573,7 +5573,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllControls",
-          "offset": "8433489792",
+          "offset": "8081561472",
           "returnType": {
             "rawType": "None"
           },
@@ -5583,7 +5583,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllKeys",
-          "offset": "8433489680",
+          "offset": "8081561360",
           "returnType": {
             "rawType": "None"
           },
@@ -5593,7 +5593,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllMenus",
-          "offset": "8433489920",
+          "offset": "8081561600",
           "returnType": {
             "rawType": "None"
           },
@@ -5603,7 +5603,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllModEvents",
-          "offset": "8433490112",
+          "offset": "8081561792",
           "returnType": {
             "rawType": "None"
           },
@@ -5637,7 +5637,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCameraState",
-          "offset": "8433490320",
+          "offset": "8081562000",
           "returnType": {
             "rawType": "None"
           },
@@ -5654,7 +5654,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForControl",
-          "offset": "8433489744",
+          "offset": "8081561424",
           "returnType": {
             "rawType": "None"
           },
@@ -5664,7 +5664,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCrosshairRef",
-          "offset": "8433490384",
+          "offset": "8081562064",
           "returnType": {
             "rawType": "None"
           },
@@ -5681,7 +5681,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForKey",
-          "offset": "8433489632",
+          "offset": "8081561312",
           "returnType": {
             "rawType": "None"
           },
@@ -5723,7 +5723,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForMenu",
-          "offset": "8433489872",
+          "offset": "8081561552",
           "returnType": {
             "rawType": "None"
           },
@@ -5740,7 +5740,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForModEvent",
-          "offset": "8433490064",
+          "offset": "8081561744",
           "returnType": {
             "rawType": "None"
           },
@@ -5750,7 +5750,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForNiNodeUpdate",
-          "offset": "8433490512",
+          "offset": "8081562192",
           "returnType": {
             "rawType": "None"
           },
@@ -5805,7 +5805,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDamage",
-          "offset": "8433500704",
+          "offset": "8081572384",
           "returnType": {
             "rawType": "Float"
           },
@@ -5815,7 +5815,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetProjectile",
-          "offset": "8433500688",
+          "offset": "8081572368",
           "returnType": {
             "objectTypeName": "PROJECTILE",
             "rawType": "Object"
@@ -5826,7 +5826,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsBolt",
-          "offset": "8433500656",
+          "offset": "8081572336",
           "returnType": {
             "rawType": "Bool"
           },
@@ -5842,7 +5842,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetQuality",
-          "offset": "8433676064",
+          "offset": "8081747744",
           "returnType": {
             "rawType": "Int"
           },
@@ -5859,7 +5859,7 @@
           ],
           "isLatent": false,
           "name": "SetQuality",
-          "offset": "8433676080",
+          "offset": "8081747760",
           "returnType": {
             "rawType": "None"
           },
@@ -5881,7 +5881,7 @@
           ],
           "isLatent": false,
           "name": "GetMaskForSlot",
-          "offset": "8433503120",
+          "offset": "8081574800",
           "returnType": {
             "rawType": "Int"
           },
@@ -5900,7 +5900,7 @@
           ],
           "isLatent": false,
           "name": "AddSlotToMask",
-          "offset": "8433503056",
+          "offset": "8081574736",
           "returnType": {
             "rawType": "Int"
           },
@@ -5910,7 +5910,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetArmorRating",
-          "offset": "8433502944",
+          "offset": "8081574624",
           "returnType": {
             "rawType": "Int"
           },
@@ -5920,7 +5920,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantment",
-          "offset": "8433465120",
+          "offset": "8081536800",
           "returnType": {
             "objectTypeName": "Enchantment",
             "rawType": "Object"
@@ -5938,7 +5938,7 @@
           ],
           "isLatent": false,
           "name": "GetIconPath",
-          "offset": "8433503296",
+          "offset": "8081574976",
           "returnType": {
             "rawType": "String"
           },
@@ -5955,7 +5955,7 @@
           ],
           "isLatent": false,
           "name": "GetMessageIconPath",
-          "offset": "8433503488",
+          "offset": "8081575168",
           "returnType": {
             "rawType": "String"
           },
@@ -5972,7 +5972,7 @@
           ],
           "isLatent": false,
           "name": "GetModelPath",
-          "offset": "8433503152",
+          "offset": "8081574832",
           "returnType": {
             "rawType": "String"
           },
@@ -5989,7 +5989,7 @@
           ],
           "isLatent": false,
           "name": "GetNthArmorAddon",
-          "offset": "8433503760",
+          "offset": "8081575440",
           "returnType": {
             "objectTypeName": "ArmorAddon",
             "rawType": "Object"
@@ -6000,7 +6000,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumArmorAddons",
-          "offset": "8433503744",
+          "offset": "8081575424",
           "returnType": {
             "rawType": "Int"
           },
@@ -6010,7 +6010,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSlotMask",
-          "offset": "8433503024",
+          "offset": "8081574704",
           "returnType": {
             "rawType": "Int"
           },
@@ -6030,7 +6030,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWeightClass",
-          "offset": "8433503680",
+          "offset": "8081575360",
           "returnType": {
             "rawType": "Int"
           },
@@ -6047,7 +6047,7 @@
           ],
           "isLatent": false,
           "name": "ModArmorRating",
-          "offset": "8433502992",
+          "offset": "8081574672",
           "returnType": {
             "rawType": "None"
           },
@@ -6064,7 +6064,7 @@
           ],
           "isLatent": false,
           "name": "RemoveSlotFromMask",
-          "offset": "8433503088",
+          "offset": "8081574768",
           "returnType": {
             "rawType": "Int"
           },
@@ -6081,7 +6081,7 @@
           ],
           "isLatent": false,
           "name": "SetArmorRating",
-          "offset": "8433502976",
+          "offset": "8081574656",
           "returnType": {
             "rawType": "None"
           },
@@ -6099,7 +6099,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantment",
-          "offset": "8433465136",
+          "offset": "8081536816",
           "returnType": {
             "rawType": "None"
           },
@@ -6122,7 +6122,7 @@
           ],
           "isLatent": false,
           "name": "SetIconPath",
-          "offset": "8433503392",
+          "offset": "8081575072",
           "returnType": {
             "rawType": "None"
           },
@@ -6145,7 +6145,7 @@
           ],
           "isLatent": false,
           "name": "SetMessageIconPath",
-          "offset": "8433503584",
+          "offset": "8081575264",
           "returnType": {
             "rawType": "None"
           },
@@ -6168,7 +6168,7 @@
           ],
           "isLatent": false,
           "name": "SetModelPath",
-          "offset": "8433503248",
+          "offset": "8081574928",
           "returnType": {
             "rawType": "None"
           },
@@ -6185,7 +6185,7 @@
           ],
           "isLatent": false,
           "name": "SetSlotMask",
-          "offset": "8433503040",
+          "offset": "8081574720",
           "returnType": {
             "rawType": "None"
           },
@@ -6202,7 +6202,7 @@
           ],
           "isLatent": false,
           "name": "SetWeightClass",
-          "offset": "8433503712",
+          "offset": "8081575392",
           "returnType": {
             "rawType": "None"
           },
@@ -6225,7 +6225,7 @@
           ],
           "isLatent": false,
           "name": "AddSlotToMask",
-          "offset": "8433510128",
+          "offset": "8081581808",
           "returnType": {
             "rawType": "Int"
           },
@@ -6254,7 +6254,7 @@
           ],
           "isLatent": false,
           "name": "GetModelNthTextureSet",
-          "offset": "8433509904",
+          "offset": "8081581584",
           "returnType": {
             "objectTypeName": "TextureSet",
             "rawType": "Object"
@@ -6278,7 +6278,7 @@
           ],
           "isLatent": false,
           "name": "GetModelNumTextureSets",
-          "offset": "8433509872",
+          "offset": "8081581552",
           "returnType": {
             "rawType": "Int"
           },
@@ -6301,7 +6301,7 @@
           ],
           "isLatent": false,
           "name": "GetModelPath",
-          "offset": "8433509744",
+          "offset": "8081581424",
           "returnType": {
             "rawType": "String"
           },
@@ -6318,7 +6318,7 @@
           ],
           "isLatent": false,
           "name": "GetNthAdditionalRace",
-          "offset": "8433510048",
+          "offset": "8081581728",
           "returnType": {
             "objectTypeName": "Race",
             "rawType": "Object"
@@ -6329,7 +6329,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumAdditionalRaces",
-          "offset": "8433510032",
+          "offset": "8081581712",
           "returnType": {
             "rawType": "Int"
           },
@@ -6339,7 +6339,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSlotMask",
-          "offset": "8433510096",
+          "offset": "8081581776",
           "returnType": {
             "rawType": "Int"
           },
@@ -6356,7 +6356,7 @@
           ],
           "isLatent": false,
           "name": "RemoveSlotFromMask",
-          "offset": "8433510144",
+          "offset": "8081581824",
           "returnType": {
             "rawType": "Int"
           },
@@ -6392,7 +6392,7 @@
           ],
           "isLatent": false,
           "name": "SetModelNthTextureSet",
-          "offset": "8433509968",
+          "offset": "8081581648",
           "returnType": {
             "rawType": "None"
           },
@@ -6421,7 +6421,7 @@
           ],
           "isLatent": false,
           "name": "SetModelPath",
-          "offset": "8433509824",
+          "offset": "8081581504",
           "returnType": {
             "rawType": "None"
           },
@@ -6438,7 +6438,7 @@
           ],
           "isLatent": false,
           "name": "SetSlotMask",
-          "offset": "8433510112",
+          "offset": "8081581792",
           "returnType": {
             "rawType": "None"
           },
@@ -6454,7 +6454,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetModelPath",
-          "offset": "8433515840",
+          "offset": "8081587520",
           "returnType": {
             "rawType": "String"
           },
@@ -6471,7 +6471,7 @@
           ],
           "isLatent": false,
           "name": "SetModelPath",
-          "offset": "8433515904",
+          "offset": "8081587584",
           "returnType": {
             "rawType": "None"
           },
@@ -6492,7 +6492,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkill",
-          "offset": "8433516800",
+          "offset": "8081588480",
           "returnType": {
             "rawType": "Int"
           },
@@ -6502,7 +6502,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSpell",
-          "offset": "8433516832",
+          "offset": "8081588512",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -6513,7 +6513,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsRead",
-          "offset": "8433516864",
+          "offset": "8081588544",
           "returnType": {
             "rawType": "Bool"
           },
@@ -6523,7 +6523,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsTakeable",
-          "offset": "8433516896",
+          "offset": "8081588576",
           "returnType": {
             "rawType": "Bool"
           },
@@ -6574,7 +6574,7 @@
           ],
           "isLatent": false,
           "name": "GetNthRef",
-          "offset": "8433519040",
+          "offset": "8081590720",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -6592,7 +6592,7 @@
           ],
           "isLatent": false,
           "name": "GetNumRefs",
-          "offset": "8433518944",
+          "offset": "8081590624",
           "returnType": {
             "rawType": "Int"
           },
@@ -6602,7 +6602,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWaterLevel",
-          "offset": "8433519168",
+          "offset": "8081590848",
           "returnType": {
             "rawType": "Float"
           },
@@ -6793,7 +6793,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetColor",
-          "offset": "8433521440",
+          "offset": "8081593120",
           "returnType": {
             "rawType": "Int"
           },
@@ -6810,7 +6810,7 @@
           ],
           "isLatent": false,
           "name": "SetColor",
-          "offset": "8433521488",
+          "offset": "8081593168",
           "returnType": {
             "rawType": "None"
           },
@@ -6826,7 +6826,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetAllowDualWielding",
-          "offset": "8433527104",
+          "offset": "8081598784",
           "returnType": {
             "rawType": "Bool"
           },
@@ -6836,7 +6836,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetAvoidThreatChance",
-          "offset": "8433526384",
+          "offset": "8081598064",
           "returnType": {
             "rawType": "Float"
           },
@@ -6846,7 +6846,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCloseRangeDuelingCircleMult",
-          "offset": "8433526816",
+          "offset": "8081598496",
           "returnType": {
             "rawType": "Float"
           },
@@ -6856,7 +6856,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCloseRangeDuelingFallbackMult",
-          "offset": "8433526864",
+          "offset": "8081598544",
           "returnType": {
             "rawType": "Float"
           },
@@ -6866,7 +6866,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCloseRangeFlankingFlankDistance",
-          "offset": "8433435824",
+          "offset": "8081507504",
           "returnType": {
             "rawType": "Float"
           },
@@ -6876,7 +6876,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCloseRangeFlankingStalkTime",
-          "offset": "8433435856",
+          "offset": "8081507536",
           "returnType": {
             "rawType": "Float"
           },
@@ -6886,7 +6886,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDefensiveMult",
-          "offset": "8433526000",
+          "offset": "8081597680",
           "returnType": {
             "rawType": "Float"
           },
@@ -6896,7 +6896,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFlightDiveBombChance",
-          "offset": "8433527008",
+          "offset": "8081598688",
           "returnType": {
             "rawType": "Float"
           },
@@ -6906,7 +6906,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFlightFlyingAttackChance",
-          "offset": "8433527056",
+          "offset": "8081598736",
           "returnType": {
             "rawType": "Float"
           },
@@ -6916,7 +6916,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFlightHoverChance",
-          "offset": "8433526960",
+          "offset": "8081598640",
           "returnType": {
             "rawType": "Float"
           },
@@ -6926,7 +6926,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetGroupOffensiveMult",
-          "offset": "8433526048",
+          "offset": "8081597728",
           "returnType": {
             "rawType": "Float"
           },
@@ -6936,7 +6936,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetLongRangeStrafeMult",
-          "offset": "8433435888",
+          "offset": "8081507568",
           "returnType": {
             "rawType": "Float"
           },
@@ -6946,7 +6946,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagicMult",
-          "offset": "8433526192",
+          "offset": "8081597872",
           "returnType": {
             "rawType": "Float"
           },
@@ -6956,7 +6956,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeAttackStaggeredMult",
-          "offset": "8433526432",
+          "offset": "8081598112",
           "returnType": {
             "rawType": "Float"
           },
@@ -6966,7 +6966,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeBashAttackMult",
-          "offset": "8433526672",
+          "offset": "8081598352",
           "returnType": {
             "rawType": "Float"
           },
@@ -6976,7 +6976,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeBashMult",
-          "offset": "8433526576",
+          "offset": "8081598256",
           "returnType": {
             "rawType": "Float"
           },
@@ -6986,7 +6986,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeBashPowerAttackMult",
-          "offset": "8433526720",
+          "offset": "8081598400",
           "returnType": {
             "rawType": "Float"
           },
@@ -6996,7 +6996,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeBashRecoiledMult",
-          "offset": "8433526624",
+          "offset": "8081598304",
           "returnType": {
             "rawType": "Float"
           },
@@ -7006,7 +7006,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeMult",
-          "offset": "8433526096",
+          "offset": "8081597776",
           "returnType": {
             "rawType": "Float"
           },
@@ -7016,7 +7016,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleePowerAttackBlockingMult",
-          "offset": "8433526528",
+          "offset": "8081598208",
           "returnType": {
             "rawType": "Float"
           },
@@ -7026,7 +7026,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleePowerAttackStaggeredMult",
-          "offset": "8433526480",
+          "offset": "8081598160",
           "returnType": {
             "rawType": "Float"
           },
@@ -7036,7 +7036,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMeleeSpecialAttackMult",
-          "offset": "8433526768",
+          "offset": "8081598448",
           "returnType": {
             "rawType": "Float"
           },
@@ -7046,7 +7046,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetOffensiveMult",
-          "offset": "8433525952",
+          "offset": "8081597632",
           "returnType": {
             "rawType": "Float"
           },
@@ -7056,7 +7056,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetRangedMult",
-          "offset": "8433526144",
+          "offset": "8081597824",
           "returnType": {
             "rawType": "Float"
           },
@@ -7066,7 +7066,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetShoutMult",
-          "offset": "8433526240",
+          "offset": "8081597920",
           "returnType": {
             "rawType": "Float"
           },
@@ -7076,7 +7076,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetStaffMult",
-          "offset": "8433526288",
+          "offset": "8081597968",
           "returnType": {
             "rawType": "Float"
           },
@@ -7086,7 +7086,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetUnarmedMult",
-          "offset": "8433526336",
+          "offset": "8081598016",
           "returnType": {
             "rawType": "Float"
           },
@@ -7103,7 +7103,7 @@
           ],
           "isLatent": false,
           "name": "SetAllowDualWielding",
-          "offset": "8433527136",
+          "offset": "8081598816",
           "returnType": {
             "rawType": "None"
           },
@@ -7120,7 +7120,7 @@
           ],
           "isLatent": false,
           "name": "SetAvoidThreatChance",
-          "offset": "8433526416",
+          "offset": "8081598096",
           "returnType": {
             "rawType": "None"
           },
@@ -7137,7 +7137,7 @@
           ],
           "isLatent": false,
           "name": "SetCloseRangeDuelingCircleMult",
-          "offset": "8433526848",
+          "offset": "8081598528",
           "returnType": {
             "rawType": "None"
           },
@@ -7154,7 +7154,7 @@
           ],
           "isLatent": false,
           "name": "SetCloseRangeDuelingFallbackMult",
-          "offset": "8433526896",
+          "offset": "8081598576",
           "returnType": {
             "rawType": "None"
           },
@@ -7171,7 +7171,7 @@
           ],
           "isLatent": false,
           "name": "SetCloseRangeFlankingFlankDistance",
-          "offset": "8433526912",
+          "offset": "8081598592",
           "returnType": {
             "rawType": "None"
           },
@@ -7188,7 +7188,7 @@
           ],
           "isLatent": false,
           "name": "SetCloseRangeFlankingStalkTime",
-          "offset": "8433526928",
+          "offset": "8081598608",
           "returnType": {
             "rawType": "None"
           },
@@ -7205,7 +7205,7 @@
           ],
           "isLatent": false,
           "name": "SetDefensiveMult",
-          "offset": "8433526032",
+          "offset": "8081597712",
           "returnType": {
             "rawType": "None"
           },
@@ -7222,7 +7222,7 @@
           ],
           "isLatent": false,
           "name": "SetFlightDiveBombChance",
-          "offset": "8433527040",
+          "offset": "8081598720",
           "returnType": {
             "rawType": "None"
           },
@@ -7239,7 +7239,7 @@
           ],
           "isLatent": false,
           "name": "SetFlightFlyingAttackChance",
-          "offset": "8433527088",
+          "offset": "8081598768",
           "returnType": {
             "rawType": "None"
           },
@@ -7256,7 +7256,7 @@
           ],
           "isLatent": false,
           "name": "SetFlightHoverChance",
-          "offset": "8433526992",
+          "offset": "8081598672",
           "returnType": {
             "rawType": "None"
           },
@@ -7273,7 +7273,7 @@
           ],
           "isLatent": false,
           "name": "SetGroupOffensiveMult",
-          "offset": "8433526080",
+          "offset": "8081597760",
           "returnType": {
             "rawType": "None"
           },
@@ -7290,7 +7290,7 @@
           ],
           "isLatent": false,
           "name": "SetLongRangeStrafeMult",
-          "offset": "8433526944",
+          "offset": "8081598624",
           "returnType": {
             "rawType": "None"
           },
@@ -7307,7 +7307,7 @@
           ],
           "isLatent": false,
           "name": "SetMagicMult",
-          "offset": "8433526224",
+          "offset": "8081597904",
           "returnType": {
             "rawType": "None"
           },
@@ -7324,7 +7324,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeAttackStaggeredMult",
-          "offset": "8433526464",
+          "offset": "8081598144",
           "returnType": {
             "rawType": "None"
           },
@@ -7341,7 +7341,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeBashAttackMult",
-          "offset": "8433526704",
+          "offset": "8081598384",
           "returnType": {
             "rawType": "None"
           },
@@ -7358,7 +7358,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeBashMult",
-          "offset": "8433526608",
+          "offset": "8081598288",
           "returnType": {
             "rawType": "None"
           },
@@ -7375,7 +7375,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeBashPowerAttackMult",
-          "offset": "8433526752",
+          "offset": "8081598432",
           "returnType": {
             "rawType": "None"
           },
@@ -7392,7 +7392,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeBashRecoiledMult",
-          "offset": "8433526656",
+          "offset": "8081598336",
           "returnType": {
             "rawType": "None"
           },
@@ -7409,7 +7409,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeMult",
-          "offset": "8433526128",
+          "offset": "8081597808",
           "returnType": {
             "rawType": "None"
           },
@@ -7426,7 +7426,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleePowerAttackBlockingMult",
-          "offset": "8433526560",
+          "offset": "8081598240",
           "returnType": {
             "rawType": "None"
           },
@@ -7443,7 +7443,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleePowerAttackStaggeredMult",
-          "offset": "8433526512",
+          "offset": "8081598192",
           "returnType": {
             "rawType": "None"
           },
@@ -7460,7 +7460,7 @@
           ],
           "isLatent": false,
           "name": "SetMeleeSpecialAttackMult",
-          "offset": "8433526800",
+          "offset": "8081598480",
           "returnType": {
             "rawType": "None"
           },
@@ -7477,7 +7477,7 @@
           ],
           "isLatent": false,
           "name": "SetOffensiveMult",
-          "offset": "8433525984",
+          "offset": "8081597664",
           "returnType": {
             "rawType": "None"
           },
@@ -7494,7 +7494,7 @@
           ],
           "isLatent": false,
           "name": "SetRangedMult",
-          "offset": "8433526176",
+          "offset": "8081597856",
           "returnType": {
             "rawType": "None"
           },
@@ -7511,7 +7511,7 @@
           ],
           "isLatent": false,
           "name": "SetShoutMult",
-          "offset": "8433526272",
+          "offset": "8081597952",
           "returnType": {
             "rawType": "None"
           },
@@ -7528,7 +7528,7 @@
           ],
           "isLatent": false,
           "name": "SetStaffMult",
-          "offset": "8433526320",
+          "offset": "8081598000",
           "returnType": {
             "rawType": "None"
           },
@@ -7545,7 +7545,7 @@
           ],
           "isLatent": false,
           "name": "SetUnarmedMult",
-          "offset": "8433526368",
+          "offset": "8081598048",
           "returnType": {
             "rawType": "None"
           },
@@ -7568,7 +7568,7 @@
           ],
           "isLatent": false,
           "name": "GetNthIngredient",
-          "offset": "8433535552",
+          "offset": "8081607232",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -7586,7 +7586,7 @@
           ],
           "isLatent": false,
           "name": "GetNthIngredientQuantity",
-          "offset": "8433535696",
+          "offset": "8081607376",
           "returnType": {
             "rawType": "Int"
           },
@@ -7596,7 +7596,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumIngredients",
-          "offset": "8433535536",
+          "offset": "8081607216",
           "returnType": {
             "rawType": "Int"
           },
@@ -7606,7 +7606,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetResult",
-          "offset": "8433535360",
+          "offset": "8081607040",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -7617,7 +7617,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetResultQuantity",
-          "offset": "8433535472",
+          "offset": "8081607152",
           "returnType": {
             "rawType": "Int"
           },
@@ -7627,7 +7627,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWorkbenchKeyword",
-          "offset": "8433535760",
+          "offset": "8081607440",
           "returnType": {
             "objectTypeName": "Keyword",
             "rawType": "Object"
@@ -7652,7 +7652,7 @@
           ],
           "isLatent": false,
           "name": "SetNthIngredient",
-          "offset": "8433535584",
+          "offset": "8081607264",
           "returnType": {
             "rawType": "None"
           },
@@ -7675,7 +7675,7 @@
           ],
           "isLatent": false,
           "name": "SetNthIngredientQuantity",
-          "offset": "8433535728",
+          "offset": "8081607408",
           "returnType": {
             "rawType": "None"
           },
@@ -7693,7 +7693,7 @@
           ],
           "isLatent": false,
           "name": "SetResult",
-          "offset": "8433535392",
+          "offset": "8081607072",
           "returnType": {
             "rawType": "None"
           },
@@ -7710,7 +7710,7 @@
           ],
           "isLatent": false,
           "name": "SetResultQuantity",
-          "offset": "8433535504",
+          "offset": "8081607184",
           "returnType": {
             "rawType": "None"
           },
@@ -7728,7 +7728,7 @@
           ],
           "isLatent": false,
           "name": "SetWorkbenchKeyword",
-          "offset": "8433535776",
+          "offset": "8081607456",
           "returnType": {
             "rawType": "None"
           },
@@ -7799,7 +7799,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "DBSendPlayerPosition",
-          "offset": "18446603376874356736",
+          "offset": "18446604199516839184",
           "returnType": {
             "rawType": "None"
           },
@@ -8024,11 +8024,11 @@
           ],
           "isLatent": false,
           "name": "ShowRefPosition",
-          "offset": "25467584",
+          "offset": "18446604199516835504",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": true
+          "useLongSignature": false
         },
         {
           "arguments": [
@@ -8223,7 +8223,7 @@
           ],
           "isLatent": false,
           "name": "GetForm",
-          "offset": "8433540720",
+          "offset": "8081612400",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -8248,7 +8248,7 @@
           ],
           "isLatent": false,
           "name": "SetForm",
-          "offset": "8433540512",
+          "offset": "8081612192",
           "returnType": {
             "rawType": "None"
           },
@@ -8317,7 +8317,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetBaseEnchantment",
-          "offset": "8433549840",
+          "offset": "8081621520",
           "returnType": {
             "objectTypeName": "Enchantment",
             "rawType": "Object"
@@ -8328,7 +8328,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCostliestEffectIndex",
-          "offset": "8433549680",
+          "offset": "8081621360",
           "returnType": {
             "rawType": "Int"
           },
@@ -8338,7 +8338,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetKeywordRestrictions",
-          "offset": "8433549856",
+          "offset": "8081621536",
           "returnType": {
             "objectTypeName": "FormList",
             "rawType": "Object"
@@ -8356,7 +8356,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectArea",
-          "offset": "8433549536",
+          "offset": "8081621216",
           "returnType": {
             "rawType": "Int"
           },
@@ -8373,7 +8373,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectDuration",
-          "offset": "8433549584",
+          "offset": "8081621264",
           "returnType": {
             "rawType": "Int"
           },
@@ -8390,7 +8390,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagicEffect",
-          "offset": "8433549632",
+          "offset": "8081621312",
           "returnType": {
             "objectTypeName": "MagicEffect",
             "rawType": "Object"
@@ -8408,7 +8408,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagnitude",
-          "offset": "8433549472",
+          "offset": "8081621152",
           "returnType": {
             "rawType": "Float"
           },
@@ -8418,7 +8418,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEffects",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -8446,7 +8446,7 @@
           ],
           "isLatent": false,
           "name": "SetKeywordRestrictions",
-          "offset": "8433549872",
+          "offset": "8081621552",
           "returnType": {
             "rawType": "None"
           },
@@ -8469,7 +8469,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectArea",
-          "offset": "8433549744",
+          "offset": "8081621424",
           "returnType": {
             "rawType": "None"
           },
@@ -8492,7 +8492,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectDuration",
-          "offset": "8433549792",
+          "offset": "8081621472",
           "returnType": {
             "rawType": "None"
           },
@@ -8515,7 +8515,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectMagnitude",
-          "offset": "8433549696",
+          "offset": "8081621376",
           "returnType": {
             "rawType": "None"
           },
@@ -8543,7 +8543,7 @@
           ],
           "isLatent": false,
           "name": "GetNthParent",
-          "offset": "8433554800",
+          "offset": "8081626480",
           "returnType": {
             "objectTypeName": "EquipSlot",
             "rawType": "Object"
@@ -8554,7 +8554,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumParents",
-          "offset": "8433554784",
+          "offset": "8081626464",
           "returnType": {
             "rawType": "Int"
           },
@@ -8592,7 +8592,7 @@
           ],
           "isLatent": false,
           "name": "ClearFactionFlag",
-          "offset": "8433563856",
+          "offset": "8081635536",
           "returnType": {
             "rawType": "None"
           },
@@ -8602,7 +8602,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetBuySellList",
-          "offset": "8433564192",
+          "offset": "8081635872",
           "returnType": {
             "objectTypeName": "FormList",
             "rawType": "Object"
@@ -8673,7 +8673,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMerchantContainer",
-          "offset": "8433564080",
+          "offset": "8081635760",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -8722,7 +8722,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetVendorEndHour",
-          "offset": "8433563984",
+          "offset": "8081635664",
           "returnType": {
             "rawType": "Int"
           },
@@ -8732,7 +8732,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetVendorRadius",
-          "offset": "8433564032",
+          "offset": "8081635712",
           "returnType": {
             "rawType": "Int"
           },
@@ -8742,7 +8742,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetVendorStartHour",
-          "offset": "8433563936",
+          "offset": "8081635616",
           "returnType": {
             "rawType": "Int"
           },
@@ -8759,7 +8759,7 @@
           ],
           "isLatent": false,
           "name": "IsFactionFlagSet",
-          "offset": "8433563808",
+          "offset": "8081635488",
           "returnType": {
             "rawType": "Bool"
           },
@@ -8781,13 +8781,13 @@
           "returnType": {
             "rawType": "Bool"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [],
           "isLatent": false,
           "name": "IsNotSellBuy",
-          "offset": "8433564128",
+          "offset": "8081635808",
           "returnType": {
             "rawType": "Bool"
           },
@@ -8854,7 +8854,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "OnlyBuysStolenItems",
-          "offset": "8433563872",
+          "offset": "8081635552",
           "returnType": {
             "rawType": "Bool"
           },
@@ -8958,7 +8958,7 @@
           ],
           "isLatent": false,
           "name": "SetBuySellList",
-          "offset": "8433564208",
+          "offset": "8081635888",
           "returnType": {
             "rawType": "None"
           },
@@ -9039,7 +9039,7 @@
           ],
           "isLatent": false,
           "name": "SetFactionFlag",
-          "offset": "8433563840",
+          "offset": "8081635520",
           "returnType": {
             "rawType": "None"
           },
@@ -9057,7 +9057,7 @@
           ],
           "isLatent": false,
           "name": "SetMerchantContainer",
-          "offset": "8433564096",
+          "offset": "8081635776",
           "returnType": {
             "rawType": "None"
           },
@@ -9074,7 +9074,7 @@
           ],
           "isLatent": false,
           "name": "SetNotSellBuy",
-          "offset": "8433564160",
+          "offset": "8081635840",
           "returnType": {
             "rawType": "None"
           },
@@ -9091,7 +9091,7 @@
           ],
           "isLatent": false,
           "name": "SetOnlyBuysStolenItems",
-          "offset": "8433563904",
+          "offset": "8081635584",
           "returnType": {
             "rawType": "None"
           },
@@ -9166,7 +9166,7 @@
           ],
           "isLatent": false,
           "name": "SetVendorEndHour",
-          "offset": "8433564000",
+          "offset": "8081635680",
           "returnType": {
             "rawType": "None"
           },
@@ -9183,7 +9183,7 @@
           ],
           "isLatent": false,
           "name": "SetVendorRadius",
-          "offset": "8433564048",
+          "offset": "8081635728",
           "returnType": {
             "rawType": "None"
           },
@@ -9200,7 +9200,7 @@
           ],
           "isLatent": false,
           "name": "SetVendorStartHour",
-          "offset": "8433563952",
+          "offset": "8081635632",
           "returnType": {
             "rawType": "None"
           },
@@ -9216,7 +9216,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHarvestSound",
-          "offset": "8433564080",
+          "offset": "8081635760",
           "returnType": {
             "objectTypeName": "SoundDescriptor",
             "rawType": "Object"
@@ -9227,7 +9227,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetIngredient",
-          "offset": "8433569104",
+          "offset": "8081640784",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -9246,7 +9246,7 @@
           ],
           "isLatent": false,
           "name": "SetHarvestSound",
-          "offset": "8433569136",
+          "offset": "8081640816",
           "returnType": {
             "rawType": "None"
           },
@@ -9264,7 +9264,7 @@
           ],
           "isLatent": false,
           "name": "SetIngredient",
-          "offset": "8433569120",
+          "offset": "8081640800",
           "returnType": {
             "rawType": "None"
           },
@@ -9300,7 +9300,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetKeywords",
-          "offset": "8433571856",
+          "offset": "8081643536",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -9310,7 +9310,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetName",
-          "offset": "8433571168",
+          "offset": "8081642848",
           "returnType": {
             "rawType": "String"
           },
@@ -9327,7 +9327,7 @@
           ],
           "isLatent": false,
           "name": "GetNthKeyword",
-          "offset": "8433571760",
+          "offset": "8081643440",
           "returnType": {
             "objectTypeName": "Keyword",
             "rawType": "Object"
@@ -9338,7 +9338,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumKeywords",
-          "offset": "8433571680",
+          "offset": "8081643360",
           "returnType": {
             "rawType": "Int"
           },
@@ -9348,7 +9348,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetType",
-          "offset": "8433571136",
+          "offset": "8081642816",
           "returnType": {
             "rawType": "Int"
           },
@@ -9358,7 +9358,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWeight",
-          "offset": "8433571360",
+          "offset": "8081643040",
           "returnType": {
             "rawType": "Float"
           },
@@ -9375,7 +9375,7 @@
           ],
           "isLatent": false,
           "name": "GetWorldModelNthTextureSet",
-          "offset": "8433573968",
+          "offset": "8081645648",
           "returnType": {
             "objectTypeName": "TextureSet",
             "rawType": "Object"
@@ -9386,7 +9386,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWorldModelNumTextureSets",
-          "offset": "8433573888",
+          "offset": "8081645568",
           "returnType": {
             "rawType": "Int"
           },
@@ -9396,7 +9396,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWorldModelPath",
-          "offset": "8433573632",
+          "offset": "8081645312",
           "returnType": {
             "rawType": "String"
           },
@@ -9424,7 +9424,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "HasWorldModel",
-          "offset": "8433573552",
+          "offset": "8081645232",
           "returnType": {
             "rawType": "Bool"
           },
@@ -9434,7 +9434,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsPlayable",
-          "offset": "8433574160",
+          "offset": "8081645840",
           "returnType": {
             "rawType": "Bool"
           },
@@ -9461,7 +9461,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForActorAction",
-          "offset": "8433573248",
+          "offset": "8081644928",
           "returnType": {
             "rawType": "None"
           },
@@ -9495,7 +9495,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCameraState",
-          "offset": "8433573056",
+          "offset": "8081644736",
           "returnType": {
             "rawType": "None"
           },
@@ -9512,7 +9512,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForControl",
-          "offset": "8433572304",
+          "offset": "8081643984",
           "returnType": {
             "rawType": "None"
           },
@@ -9522,7 +9522,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForCrosshairRef",
-          "offset": "8433573152",
+          "offset": "8081644832",
           "returnType": {
             "rawType": "None"
           },
@@ -9539,7 +9539,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForKey",
-          "offset": "8433572128",
+          "offset": "8081643808",
           "returnType": {
             "rawType": "None"
           },
@@ -9581,7 +9581,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForMenu",
-          "offset": "8433572480",
+          "offset": "8081644160",
           "returnType": {
             "rawType": "None"
           },
@@ -9604,7 +9604,7 @@
           ],
           "isLatent": false,
           "name": "RegisterForModEvent",
-          "offset": "8433572656",
+          "offset": "8081644336",
           "returnType": {
             "rawType": "None"
           },
@@ -9614,7 +9614,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "RegisterForNiNodeUpdate",
-          "offset": "8433574192",
+          "offset": "8081645872",
           "returnType": {
             "rawType": "None"
           },
@@ -9781,7 +9781,7 @@
           ],
           "isLatent": false,
           "name": "SendModEvent",
-          "offset": "8433572896",
+          "offset": "8081644576",
           "returnType": {
             "rawType": "None"
           },
@@ -9798,7 +9798,7 @@
           ],
           "isLatent": false,
           "name": "SetGoldValue",
-          "offset": "8433571520",
+          "offset": "8081643200",
           "returnType": {
             "rawType": "None"
           },
@@ -9815,7 +9815,7 @@
           ],
           "isLatent": false,
           "name": "SetName",
-          "offset": "8433571280",
+          "offset": "8081642960",
           "returnType": {
             "rawType": "None"
           },
@@ -9832,7 +9832,7 @@
           ],
           "isLatent": false,
           "name": "SetPlayerKnows",
-          "offset": "8433572096",
+          "offset": "8081643776",
           "returnType": {
             "rawType": "None"
           },
@@ -9849,7 +9849,7 @@
           ],
           "isLatent": false,
           "name": "SetWeight",
-          "offset": "8433571440",
+          "offset": "8081643120",
           "returnType": {
             "rawType": "None"
           },
@@ -9873,7 +9873,7 @@
           ],
           "isLatent": false,
           "name": "SetWorldModelNthTextureSet",
-          "offset": "8433574064",
+          "offset": "8081645744",
           "returnType": {
             "rawType": "None"
           },
@@ -9890,7 +9890,7 @@
           ],
           "isLatent": false,
           "name": "SetWorldModelPath",
-          "offset": "8433573808",
+          "offset": "8081645488",
           "returnType": {
             "rawType": "None"
           },
@@ -9920,7 +9920,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "TempClone",
-          "offset": "8433573376",
+          "offset": "8081645056",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -9938,7 +9938,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForActorAction",
-          "offset": "8433573312",
+          "offset": "8081644992",
           "returnType": {
             "rawType": "None"
           },
@@ -9948,7 +9948,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllControls",
-          "offset": "8433572432",
+          "offset": "8081644112",
           "returnType": {
             "rawType": "None"
           },
@@ -9958,7 +9958,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllKeys",
-          "offset": "8433572256",
+          "offset": "8081643936",
           "returnType": {
             "rawType": "None"
           },
@@ -9968,7 +9968,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllMenus",
-          "offset": "8433572608",
+          "offset": "8081644288",
           "returnType": {
             "rawType": "None"
           },
@@ -9978,7 +9978,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForAllModEvents",
-          "offset": "8433572848",
+          "offset": "8081644528",
           "returnType": {
             "rawType": "None"
           },
@@ -10012,7 +10012,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCameraState",
-          "offset": "8433573104",
+          "offset": "8081644784",
           "returnType": {
             "rawType": "None"
           },
@@ -10029,7 +10029,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForControl",
-          "offset": "8433572368",
+          "offset": "8081644048",
           "returnType": {
             "rawType": "None"
           },
@@ -10039,7 +10039,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForCrosshairRef",
-          "offset": "8433573200",
+          "offset": "8081644880",
           "returnType": {
             "rawType": "None"
           },
@@ -10056,7 +10056,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForKey",
-          "offset": "8433572192",
+          "offset": "8081643872",
           "returnType": {
             "rawType": "None"
           },
@@ -10098,7 +10098,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForMenu",
-          "offset": "8433572544",
+          "offset": "8081644224",
           "returnType": {
             "rawType": "None"
           },
@@ -10115,7 +10115,7 @@
           ],
           "isLatent": false,
           "name": "UnregisterForModEvent",
-          "offset": "8433572784",
+          "offset": "8081644464",
           "returnType": {
             "rawType": "None"
           },
@@ -10125,7 +10125,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UnregisterForNiNodeUpdate",
-          "offset": "8433574240",
+          "offset": "8081645920",
           "returnType": {
             "rawType": "None"
           },
@@ -10205,7 +10205,7 @@
           ],
           "isLatent": false,
           "name": "AddForms",
-          "offset": "8433590224",
+          "offset": "8081661904",
           "returnType": {
             "rawType": "None"
           },
@@ -10307,7 +10307,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "ToArray",
-          "offset": "8433590080",
+          "offset": "8081661760",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -10958,7 +10958,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCameraState",
-          "offset": "8433596208",
+          "offset": "8081667888",
           "returnType": {
             "rawType": "Int"
           },
@@ -10968,7 +10968,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCurrentConsoleRef",
-          "offset": "8433597584",
+          "offset": "8081669264",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -10979,7 +10979,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCurrentCrosshairRef",
-          "offset": "8433597568",
+          "offset": "8081669248",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -10990,7 +10990,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDialogueTarget",
-          "offset": "8433597376",
+          "offset": "8081669056",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -11008,7 +11008,7 @@
           ],
           "isLatent": false,
           "name": "GetExperienceForLevel",
-          "offset": "8433592496",
+          "offset": "8081664176",
           "returnType": {
             "rawType": "Float"
           },
@@ -11043,7 +11043,7 @@
           ],
           "isLatent": false,
           "name": "GetFormEx",
-          "offset": "8433597360",
+          "offset": "8081669040",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -11136,7 +11136,7 @@
           ],
           "isLatent": false,
           "name": "GetHotkeyBoundObject",
-          "offset": "8433596880",
+          "offset": "8081668560",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -11154,7 +11154,7 @@
           ],
           "isLatent": false,
           "name": "GetLightModAuthor",
-          "offset": "8433593648",
+          "offset": "8081665328",
           "returnType": {
             "rawType": "String"
           },
@@ -11171,7 +11171,7 @@
           ],
           "isLatent": false,
           "name": "GetLightModByName",
-          "offset": "8433593440",
+          "offset": "8081665120",
           "returnType": {
             "rawType": "Int"
           },
@@ -11181,7 +11181,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetLightModCount",
-          "offset": "8433593408",
+          "offset": "8081665088",
           "returnType": {
             "rawType": "Int"
           },
@@ -11198,7 +11198,7 @@
           ],
           "isLatent": false,
           "name": "GetLightModDependencyCount",
-          "offset": "8433593904",
+          "offset": "8081665584",
           "returnType": {
             "rawType": "Int"
           },
@@ -11215,7 +11215,7 @@
           ],
           "isLatent": false,
           "name": "GetLightModDescription",
-          "offset": "8433593776",
+          "offset": "8081665456",
           "returnType": {
             "rawType": "String"
           },
@@ -11232,7 +11232,7 @@
           ],
           "isLatent": false,
           "name": "GetLightModName",
-          "offset": "8433593520",
+          "offset": "8081665200",
           "returnType": {
             "rawType": "String"
           },
@@ -11249,7 +11249,7 @@
           ],
           "isLatent": false,
           "name": "GetModAuthor",
-          "offset": "8433592960",
+          "offset": "8081664640",
           "returnType": {
             "rawType": "String"
           },
@@ -11266,7 +11266,7 @@
           ],
           "isLatent": false,
           "name": "GetModByName",
-          "offset": "8433592704",
+          "offset": "8081664384",
           "returnType": {
             "rawType": "Int"
           },
@@ -11276,7 +11276,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetModCount",
-          "offset": "8433592672",
+          "offset": "8081664352",
           "returnType": {
             "rawType": "Int"
           },
@@ -11293,7 +11293,7 @@
           ],
           "isLatent": false,
           "name": "GetModDependencyCount",
-          "offset": "8433593312",
+          "offset": "8081664992",
           "returnType": {
             "rawType": "Int"
           },
@@ -11310,7 +11310,7 @@
           ],
           "isLatent": false,
           "name": "GetModDescription",
-          "offset": "8433593136",
+          "offset": "8081664816",
           "returnType": {
             "rawType": "String"
           },
@@ -11327,7 +11327,7 @@
           ],
           "isLatent": false,
           "name": "GetModName",
-          "offset": "8433592800",
+          "offset": "8081664480",
           "returnType": {
             "rawType": "String"
           },
@@ -11350,7 +11350,7 @@
           ],
           "isLatent": false,
           "name": "GetNthLightModDependency",
-          "offset": "8433593968",
+          "offset": "8081665648",
           "returnType": {
             "rawType": "Int"
           },
@@ -11367,7 +11367,7 @@
           ],
           "isLatent": false,
           "name": "GetNthTintMaskColor",
-          "offset": "8433594768",
+          "offset": "8081666448",
           "returnType": {
             "rawType": "Int"
           },
@@ -11384,7 +11384,7 @@
           ],
           "isLatent": false,
           "name": "GetNthTintMaskTexturePath",
-          "offset": "8433594912",
+          "offset": "8081666592",
           "returnType": {
             "rawType": "String"
           },
@@ -11401,7 +11401,7 @@
           ],
           "isLatent": false,
           "name": "GetNthTintMaskType",
-          "offset": "8433594864",
+          "offset": "8081666544",
           "returnType": {
             "rawType": "Int"
           },
@@ -11411,7 +11411,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumTintMasks",
-          "offset": "8433594736",
+          "offset": "8081666416",
           "returnType": {
             "rawType": "Int"
           },
@@ -11428,7 +11428,7 @@
           ],
           "isLatent": false,
           "name": "GetNumTintsByType",
-          "offset": "8433595504",
+          "offset": "8081667184",
           "returnType": {
             "rawType": "Int"
           },
@@ -11438,7 +11438,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPerkPoints",
-          "offset": "8433592240",
+          "offset": "8081663920",
           "returnType": {
             "rawType": "Int"
           },
@@ -11448,7 +11448,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPlayerExperience",
-          "offset": "8433592448",
+          "offset": "8081664128",
           "returnType": {
             "rawType": "Float"
           },
@@ -11469,7 +11469,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPlayerMovementMode",
-          "offset": "8433596528",
+          "offset": "8081668208",
           "returnType": {
             "rawType": "Bool"
           },
@@ -11543,7 +11543,7 @@
           ],
           "isLatent": false,
           "name": "GetTintMaskColor",
-          "offset": "8433595552",
+          "offset": "8081667232",
           "returnType": {
             "rawType": "Int"
           },
@@ -11566,7 +11566,7 @@
           ],
           "isLatent": false,
           "name": "GetTintMaskTexturePath",
-          "offset": "8433595904",
+          "offset": "8081667584",
           "returnType": {
             "rawType": "String"
           },
@@ -11747,7 +11747,7 @@
           ],
           "isLatent": false,
           "name": "IsObjectFavorited",
-          "offset": "8433597088",
+          "offset": "8081668768",
           "returnType": {
             "rawType": "Bool"
           },
@@ -11774,7 +11774,7 @@
           ],
           "isLatent": false,
           "name": "IsPluginInstalled",
-          "offset": "8433594064",
+          "offset": "8081665744",
           "returnType": {
             "rawType": "Bool"
           },
@@ -11819,7 +11819,7 @@
           ],
           "isLatent": false,
           "name": "LoadGame",
-          "offset": "8433594656",
+          "offset": "8081666336",
           "returnType": {
             "rawType": "None"
           },
@@ -11836,7 +11836,7 @@
           ],
           "isLatent": false,
           "name": "ModPerkPoints",
-          "offset": "8433592304",
+          "offset": "8081663984",
           "returnType": {
             "rawType": "None"
           },
@@ -12015,7 +12015,7 @@
           ],
           "isLatent": false,
           "name": "SaveGame",
-          "offset": "8433594576",
+          "offset": "8081666256",
           "returnType": {
             "rawType": "None"
           },
@@ -12110,7 +12110,7 @@
           ],
           "isLatent": false,
           "name": "SetGameSettingBool",
-          "offset": "8433594352",
+          "offset": "8081666032",
           "returnType": {
             "rawType": "None"
           },
@@ -12133,7 +12133,7 @@
           ],
           "isLatent": false,
           "name": "SetGameSettingFloat",
-          "offset": "8433594112",
+          "offset": "8081665792",
           "returnType": {
             "rawType": "None"
           },
@@ -12156,7 +12156,7 @@
           ],
           "isLatent": false,
           "name": "SetGameSettingInt",
-          "offset": "8433594240",
+          "offset": "8081665920",
           "returnType": {
             "rawType": "None"
           },
@@ -12179,7 +12179,7 @@
           ],
           "isLatent": false,
           "name": "SetGameSettingString",
-          "offset": "8433594464",
+          "offset": "8081666144",
           "returnType": {
             "rawType": "None"
           },
@@ -12248,7 +12248,7 @@
           ],
           "isLatent": false,
           "name": "SetMiscStat",
-          "offset": "8433596288",
+          "offset": "8081667968",
           "returnType": {
             "rawType": "None"
           },
@@ -12271,7 +12271,7 @@
           ],
           "isLatent": false,
           "name": "SetNthTintMaskColor",
-          "offset": "8433595312",
+          "offset": "8081666992",
           "returnType": {
             "rawType": "None"
           },
@@ -12294,7 +12294,7 @@
           ],
           "isLatent": false,
           "name": "SetNthTintMaskTexturePath",
-          "offset": "8433595024",
+          "offset": "8081666704",
           "returnType": {
             "rawType": "None"
           },
@@ -12311,7 +12311,7 @@
           ],
           "isLatent": false,
           "name": "SetPerkPoints",
-          "offset": "8433592272",
+          "offset": "8081663952",
           "returnType": {
             "rawType": "None"
           },
@@ -12345,7 +12345,7 @@
           ],
           "isLatent": false,
           "name": "SetPlayerExperience",
-          "offset": "8433592352",
+          "offset": "8081664032",
           "returnType": {
             "rawType": "None"
           },
@@ -12362,7 +12362,7 @@
           ],
           "isLatent": false,
           "name": "SetPlayerLevel",
-          "offset": "8433592384",
+          "offset": "8081664064",
           "returnType": {
             "rawType": "None"
           },
@@ -12397,7 +12397,7 @@
           ],
           "isLatent": false,
           "name": "SetPlayersLastRiddenHorse",
-          "offset": "8433596416",
+          "offset": "8081668096",
           "returnType": {
             "rawType": "None"
           },
@@ -12461,7 +12461,7 @@
           ],
           "isLatent": false,
           "name": "SetTintMaskColor",
-          "offset": "8433595680",
+          "offset": "8081667360",
           "returnType": {
             "rawType": "None"
           },
@@ -12490,7 +12490,7 @@
           ],
           "isLatent": false,
           "name": "SetTintMaskTexturePath",
-          "offset": "8433596032",
+          "offset": "8081667712",
           "returnType": {
             "rawType": "None"
           },
@@ -12624,7 +12624,7 @@
           ],
           "isLatent": false,
           "name": "UnbindObjectHotkey",
-          "offset": "8433596656",
+          "offset": "8081668336",
           "returnType": {
             "rawType": "None"
           },
@@ -12652,7 +12652,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UpdateHairColor",
-          "offset": "8433596192",
+          "offset": "8081667872",
           "returnType": {
             "rawType": "None"
           },
@@ -12662,7 +12662,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UpdateThirdPerson",
-          "offset": "8433596560",
+          "offset": "8081668240",
           "returnType": {
             "rawType": "None"
           },
@@ -12672,7 +12672,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "UpdateTintMaskColors",
-          "offset": "8433596176",
+          "offset": "8081667856",
           "returnType": {
             "rawType": "None"
           },
@@ -12812,7 +12812,7 @@
           ],
           "isLatent": false,
           "name": "GetHeadPart",
-          "offset": "8433626256",
+          "offset": "8081697936",
           "returnType": {
             "objectTypeName": "HeadPart",
             "rawType": "Object"
@@ -12833,7 +12833,7 @@
           ],
           "isLatent": false,
           "name": "GetIndexOfExtraPart",
-          "offset": "8433626688",
+          "offset": "8081698368",
           "returnType": {
             "rawType": "Int"
           },
@@ -12850,7 +12850,7 @@
           ],
           "isLatent": false,
           "name": "GetNthExtraPart",
-          "offset": "8433626560",
+          "offset": "8081698240",
           "returnType": {
             "objectTypeName": "HeadPart",
             "rawType": "Object"
@@ -12861,7 +12861,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumExtraParts",
-          "offset": "8433626544",
+          "offset": "8081698224",
           "returnType": {
             "rawType": "Int"
           },
@@ -12871,7 +12871,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPartName",
-          "offset": "8433626768",
+          "offset": "8081698448",
           "returnType": {
             "rawType": "String"
           },
@@ -12881,7 +12881,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetType",
-          "offset": "8433626528",
+          "offset": "8081698208",
           "returnType": {
             "rawType": "Int"
           },
@@ -12891,7 +12891,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetValidRaces",
-          "offset": "8433500688",
+          "offset": "8081572368",
           "returnType": {
             "objectTypeName": "FormList",
             "rawType": "Object"
@@ -12910,7 +12910,7 @@
           ],
           "isLatent": false,
           "name": "HasExtraPart",
-          "offset": "8433626624",
+          "offset": "8081698304",
           "returnType": {
             "rawType": "Bool"
           },
@@ -12920,7 +12920,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsExtraPart",
-          "offset": "8433626592",
+          "offset": "8081698272",
           "returnType": {
             "rawType": "Bool"
           },
@@ -12938,7 +12938,7 @@
           ],
           "isLatent": false,
           "name": "SetValidRaces",
-          "offset": "8433626736",
+          "offset": "8081698416",
           "returnType": {
             "rawType": "None"
           },
@@ -13056,7 +13056,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCostliestEffectIndex",
-          "offset": "8433549680",
+          "offset": "8081621360",
           "returnType": {
             "rawType": "Int"
           },
@@ -13066,7 +13066,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectAreas",
-          "offset": "8433633968",
+          "offset": "8081705648",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -13076,7 +13076,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectDurations",
-          "offset": "8433634000",
+          "offset": "8081705680",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -13086,7 +13086,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectMagnitudes",
-          "offset": "8433633872",
+          "offset": "8081705552",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -13103,7 +13103,7 @@
           ],
           "isLatent": false,
           "name": "GetIsNthEffectKnown",
-          "offset": "8433633792",
+          "offset": "8081705472",
           "returnType": {
             "rawType": "Bool"
           },
@@ -13113,7 +13113,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagicEffects",
-          "offset": "8433634032",
+          "offset": "8081705712",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -13130,7 +13130,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectArea",
-          "offset": "8433549536",
+          "offset": "8081621216",
           "returnType": {
             "rawType": "Int"
           },
@@ -13147,7 +13147,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectDuration",
-          "offset": "8433549584",
+          "offset": "8081621264",
           "returnType": {
             "rawType": "Int"
           },
@@ -13164,7 +13164,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagicEffect",
-          "offset": "8433549632",
+          "offset": "8081621312",
           "returnType": {
             "objectTypeName": "MagicEffect",
             "rawType": "Object"
@@ -13182,7 +13182,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagnitude",
-          "offset": "8433549472",
+          "offset": "8081621152",
           "returnType": {
             "rawType": "Float"
           },
@@ -13192,7 +13192,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEffects",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -13262,7 +13262,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectArea",
-          "offset": "8433549744",
+          "offset": "8081621424",
           "returnType": {
             "rawType": "None"
           },
@@ -13285,7 +13285,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectDuration",
-          "offset": "8433549792",
+          "offset": "8081621472",
           "returnType": {
             "rawType": "None"
           },
@@ -13308,7 +13308,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectMagnitude",
-          "offset": "8433549696",
+          "offset": "8081621376",
           "returnType": {
             "rawType": "None"
           },
@@ -13335,7 +13335,7 @@
           ],
           "isLatent": false,
           "name": "GetKeyword",
-          "offset": "8433644624",
+          "offset": "8081716304",
           "returnType": {
             "objectTypeName": "Keyword",
             "rawType": "Object"
@@ -13348,7 +13348,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetString",
-          "offset": "8433644960",
+          "offset": "8081716640",
           "returnType": {
             "rawType": "String"
           },
@@ -13483,7 +13483,7 @@
           ],
           "isLatent": false,
           "name": "GetNthCount",
-          "offset": "8433648960",
+          "offset": "8081720640",
           "returnType": {
             "rawType": "Int"
           },
@@ -13500,7 +13500,7 @@
           ],
           "isLatent": false,
           "name": "GetNthForm",
-          "offset": "8433648848",
+          "offset": "8081720528",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -13518,7 +13518,7 @@
           ],
           "isLatent": false,
           "name": "GetNthLevel",
-          "offset": "8433648880",
+          "offset": "8081720560",
           "returnType": {
             "rawType": "Int"
           },
@@ -13528,7 +13528,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumForms",
-          "offset": "8433648832",
+          "offset": "8081720512",
           "returnType": {
             "rawType": "Int"
           },
@@ -13561,7 +13561,7 @@
           ],
           "isLatent": false,
           "name": "SetNthCount",
-          "offset": "8433648992",
+          "offset": "8081720672",
           "returnType": {
             "rawType": "None"
           },
@@ -13584,7 +13584,7 @@
           ],
           "isLatent": false,
           "name": "SetNthLevel",
-          "offset": "8433648912",
+          "offset": "8081720592",
           "returnType": {
             "rawType": "None"
           },
@@ -13630,7 +13630,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetChanceGlobal",
-          "offset": "8433651296",
+          "offset": "8081722976",
           "returnType": {
             "objectTypeName": "GlobalVariable",
             "rawType": "Object"
@@ -13641,7 +13641,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetChanceNone",
-          "offset": "8433437248",
+          "offset": "8081508928",
           "returnType": {
             "rawType": "Int"
           },
@@ -13658,7 +13658,7 @@
           ],
           "isLatent": false,
           "name": "GetNthCount",
-          "offset": "8433648960",
+          "offset": "8081720640",
           "returnType": {
             "rawType": "Int"
           },
@@ -13675,7 +13675,7 @@
           ],
           "isLatent": false,
           "name": "GetNthForm",
-          "offset": "8433648848",
+          "offset": "8081720528",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -13693,7 +13693,7 @@
           ],
           "isLatent": false,
           "name": "GetNthLevel",
-          "offset": "8433648880",
+          "offset": "8081720560",
           "returnType": {
             "rawType": "Int"
           },
@@ -13703,7 +13703,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumForms",
-          "offset": "8433648832",
+          "offset": "8081720512",
           "returnType": {
             "rawType": "Int"
           },
@@ -13731,7 +13731,7 @@
           ],
           "isLatent": false,
           "name": "SetChanceGlobal",
-          "offset": "8433651312",
+          "offset": "8081722992",
           "returnType": {
             "rawType": "None"
           },
@@ -13748,7 +13748,7 @@
           ],
           "isLatent": false,
           "name": "SetChanceNone",
-          "offset": "8433651280",
+          "offset": "8081722960",
           "returnType": {
             "rawType": "None"
           },
@@ -13771,7 +13771,7 @@
           ],
           "isLatent": false,
           "name": "SetNthCount",
-          "offset": "8433648992",
+          "offset": "8081720672",
           "returnType": {
             "rawType": "None"
           },
@@ -13794,7 +13794,7 @@
           ],
           "isLatent": false,
           "name": "SetNthLevel",
-          "offset": "8433648912",
+          "offset": "8081720592",
           "returnType": {
             "rawType": "None"
           },
@@ -13834,7 +13834,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetChanceNone",
-          "offset": "8433437248",
+          "offset": "8081508928",
           "returnType": {
             "rawType": "Int"
           },
@@ -13851,7 +13851,7 @@
           ],
           "isLatent": false,
           "name": "GetNthForm",
-          "offset": "8433648848",
+          "offset": "8081720528",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -13869,7 +13869,7 @@
           ],
           "isLatent": false,
           "name": "GetNthLevel",
-          "offset": "8433648880",
+          "offset": "8081720560",
           "returnType": {
             "rawType": "Int"
           },
@@ -13879,7 +13879,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumForms",
-          "offset": "8433648832",
+          "offset": "8081720512",
           "returnType": {
             "rawType": "Int"
           },
@@ -13906,7 +13906,7 @@
           ],
           "isLatent": false,
           "name": "SetChanceNone",
-          "offset": "8433651280",
+          "offset": "8081722960",
           "returnType": {
             "rawType": "None"
           },
@@ -13929,7 +13929,7 @@
           ],
           "isLatent": false,
           "name": "SetNthLevel",
-          "offset": "8433648912",
+          "offset": "8081720592",
           "returnType": {
             "rawType": "None"
           },
@@ -14200,7 +14200,7 @@
           ],
           "isLatent": false,
           "name": "ClearEffectFlag",
-          "offset": "8433657664",
+          "offset": "8081729344",
           "returnType": {
             "rawType": "None"
           },
@@ -14210,7 +14210,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetArea",
-          "offset": "8433564032",
+          "offset": "8081635712",
           "returnType": {
             "rawType": "Int"
           },
@@ -14230,7 +14230,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetBaseCost",
-          "offset": "8433526864",
+          "offset": "8081598544",
           "returnType": {
             "rawType": "Float"
           },
@@ -14240,7 +14240,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCastTime",
-          "offset": "8433657680",
+          "offset": "8081729360",
           "returnType": {
             "rawType": "Float"
           },
@@ -14250,7 +14250,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCastingArt",
-          "offset": "8433658144",
+          "offset": "8081729824",
           "returnType": {
             "objectTypeName": "Art",
             "rawType": "Object"
@@ -14261,7 +14261,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCastingType",
-          "offset": "8433658368",
+          "offset": "8081730048",
           "returnType": {
             "rawType": "Int"
           },
@@ -14271,7 +14271,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDeliveryType",
-          "offset": "8433658384",
+          "offset": "8081730064",
           "returnType": {
             "rawType": "Int"
           },
@@ -14281,7 +14281,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantArt",
-          "offset": "8433658240",
+          "offset": "8081729920",
           "returnType": {
             "objectTypeName": "Art",
             "rawType": "Object"
@@ -14292,7 +14292,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantShader",
-          "offset": "8433658096",
+          "offset": "8081729776",
           "returnType": {
             "objectTypeName": "EffectShader",
             "rawType": "Object"
@@ -14303,7 +14303,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEquipAbility",
-          "offset": "8433658272",
+          "offset": "8081729952",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -14314,7 +14314,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetExplosion",
-          "offset": "8433564080",
+          "offset": "8081635760",
           "returnType": {
             "objectTypeName": "Explosion",
             "rawType": "Object"
@@ -14325,7 +14325,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHitEffectArt",
-          "offset": "8433658176",
+          "offset": "8081729856",
           "returnType": {
             "objectTypeName": "Art",
             "rawType": "Object"
@@ -14336,7 +14336,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHitShader",
-          "offset": "8433658064",
+          "offset": "8081729744",
           "returnType": {
             "objectTypeName": "EffectShader",
             "rawType": "Object"
@@ -14347,7 +14347,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetImageSpaceMod",
-          "offset": "8433658304",
+          "offset": "8081729984",
           "returnType": {
             "objectTypeName": "ImageSpaceModifier",
             "rawType": "Object"
@@ -14358,7 +14358,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetImpactDataSet",
-          "offset": "8433658208",
+          "offset": "8081729888",
           "returnType": {
             "objectTypeName": "ImpactDataSet",
             "rawType": "Object"
@@ -14369,7 +14369,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetLight",
-          "offset": "8433658032",
+          "offset": "8081729712",
           "returnType": {
             "objectTypeName": "Light",
             "rawType": "Object"
@@ -14380,7 +14380,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPerk",
-          "offset": "8433658336",
+          "offset": "8081730016",
           "returnType": {
             "objectTypeName": "Perk",
             "rawType": "Object"
@@ -14391,7 +14391,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetProjectile",
-          "offset": "8433564192",
+          "offset": "8081635872",
           "returnType": {
             "objectTypeName": "PROJECTILE",
             "rawType": "Object"
@@ -14402,7 +14402,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetResistance",
-          "offset": "8433657872",
+          "offset": "8081729552",
           "returnType": {
             "rawType": "String"
           },
@@ -14412,7 +14412,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillLevel",
-          "offset": "8433657728",
+          "offset": "8081729408",
           "returnType": {
             "rawType": "Int"
           },
@@ -14422,7 +14422,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkillUsageMult",
-          "offset": "8433657776",
+          "offset": "8081729456",
           "returnType": {
             "rawType": "Float"
           },
@@ -14432,7 +14432,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSounds",
-          "offset": "8433658400",
+          "offset": "8081730080",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -14449,7 +14449,7 @@
           ],
           "isLatent": false,
           "name": "IsEffectFlagSet",
-          "offset": "8433657616",
+          "offset": "8081729296",
           "returnType": {
             "rawType": "Bool"
           },
@@ -14466,7 +14466,7 @@
           ],
           "isLatent": false,
           "name": "SetArea",
-          "offset": "8433657760",
+          "offset": "8081729440",
           "returnType": {
             "rawType": "None"
           },
@@ -14483,7 +14483,7 @@
           ],
           "isLatent": false,
           "name": "SetAssociatedSkill",
-          "offset": "8433657824",
+          "offset": "8081729504",
           "returnType": {
             "rawType": "None"
           },
@@ -14500,7 +14500,7 @@
           ],
           "isLatent": false,
           "name": "SetBaseCost",
-          "offset": "8433526896",
+          "offset": "8081598576",
           "returnType": {
             "rawType": "None"
           },
@@ -14517,7 +14517,7 @@
           ],
           "isLatent": false,
           "name": "SetCastTime",
-          "offset": "8433657712",
+          "offset": "8081729392",
           "returnType": {
             "rawType": "None"
           },
@@ -14535,7 +14535,7 @@
           ],
           "isLatent": false,
           "name": "SetCastingArt",
-          "offset": "8433658160",
+          "offset": "8081729840",
           "returnType": {
             "rawType": "None"
           },
@@ -14552,7 +14552,7 @@
           ],
           "isLatent": false,
           "name": "SetEffectFlag",
-          "offset": "8433657648",
+          "offset": "8081729328",
           "returnType": {
             "rawType": "None"
           },
@@ -14570,7 +14570,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantArt",
-          "offset": "8433658256",
+          "offset": "8081729936",
           "returnType": {
             "rawType": "None"
           },
@@ -14588,7 +14588,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantShader",
-          "offset": "8433658112",
+          "offset": "8081729792",
           "returnType": {
             "rawType": "None"
           },
@@ -14606,7 +14606,7 @@
           ],
           "isLatent": false,
           "name": "SetEquipAbility",
-          "offset": "8433658288",
+          "offset": "8081729968",
           "returnType": {
             "rawType": "None"
           },
@@ -14624,7 +14624,7 @@
           ],
           "isLatent": false,
           "name": "SetExplosion",
-          "offset": "8433569136",
+          "offset": "8081640816",
           "returnType": {
             "rawType": "None"
           },
@@ -14642,7 +14642,7 @@
           ],
           "isLatent": false,
           "name": "SetHitEffectArt",
-          "offset": "8433658192",
+          "offset": "8081729872",
           "returnType": {
             "rawType": "None"
           },
@@ -14660,7 +14660,7 @@
           ],
           "isLatent": false,
           "name": "SetHitShader",
-          "offset": "8433658080",
+          "offset": "8081729760",
           "returnType": {
             "rawType": "None"
           },
@@ -14678,7 +14678,7 @@
           ],
           "isLatent": false,
           "name": "SetImageSpaceMod",
-          "offset": "8433658320",
+          "offset": "8081730000",
           "returnType": {
             "rawType": "None"
           },
@@ -14696,7 +14696,7 @@
           ],
           "isLatent": false,
           "name": "SetImpactDataSet",
-          "offset": "8433658224",
+          "offset": "8081729904",
           "returnType": {
             "rawType": "None"
           },
@@ -14714,7 +14714,7 @@
           ],
           "isLatent": false,
           "name": "SetLight",
-          "offset": "8433658048",
+          "offset": "8081729728",
           "returnType": {
             "rawType": "None"
           },
@@ -14732,7 +14732,7 @@
           ],
           "isLatent": false,
           "name": "SetPerk",
-          "offset": "8433658352",
+          "offset": "8081730032",
           "returnType": {
             "rawType": "None"
           },
@@ -14750,7 +14750,7 @@
           ],
           "isLatent": false,
           "name": "SetProjectile",
-          "offset": "8433658128",
+          "offset": "8081729808",
           "returnType": {
             "rawType": "None"
           },
@@ -14767,7 +14767,7 @@
           ],
           "isLatent": false,
           "name": "SetResistance",
-          "offset": "8433657984",
+          "offset": "8081729664",
           "returnType": {
             "rawType": "None"
           },
@@ -14784,7 +14784,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillLevel",
-          "offset": "8433657744",
+          "offset": "8081729424",
           "returnType": {
             "rawType": "None"
           },
@@ -14801,7 +14801,7 @@
           ],
           "isLatent": false,
           "name": "SetSkillUsageMult",
-          "offset": "8433657808",
+          "offset": "8081729488",
           "returnType": {
             "rawType": "None"
           },
@@ -15223,7 +15223,7 @@
           ],
           "isLatent": false,
           "name": "CreateEnchantment",
-          "offset": "8433703264",
+          "offset": "8081774944",
           "returnType": {
             "rawType": "None"
           },
@@ -15409,7 +15409,7 @@
           ],
           "isLatent": false,
           "name": "GetAllForms",
-          "offset": "8433703904",
+          "offset": "8081775584",
           "returnType": {
             "rawType": "None"
           },
@@ -15511,7 +15511,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetContainerForms",
-          "offset": "8433704288",
+          "offset": "8081775968",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -15553,7 +15553,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDisplayName",
-          "offset": "8433703456",
+          "offset": "8081775136",
           "returnType": {
             "rawType": "String"
           },
@@ -15574,7 +15574,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnableParent",
-          "offset": "8433703584",
+          "offset": "8081775264",
           "returnType": {
             "objectTypeName": "ObjectReference",
             "rawType": "Object"
@@ -15585,7 +15585,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantment",
-          "offset": "8433703216",
+          "offset": "8081774896",
           "returnType": {
             "objectTypeName": "Enchantment",
             "rawType": "Object"
@@ -15635,7 +15635,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetItemCharge",
-          "offset": "8433703056",
+          "offset": "8081774736",
           "returnType": {
             "rawType": "Float"
           },
@@ -15673,7 +15673,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetItemMaxCharge",
-          "offset": "8433702992",
+          "offset": "8081774672",
           "returnType": {
             "rawType": "Float"
           },
@@ -15750,7 +15750,7 @@
           ],
           "isLatent": false,
           "name": "GetNthForm",
-          "offset": "8433701968",
+          "offset": "8081773648",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -15786,7 +15786,7 @@
           ],
           "isLatent": false,
           "name": "GetNthReferenceAlias",
-          "offset": "8433703744",
+          "offset": "8081775424",
           "returnType": {
             "objectTypeName": "ReferenceAlias",
             "rawType": "Object"
@@ -15797,7 +15797,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumItems",
-          "offset": "8433701488",
+          "offset": "8081773168",
           "returnType": {
             "rawType": "Int"
           },
@@ -15807,7 +15807,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumReferenceAliases",
-          "offset": "8433703696",
+          "offset": "8081775376",
           "returnType": {
             "rawType": "Int"
           },
@@ -15838,7 +15838,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPoison",
-          "offset": "8433703360",
+          "offset": "8081775040",
           "returnType": {
             "objectTypeName": "Potion",
             "rawType": "Object"
@@ -15879,7 +15879,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetReferenceAliases",
-          "offset": "8433703824",
+          "offset": "8081775504",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -15899,7 +15899,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetTotalArmorWeight",
-          "offset": "8433702720",
+          "offset": "8081774400",
           "returnType": {
             "rawType": "Float"
           },
@@ -15909,7 +15909,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetTotalItemWeight",
-          "offset": "8433702384",
+          "offset": "8081774064",
           "returnType": {
             "rawType": "Float"
           },
@@ -16139,7 +16139,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsHarvested",
-          "offset": "8433702800",
+          "offset": "8081774480",
           "returnType": {
             "rawType": "Bool"
           },
@@ -16199,7 +16199,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsOffLimits",
-          "offset": "8433703424",
+          "offset": "8081775104",
           "returnType": {
             "rawType": "Bool"
           },
@@ -16875,7 +16875,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "ResetInventory",
-          "offset": "8433703408",
+          "offset": "8081775088",
           "returnType": {
             "rawType": "None"
           },
@@ -17098,7 +17098,7 @@
           ],
           "isLatent": false,
           "name": "SetDisplayName",
-          "offset": "8433703552",
+          "offset": "8081775232",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17122,7 +17122,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantment",
-          "offset": "8433703328",
+          "offset": "8081775008",
           "returnType": {
             "rawType": "None"
           },
@@ -17157,7 +17157,7 @@
           ],
           "isLatent": false,
           "name": "SetHarvested",
-          "offset": "8433702848",
+          "offset": "8081774528",
           "returnType": {
             "rawType": "None"
           },
@@ -17174,7 +17174,7 @@
           ],
           "isLatent": false,
           "name": "SetItemCharge",
-          "offset": "8433703184",
+          "offset": "8081774864",
           "returnType": {
             "rawType": "None"
           },
@@ -17191,7 +17191,7 @@
           ],
           "isLatent": false,
           "name": "SetItemHealthPercent",
-          "offset": "8433702960",
+          "offset": "8081774640",
           "returnType": {
             "rawType": "None"
           },
@@ -17208,7 +17208,7 @@
           ],
           "isLatent": false,
           "name": "SetItemMaxCharge",
-          "offset": "8433703024",
+          "offset": "8081774704",
           "returnType": {
             "rawType": "None"
           },
@@ -17580,7 +17580,7 @@
           ],
           "isLatent": false,
           "name": "GetNthPart",
-          "offset": "8433676096",
+          "offset": "8081747776",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -17591,7 +17591,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumParts",
-          "offset": "8433554784",
+          "offset": "8081626464",
           "returnType": {
             "rawType": "Int"
           },
@@ -17640,7 +17640,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNextPerk",
-          "offset": "8433724512",
+          "offset": "8081796192",
           "returnType": {
             "objectTypeName": "Perk",
             "rawType": "Object"
@@ -17658,7 +17658,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryLeveledList",
-          "offset": "8433725104",
+          "offset": "8081796784",
           "returnType": {
             "objectTypeName": "LeveledItem",
             "rawType": "Object"
@@ -17676,7 +17676,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryPriority",
-          "offset": "8433724576",
+          "offset": "8081796256",
           "returnType": {
             "rawType": "Int"
           },
@@ -17693,7 +17693,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryQuest",
-          "offset": "8433724608",
+          "offset": "8081796288",
           "returnType": {
             "objectTypeName": "Quest",
             "rawType": "Object"
@@ -17711,7 +17711,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryRank",
-          "offset": "8433724544",
+          "offset": "8081796224",
           "returnType": {
             "rawType": "Int"
           },
@@ -17728,7 +17728,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntrySpell",
-          "offset": "8433724800",
+          "offset": "8081796480",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -17746,7 +17746,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryStage",
-          "offset": "8433724704",
+          "offset": "8081796384",
           "returnType": {
             "rawType": "Int"
           },
@@ -17763,7 +17763,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryText",
-          "offset": "8433725248",
+          "offset": "8081796928",
           "returnType": {
             "rawType": "String"
           },
@@ -17786,7 +17786,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEntryValue",
-          "offset": "8433725616",
+          "offset": "8081797296",
           "returnType": {
             "rawType": "Float"
           },
@@ -17796,7 +17796,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEntries",
-          "offset": "8433724528",
+          "offset": "8081796208",
           "returnType": {
             "rawType": "Int"
           },
@@ -17820,7 +17820,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryLeveledList",
-          "offset": "8433726480",
+          "offset": "8081798160",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17843,7 +17843,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryPriority",
-          "offset": "8433725920",
+          "offset": "8081797600",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17867,7 +17867,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryQuest",
-          "offset": "8433725968",
+          "offset": "8081797648",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17890,7 +17890,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryRank",
-          "offset": "8433725872",
+          "offset": "8081797552",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17914,7 +17914,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntrySpell",
-          "offset": "8433726160",
+          "offset": "8081797840",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17937,7 +17937,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryStage",
-          "offset": "8433726064",
+          "offset": "8081797744",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17960,7 +17960,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryText",
-          "offset": "8433726624",
+          "offset": "8081798304",
           "returnType": {
             "rawType": "Bool"
           },
@@ -17989,7 +17989,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEntryValue",
-          "offset": "8433726896",
+          "offset": "8081798576",
           "returnType": {
             "rawType": "Bool"
           },
@@ -18005,7 +18005,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCostliestEffectIndex",
-          "offset": "8433549680",
+          "offset": "8081621360",
           "returnType": {
             "rawType": "Int"
           },
@@ -18015,7 +18015,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectAreas",
-          "offset": "8433633968",
+          "offset": "8081705648",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -18025,7 +18025,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectDurations",
-          "offset": "8433634000",
+          "offset": "8081705680",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -18035,7 +18035,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectMagnitudes",
-          "offset": "8433633872",
+          "offset": "8081705552",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -18045,7 +18045,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagicEffects",
-          "offset": "8433634032",
+          "offset": "8081705712",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -18062,7 +18062,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectArea",
-          "offset": "8433549536",
+          "offset": "8081621216",
           "returnType": {
             "rawType": "Int"
           },
@@ -18079,7 +18079,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectDuration",
-          "offset": "8433549584",
+          "offset": "8081621264",
           "returnType": {
             "rawType": "Int"
           },
@@ -18096,7 +18096,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagicEffect",
-          "offset": "8433549632",
+          "offset": "8081621312",
           "returnType": {
             "objectTypeName": "MagicEffect",
             "rawType": "Object"
@@ -18114,7 +18114,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagnitude",
-          "offset": "8433549472",
+          "offset": "8081621152",
           "returnType": {
             "rawType": "Float"
           },
@@ -18124,7 +18124,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEffects",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -18134,7 +18134,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetUseSound",
-          "offset": "8433735168",
+          "offset": "8081806848",
           "returnType": {
             "objectTypeName": "SoundDescriptor",
             "rawType": "Object"
@@ -18145,7 +18145,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsFood",
-          "offset": "8433735104",
+          "offset": "8081806784",
           "returnType": {
             "rawType": "Bool"
           },
@@ -18165,7 +18165,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsPoison",
-          "offset": "8433735136",
+          "offset": "8081806816",
           "returnType": {
             "rawType": "Bool"
           },
@@ -18188,7 +18188,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectArea",
-          "offset": "8433549744",
+          "offset": "8081621424",
           "returnType": {
             "rawType": "None"
           },
@@ -18211,7 +18211,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectDuration",
-          "offset": "8433549792",
+          "offset": "8081621472",
           "returnType": {
             "rawType": "None"
           },
@@ -18234,7 +18234,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectMagnitude",
-          "offset": "8433549696",
+          "offset": "8081621376",
           "returnType": {
             "rawType": "None"
           },
@@ -18256,7 +18256,7 @@
           ],
           "isLatent": false,
           "name": "GetQuest",
-          "offset": "8433741456",
+          "offset": "8081813136",
           "returnType": {
             "objectTypeName": "Quest",
             "rawType": "Object"
@@ -18324,7 +18324,7 @@
           ],
           "isLatent": false,
           "name": "GetAliasById",
-          "offset": "8433742384",
+          "offset": "8081814064",
           "returnType": {
             "objectTypeName": "Alias",
             "rawType": "Object"
@@ -18342,7 +18342,7 @@
           ],
           "isLatent": false,
           "name": "GetAliasByName",
-          "offset": "8433741968",
+          "offset": "8081813648",
           "returnType": {
             "objectTypeName": "Alias",
             "rawType": "Object"
@@ -18353,7 +18353,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetAliases",
-          "offset": "8433742048",
+          "offset": "8081813728",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -18373,7 +18373,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetID",
-          "offset": "8433741824",
+          "offset": "8081813504",
           "returnType": {
             "rawType": "String"
           },
@@ -18390,7 +18390,7 @@
           ],
           "isLatent": false,
           "name": "GetNthAlias",
-          "offset": "8433741920",
+          "offset": "8081813600",
           "returnType": {
             "objectTypeName": "Alias",
             "rawType": "Object"
@@ -18401,7 +18401,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumAliases",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -18411,7 +18411,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPriority",
-          "offset": "8433741904",
+          "offset": "8081813584",
           "returnType": {
             "rawType": "Int"
           },
@@ -18718,7 +18718,7 @@
           ],
           "isLatent": false,
           "name": "GetNthPlayableRace",
-          "offset": "8433749632",
+          "offset": "8081821312",
           "returnType": {
             "objectTypeName": "Race",
             "rawType": "Object"
@@ -18729,7 +18729,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumPlayableRaces",
-          "offset": "8433749280",
+          "offset": "8081820960",
           "returnType": {
             "rawType": "Int"
           },
@@ -18746,7 +18746,7 @@
           ],
           "isLatent": false,
           "name": "GetRace",
-          "offset": "8433748992",
+          "offset": "8081820672",
           "returnType": {
             "objectTypeName": "Race",
             "rawType": "Object"
@@ -18766,7 +18766,7 @@
           ],
           "isLatent": false,
           "name": "ClearRaceFlag",
-          "offset": "8433750192",
+          "offset": "8081821872",
           "returnType": {
             "rawType": "None"
           },
@@ -18783,7 +18783,7 @@
           ],
           "isLatent": false,
           "name": "GetDefaultVoiceType",
-          "offset": "8433750240",
+          "offset": "8081821920",
           "returnType": {
             "objectTypeName": "VoiceType",
             "rawType": "Object"
@@ -18801,7 +18801,7 @@
           ],
           "isLatent": false,
           "name": "GetNthSpell",
-          "offset": "8433750080",
+          "offset": "8081821760",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -18812,7 +18812,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkin",
-          "offset": "8433465120",
+          "offset": "8081536800",
           "returnType": {
             "objectTypeName": "Armor",
             "rawType": "Object"
@@ -18823,7 +18823,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSpellCount",
-          "offset": "8433750048",
+          "offset": "8081821728",
           "returnType": {
             "rawType": "Int"
           },
@@ -18840,7 +18840,7 @@
           ],
           "isLatent": false,
           "name": "IsRaceFlagSet",
-          "offset": "8433750112",
+          "offset": "8081821792",
           "returnType": {
             "rawType": "Bool"
           },
@@ -18864,7 +18864,7 @@
           ],
           "isLatent": false,
           "name": "SetDefaultVoiceType",
-          "offset": "8433750272",
+          "offset": "8081821952",
           "returnType": {
             "rawType": "None"
           },
@@ -18881,7 +18881,7 @@
           ],
           "isLatent": false,
           "name": "SetRaceFlag",
-          "offset": "8433750144",
+          "offset": "8081821824",
           "returnType": {
             "rawType": "None"
           },
@@ -18899,7 +18899,7 @@
           ],
           "isLatent": false,
           "name": "SetSkin",
-          "offset": "8433465136",
+          "offset": "8081536816",
           "returnType": {
             "rawType": "None"
           },
@@ -19031,7 +19031,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCastTime",
-          "offset": "8433758480",
+          "offset": "8081830160",
           "returnType": {
             "rawType": "Float"
           },
@@ -19041,7 +19041,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCostliestEffectIndex",
-          "offset": "8433549680",
+          "offset": "8081621360",
           "returnType": {
             "rawType": "Int"
           },
@@ -19051,7 +19051,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectAreas",
-          "offset": "8433633968",
+          "offset": "8081705648",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -19061,7 +19061,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectDurations",
-          "offset": "8433634000",
+          "offset": "8081705680",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -19071,7 +19071,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectMagnitudes",
-          "offset": "8433633872",
+          "offset": "8081705552",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -19089,7 +19089,7 @@
           ],
           "isLatent": false,
           "name": "GetEffectiveMagickaCost",
-          "offset": "8433778432",
+          "offset": "8081850112",
           "returnType": {
             "rawType": "Int"
           },
@@ -19099,7 +19099,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEquipType",
-          "offset": "8433758512",
+          "offset": "8081830192",
           "returnType": {
             "objectTypeName": "EquipSlot",
             "rawType": "Object"
@@ -19110,7 +19110,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagicEffects",
-          "offset": "8433634032",
+          "offset": "8081705712",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -19120,7 +19120,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagickaCost",
-          "offset": "8433778416",
+          "offset": "8081850096",
           "returnType": {
             "rawType": "Int"
           },
@@ -19137,7 +19137,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectArea",
-          "offset": "8433549536",
+          "offset": "8081621216",
           "returnType": {
             "rawType": "Int"
           },
@@ -19154,7 +19154,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectDuration",
-          "offset": "8433549584",
+          "offset": "8081621264",
           "returnType": {
             "rawType": "Int"
           },
@@ -19171,7 +19171,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagicEffect",
-          "offset": "8433549632",
+          "offset": "8081621312",
           "returnType": {
             "objectTypeName": "MagicEffect",
             "rawType": "Object"
@@ -19189,7 +19189,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagnitude",
-          "offset": "8433549472",
+          "offset": "8081621152",
           "returnType": {
             "rawType": "Float"
           },
@@ -19199,7 +19199,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEffects",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -19209,7 +19209,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPerk",
-          "offset": "8433778400",
+          "offset": "8081850080",
           "returnType": {
             "objectTypeName": "Perk",
             "rawType": "Object"
@@ -19280,7 +19280,7 @@
           ],
           "isLatent": false,
           "name": "SetEquipType",
-          "offset": "8433758544",
+          "offset": "8081830224",
           "returnType": {
             "rawType": "None"
           },
@@ -19303,7 +19303,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectArea",
-          "offset": "8433549744",
+          "offset": "8081621424",
           "returnType": {
             "rawType": "None"
           },
@@ -19326,7 +19326,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectDuration",
-          "offset": "8433549792",
+          "offset": "8081621472",
           "returnType": {
             "rawType": "None"
           },
@@ -19349,7 +19349,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectMagnitude",
-          "offset": "8433549696",
+          "offset": "8081621376",
           "returnType": {
             "rawType": "None"
           },
@@ -19479,7 +19479,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCastTime",
-          "offset": "8433758480",
+          "offset": "8081830160",
           "returnType": {
             "rawType": "Float"
           },
@@ -19489,7 +19489,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCostliestEffectIndex",
-          "offset": "8433549680",
+          "offset": "8081621360",
           "returnType": {
             "rawType": "Int"
           },
@@ -19499,7 +19499,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectAreas",
-          "offset": "8433633968",
+          "offset": "8081705648",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -19509,7 +19509,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectDurations",
-          "offset": "8433634000",
+          "offset": "8081705680",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -19519,7 +19519,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEffectMagnitudes",
-          "offset": "8433633872",
+          "offset": "8081705552",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -19529,7 +19529,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEquipType",
-          "offset": "8433758512",
+          "offset": "8081830192",
           "returnType": {
             "objectTypeName": "EquipSlot",
             "rawType": "Object"
@@ -19540,7 +19540,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMagicEffects",
-          "offset": "8433634032",
+          "offset": "8081705712",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -19557,7 +19557,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectArea",
-          "offset": "8433549536",
+          "offset": "8081621216",
           "returnType": {
             "rawType": "Int"
           },
@@ -19574,7 +19574,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectDuration",
-          "offset": "8433549584",
+          "offset": "8081621264",
           "returnType": {
             "rawType": "Int"
           },
@@ -19591,7 +19591,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagicEffect",
-          "offset": "8433549632",
+          "offset": "8081621312",
           "returnType": {
             "objectTypeName": "MagicEffect",
             "rawType": "Object"
@@ -19609,7 +19609,7 @@
           ],
           "isLatent": false,
           "name": "GetNthEffectMagnitude",
-          "offset": "8433549472",
+          "offset": "8081621152",
           "returnType": {
             "rawType": "Float"
           },
@@ -19619,7 +19619,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumEffects",
-          "offset": "8433549456",
+          "offset": "8081621136",
           "returnType": {
             "rawType": "Int"
           },
@@ -19629,7 +19629,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetPerk",
-          "offset": "18446603522430895808",
+          "offset": "24588808",
           "returnType": {
             "objectTypeName": "Perk",
             "rawType": "Object"
@@ -19648,7 +19648,7 @@
           ],
           "isLatent": false,
           "name": "SetEquipType",
-          "offset": "8433758544",
+          "offset": "8081830224",
           "returnType": {
             "rawType": "None"
           },
@@ -19671,7 +19671,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectArea",
-          "offset": "8433549744",
+          "offset": "8081621424",
           "returnType": {
             "rawType": "None"
           },
@@ -19694,7 +19694,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectDuration",
-          "offset": "8433549792",
+          "offset": "8081621472",
           "returnType": {
             "rawType": "None"
           },
@@ -19717,7 +19717,7 @@
           ],
           "isLatent": false,
           "name": "SetNthEffectMagnitude",
-          "offset": "8433549696",
+          "offset": "8081621376",
           "returnType": {
             "rawType": "None"
           },
@@ -19780,7 +19780,7 @@
           ],
           "isLatent": false,
           "name": "GetNthRecoveryTime",
-          "offset": "8433765360",
+          "offset": "8081837040",
           "returnType": {
             "rawType": "Float"
           },
@@ -19797,7 +19797,7 @@
           ],
           "isLatent": false,
           "name": "GetNthSpell",
-          "offset": "8433765328",
+          "offset": "8081837008",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -19815,7 +19815,7 @@
           ],
           "isLatent": false,
           "name": "GetNthWordOfPower",
-          "offset": "8433765296",
+          "offset": "8081836976",
           "returnType": {
             "objectTypeName": "WordOfPower",
             "rawType": "Object"
@@ -19839,7 +19839,7 @@
           ],
           "isLatent": false,
           "name": "SetNthRecoveryTime",
-          "offset": "8433765472",
+          "offset": "8081837152",
           "returnType": {
             "rawType": "None"
           },
@@ -19863,7 +19863,7 @@
           ],
           "isLatent": false,
           "name": "SetNthSpell",
-          "offset": "8433765440",
+          "offset": "8081837120",
           "returnType": {
             "rawType": "None"
           },
@@ -19887,7 +19887,7 @@
           ],
           "isLatent": false,
           "name": "SetNthWordOfPower",
-          "offset": "8433765408",
+          "offset": "8081837088",
           "returnType": {
             "rawType": "None"
           },
@@ -19903,7 +19903,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetGemSize",
-          "offset": "8433676048",
+          "offset": "8081747728",
           "returnType": {
             "rawType": "Int"
           },
@@ -19913,7 +19913,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSoulSize",
-          "offset": "8433676048",
+          "offset": "8081747728",
           "returnType": {
             "rawType": "Int"
           },
@@ -19970,7 +19970,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDescriptor",
-          "offset": "8433769936",
+          "offset": "8081841616",
           "returnType": {
             "objectTypeName": "SoundDescriptor",
             "rawType": "Object"
@@ -20103,7 +20103,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDecibelAttenuation",
-          "offset": "8433770272",
+          "offset": "8081841952",
           "returnType": {
             "rawType": "Float"
           },
@@ -20113,7 +20113,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetDecibelVariance",
-          "offset": "8433770352",
+          "offset": "8081842032",
           "returnType": {
             "rawType": "Int"
           },
@@ -20123,7 +20123,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFrequencyShift",
-          "offset": "8433770480",
+          "offset": "8081842160",
           "returnType": {
             "rawType": "Int"
           },
@@ -20133,7 +20133,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetFrequencyVariance",
-          "offset": "8433770416",
+          "offset": "8081842096",
           "returnType": {
             "rawType": "Int"
           },
@@ -20150,7 +20150,7 @@
           ],
           "isLatent": false,
           "name": "SetDecibelAttenuation",
-          "offset": "8433770320",
+          "offset": "8081842000",
           "returnType": {
             "rawType": "None"
           },
@@ -20167,7 +20167,7 @@
           ],
           "isLatent": false,
           "name": "SetDecibelVariance",
-          "offset": "8433770384",
+          "offset": "8081842064",
           "returnType": {
             "rawType": "None"
           },
@@ -20184,7 +20184,7 @@
           ],
           "isLatent": false,
           "name": "SetFrequencyShift",
-          "offset": "8433770512",
+          "offset": "8081842192",
           "returnType": {
             "rawType": "None"
           },
@@ -20201,7 +20201,7 @@
           ],
           "isLatent": false,
           "name": "SetFrequencyVariance",
-          "offset": "8433770448",
+          "offset": "8081842128",
           "returnType": {
             "rawType": "None"
           },
@@ -20289,17 +20289,35 @@
           ],
           "isLatent": false,
           "name": "Add",
-          "offset": "8413544624",
+          "offset": "7971312800",
           "returnType": {
             "rawType": "Int"
           },
           "useLongSignature": false
         },
         {
+          "arguments": [
+            {
+              "name": "targetActor",
+              "type": {
+                "objectTypeName": "Actor",
+                "rawType": "Object"
+              }
+            }
+          ],
+          "isLatent": false,
+          "name": "ClearTintMasks",
+          "offset": "7971312944",
+          "returnType": {
+            "rawType": "None"
+          },
+          "useLongSignature": true
+        },
+        {
           "arguments": [],
           "isLatent": false,
           "name": "CreateNpc",
-          "offset": "8413544768",
+          "offset": "7971313456",
           "returnType": {
             "objectTypeName": "ActorBase",
             "rawType": "Object"
@@ -20330,7 +20348,7 @@
           ],
           "isLatent": false,
           "name": "GetNthVtableElement",
-          "offset": "8413545136",
+          "offset": "7971314016",
           "returnType": {
             "rawType": "Int"
           },
@@ -20348,7 +20366,7 @@
           ],
           "isLatent": false,
           "name": "GetSkinColor",
-          "offset": "8413545296",
+          "offset": "7971314176",
           "returnType": {
             "objectTypeName": "ColorForm",
             "rawType": "Object"
@@ -20359,11 +20377,11 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsPlayerRunningEnabled",
-          "offset": "8413545744",
+          "offset": "7971314848",
           "returnType": {
             "rawType": "Bool"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -20427,7 +20445,43 @@
           ],
           "isLatent": false,
           "name": "MoveRefrToPosition",
-          "offset": "8413547488",
+          "offset": "7971316960",
+          "returnType": {
+            "rawType": "None"
+          },
+          "useLongSignature": true
+        },
+        {
+          "arguments": [
+            {
+              "name": "targetActor",
+              "type": {
+                "objectTypeName": "Actor",
+                "rawType": "Object"
+              }
+            },
+            {
+              "name": "type",
+              "type": {
+                "rawType": "Int"
+              }
+            },
+            {
+              "name": "argb",
+              "type": {
+                "rawType": "Int"
+              }
+            },
+            {
+              "name": "texturePath",
+              "type": {
+                "rawType": "String"
+              }
+            }
+          ],
+          "isLatent": false,
+          "name": "PushTintMask",
+          "offset": "7971317184",
           "returnType": {
             "rawType": "None"
           },
@@ -20451,11 +20505,11 @@
           ],
           "isLatent": false,
           "name": "ResizeHeadpartsArray",
-          "offset": "8413551120",
+          "offset": "7971322384",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -20468,11 +20522,11 @@
           ],
           "isLatent": false,
           "name": "ResizeTintsArray",
-          "offset": "8413551280",
+          "offset": "7971322544",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -20492,7 +20546,7 @@
           ],
           "isLatent": false,
           "name": "SetFormIdUnsafe",
-          "offset": "8413551776",
+          "offset": "7971322768",
           "returnType": {
             "rawType": "None"
           },
@@ -20516,11 +20570,11 @@
           ],
           "isLatent": false,
           "name": "SetNpcHairColor",
-          "offset": "8413551792",
+          "offset": "7971322784",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -20541,11 +20595,11 @@
           ],
           "isLatent": false,
           "name": "SetNpcRace",
-          "offset": "8413552032",
+          "offset": "7971323024",
           "returnType": {
             "rawType": "None"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -20565,7 +20619,7 @@
           ],
           "isLatent": false,
           "name": "SetNpcSex",
-          "offset": "8413552064",
+          "offset": "7971323056",
           "returnType": {
             "rawType": "None"
           },
@@ -20589,7 +20643,7 @@
           ],
           "isLatent": false,
           "name": "SetNpcSkinColor",
-          "offset": "8413552096",
+          "offset": "7971323088",
           "returnType": {
             "rawType": "None"
           },
@@ -20613,7 +20667,7 @@
           ],
           "isLatent": false,
           "name": "SetWeaponDrawnMode",
-          "offset": "8413552144",
+          "offset": "7971323136",
           "returnType": {
             "rawType": "None"
           },
@@ -20641,7 +20695,7 @@
           ],
           "isLatent": false,
           "name": "GetNthTexturePath",
-          "offset": "8433796560",
+          "offset": "8081868240",
           "returnType": {
             "rawType": "String"
           },
@@ -20651,7 +20705,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetNumTexturePaths",
-          "offset": "8433796544",
+          "offset": "8081868224",
           "returnType": {
             "rawType": "Int"
           },
@@ -20674,7 +20728,7 @@
           ],
           "isLatent": false,
           "name": "SetNthTexturePath",
-          "offset": "8433796656",
+          "offset": "8081868336",
           "returnType": {
             "rawType": "None"
           },
@@ -20723,7 +20777,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetHarvestSound",
-          "offset": "8433798128",
+          "offset": "8081869808",
           "returnType": {
             "objectTypeName": "SoundDescriptor",
             "rawType": "Object"
@@ -20734,7 +20788,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetIngredient",
-          "offset": "8433724512",
+          "offset": "8081796192",
           "returnType": {
             "objectTypeName": "Form",
             "rawType": "Object"
@@ -20753,7 +20807,7 @@
           ],
           "isLatent": false,
           "name": "SetHarvestSound",
-          "offset": "8433798144",
+          "offset": "8081869824",
           "returnType": {
             "rawType": "None"
           },
@@ -20771,7 +20825,7 @@
           ],
           "isLatent": false,
           "name": "SetIngredient",
-          "offset": "8433798112",
+          "offset": "8081869792",
           "returnType": {
             "rawType": "None"
           },
@@ -20786,7 +20840,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "CloseCustomMenu",
-          "offset": "8433802624",
+          "offset": "8081874304",
           "returnType": {
             "rawType": "None"
           },
@@ -20809,7 +20863,7 @@
           ],
           "isLatent": false,
           "name": "GetBool",
-          "offset": "8433815168",
+          "offset": "8081886848",
           "returnType": {
             "rawType": "Bool"
           },
@@ -20832,7 +20886,7 @@
           ],
           "isLatent": false,
           "name": "GetFloat",
-          "offset": "8433815488",
+          "offset": "8081887168",
           "returnType": {
             "rawType": "Float"
           },
@@ -20855,7 +20909,7 @@
           ],
           "isLatent": false,
           "name": "GetInt",
-          "offset": "8433815328",
+          "offset": "8081887008",
           "returnType": {
             "rawType": "Int"
           },
@@ -20878,7 +20932,7 @@
           ],
           "isLatent": false,
           "name": "GetString",
-          "offset": "8433815664",
+          "offset": "8081887344",
           "returnType": {
             "rawType": "String"
           },
@@ -20907,7 +20961,7 @@
           ],
           "isLatent": false,
           "name": "InvokeBool",
-          "offset": "8433816000",
+          "offset": "8081887680",
           "returnType": {
             "rawType": "None"
           },
@@ -20936,7 +20990,7 @@
           ],
           "isLatent": false,
           "name": "InvokeBoolA",
-          "offset": "8433816848",
+          "offset": "8081888528",
           "returnType": {
             "rawType": "None"
           },
@@ -20965,7 +21019,7 @@
           ],
           "isLatent": false,
           "name": "InvokeFloat",
-          "offset": "8433816208",
+          "offset": "8081887888",
           "returnType": {
             "rawType": "None"
           },
@@ -20994,7 +21048,7 @@
           ],
           "isLatent": false,
           "name": "InvokeFloatA",
-          "offset": "8433817568",
+          "offset": "8081889248",
           "returnType": {
             "rawType": "None"
           },
@@ -21024,7 +21078,7 @@
           ],
           "isLatent": false,
           "name": "InvokeForm",
-          "offset": "8433802160",
+          "offset": "8081873840",
           "returnType": {
             "rawType": "None"
           },
@@ -21053,7 +21107,7 @@
           ],
           "isLatent": false,
           "name": "InvokeInt",
-          "offset": "8433816416",
+          "offset": "8081888096",
           "returnType": {
             "rawType": "None"
           },
@@ -21082,7 +21136,7 @@
           ],
           "isLatent": false,
           "name": "InvokeIntA",
-          "offset": "8433817216",
+          "offset": "8081888896",
           "returnType": {
             "rawType": "None"
           },
@@ -21111,7 +21165,7 @@
           ],
           "isLatent": false,
           "name": "InvokeString",
-          "offset": "8433816640",
+          "offset": "8081888320",
           "returnType": {
             "rawType": "None"
           },
@@ -21140,7 +21194,7 @@
           ],
           "isLatent": false,
           "name": "InvokeStringA",
-          "offset": "8433817920",
+          "offset": "8081889600",
           "returnType": {
             "rawType": "None"
           },
@@ -21157,7 +21211,7 @@
           ],
           "isLatent": false,
           "name": "IsMenuOpen",
-          "offset": "8433802352",
+          "offset": "8081874032",
           "returnType": {
             "rawType": "Bool"
           },
@@ -21167,7 +21221,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "IsTextInputEnabled",
-          "offset": "8433802432",
+          "offset": "8081874112",
           "returnType": {
             "rawType": "Bool"
           },
@@ -21190,7 +21244,7 @@
           ],
           "isLatent": false,
           "name": "OpenCustomMenu",
-          "offset": "8433802480",
+          "offset": "8081874160",
           "returnType": {
             "rawType": "None"
           },
@@ -21219,7 +21273,7 @@
           ],
           "isLatent": false,
           "name": "SetBool",
-          "offset": "8433814448",
+          "offset": "8081886128",
           "returnType": {
             "rawType": "None"
           },
@@ -21248,7 +21302,7 @@
           ],
           "isLatent": false,
           "name": "SetFloat",
-          "offset": "8433814816",
+          "offset": "8081886496",
           "returnType": {
             "rawType": "None"
           },
@@ -21277,7 +21331,7 @@
           ],
           "isLatent": false,
           "name": "SetInt",
-          "offset": "8433814624",
+          "offset": "8081886304",
           "returnType": {
             "rawType": "None"
           },
@@ -21306,7 +21360,7 @@
           ],
           "isLatent": false,
           "name": "SetString",
-          "offset": "8433814992",
+          "offset": "8081886672",
           "returnType": {
             "rawType": "None"
           },
@@ -21407,7 +21461,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetBaseDamage",
-          "offset": "8433844048",
+          "offset": "8081915728",
           "returnType": {
             "rawType": "Int"
           },
@@ -21417,7 +21471,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCritDamage",
-          "offset": "8433844112",
+          "offset": "8081915792",
           "returnType": {
             "rawType": "Int"
           },
@@ -21427,7 +21481,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCritEffect",
-          "offset": "8433845280",
+          "offset": "8081916960",
           "returnType": {
             "objectTypeName": "SPELL",
             "rawType": "Object"
@@ -21438,7 +21492,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCritEffectOnDeath",
-          "offset": "8433845312",
+          "offset": "8081916992",
           "returnType": {
             "rawType": "Bool"
           },
@@ -21448,7 +21502,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCritMultiplier",
-          "offset": "8433845360",
+          "offset": "8081917040",
           "returnType": {
             "rawType": "Float"
           },
@@ -21458,7 +21512,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantment",
-          "offset": "8433844800",
+          "offset": "8081916480",
           "returnType": {
             "objectTypeName": "Enchantment",
             "rawType": "Object"
@@ -21469,7 +21523,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEnchantmentValue",
-          "offset": "8433844832",
+          "offset": "8081916512",
           "returnType": {
             "rawType": "Int"
           },
@@ -21479,7 +21533,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEquipType",
-          "offset": "8433658144",
+          "offset": "8081729824",
           "returnType": {
             "objectTypeName": "EquipSlot",
             "rawType": "Object"
@@ -21490,7 +21544,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetEquippedModel",
-          "offset": "8433844896",
+          "offset": "8081916576",
           "returnType": {
             "objectTypeName": "STATIC",
             "rawType": "Object"
@@ -21501,7 +21555,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetIconPath",
-          "offset": "8433844512",
+          "offset": "8081916192",
           "returnType": {
             "rawType": "String"
           },
@@ -21511,7 +21565,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMaxRange",
-          "offset": "8433844336",
+          "offset": "8081916016",
           "returnType": {
             "rawType": "Float"
           },
@@ -21521,7 +21575,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMessageIconPath",
-          "offset": "8433844656",
+          "offset": "8081916336",
           "returnType": {
             "rawType": "String"
           },
@@ -21531,7 +21585,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMinRange",
-          "offset": "8433844288",
+          "offset": "8081915968",
           "returnType": {
             "rawType": "Float"
           },
@@ -21541,7 +21595,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetModelPath",
-          "offset": "8433844416",
+          "offset": "8081916096",
           "returnType": {
             "rawType": "String"
           },
@@ -21551,7 +21605,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetReach",
-          "offset": "8433844144",
+          "offset": "8081915824",
           "returnType": {
             "rawType": "Float"
           },
@@ -21561,7 +21615,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetResist",
-          "offset": "8433845120",
+          "offset": "8081916800",
           "returnType": {
             "rawType": "String"
           },
@@ -21571,7 +21625,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSkill",
-          "offset": "8433844960",
+          "offset": "8081916640",
           "returnType": {
             "rawType": "String"
           },
@@ -21581,7 +21635,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSpeed",
-          "offset": "8433844192",
+          "offset": "8081915872",
           "returnType": {
             "rawType": "Float"
           },
@@ -21591,7 +21645,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetStagger",
-          "offset": "8433844240",
+          "offset": "8081915920",
           "returnType": {
             "rawType": "Float"
           },
@@ -21601,7 +21655,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetTemplate",
-          "offset": "8433845408",
+          "offset": "8081917088",
           "returnType": {
             "objectTypeName": "WEAPON",
             "rawType": "Object"
@@ -21612,7 +21666,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWeaponType",
-          "offset": "8433844384",
+          "offset": "8081916064",
           "returnType": {
             "rawType": "Int"
           },
@@ -21629,7 +21683,7 @@
           ],
           "isLatent": false,
           "name": "SetBaseDamage",
-          "offset": "8433844096",
+          "offset": "8081915776",
           "returnType": {
             "rawType": "None"
           },
@@ -21646,7 +21700,7 @@
           ],
           "isLatent": false,
           "name": "SetCritDamage",
-          "offset": "8433844128",
+          "offset": "8081915808",
           "returnType": {
             "rawType": "None"
           },
@@ -21664,7 +21718,7 @@
           ],
           "isLatent": false,
           "name": "SetCritEffect",
-          "offset": "8433845296",
+          "offset": "8081916976",
           "returnType": {
             "rawType": "None"
           },
@@ -21681,7 +21735,7 @@
           ],
           "isLatent": false,
           "name": "SetCritEffectOnDeath",
-          "offset": "8433845344",
+          "offset": "8081917024",
           "returnType": {
             "rawType": "None"
           },
@@ -21698,7 +21752,7 @@
           ],
           "isLatent": false,
           "name": "SetCritMultiplier",
-          "offset": "8433845392",
+          "offset": "8081917072",
           "returnType": {
             "rawType": "None"
           },
@@ -21716,7 +21770,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantment",
-          "offset": "8433844816",
+          "offset": "8081916496",
           "returnType": {
             "rawType": "None"
           },
@@ -21733,7 +21787,7 @@
           ],
           "isLatent": false,
           "name": "SetEnchantmentValue",
-          "offset": "8433844864",
+          "offset": "8081916544",
           "returnType": {
             "rawType": "None"
           },
@@ -21751,7 +21805,7 @@
           ],
           "isLatent": false,
           "name": "SetEquipType",
-          "offset": "8433844928",
+          "offset": "8081916608",
           "returnType": {
             "rawType": "None"
           },
@@ -21769,7 +21823,7 @@
           ],
           "isLatent": false,
           "name": "SetEquippedModel",
-          "offset": "8433844912",
+          "offset": "8081916592",
           "returnType": {
             "rawType": "None"
           },
@@ -21786,7 +21840,7 @@
           ],
           "isLatent": false,
           "name": "SetIconPath",
-          "offset": "8433844592",
+          "offset": "8081916272",
           "returnType": {
             "rawType": "None"
           },
@@ -21803,7 +21857,7 @@
           ],
           "isLatent": false,
           "name": "SetMaxRange",
-          "offset": "8433844368",
+          "offset": "8081916048",
           "returnType": {
             "rawType": "None"
           },
@@ -21820,7 +21874,7 @@
           ],
           "isLatent": false,
           "name": "SetMessageIconPath",
-          "offset": "8433844736",
+          "offset": "8081916416",
           "returnType": {
             "rawType": "None"
           },
@@ -21837,7 +21891,7 @@
           ],
           "isLatent": false,
           "name": "SetMinRange",
-          "offset": "8433844320",
+          "offset": "8081916000",
           "returnType": {
             "rawType": "None"
           },
@@ -21854,7 +21908,7 @@
           ],
           "isLatent": false,
           "name": "SetModelPath",
-          "offset": "8433844480",
+          "offset": "8081916160",
           "returnType": {
             "rawType": "None"
           },
@@ -21871,7 +21925,7 @@
           ],
           "isLatent": false,
           "name": "SetReach",
-          "offset": "8433844176",
+          "offset": "8081915856",
           "returnType": {
             "rawType": "None"
           },
@@ -21888,7 +21942,7 @@
           ],
           "isLatent": false,
           "name": "SetResist",
-          "offset": "8433845232",
+          "offset": "8081916912",
           "returnType": {
             "rawType": "None"
           },
@@ -21905,7 +21959,7 @@
           ],
           "isLatent": false,
           "name": "SetSkill",
-          "offset": "8433845072",
+          "offset": "8081916752",
           "returnType": {
             "rawType": "None"
           },
@@ -21922,7 +21976,7 @@
           ],
           "isLatent": false,
           "name": "SetSpeed",
-          "offset": "8433844224",
+          "offset": "8081915904",
           "returnType": {
             "rawType": "None"
           },
@@ -21939,7 +21993,7 @@
           ],
           "isLatent": false,
           "name": "SetStagger",
-          "offset": "8433844272",
+          "offset": "8081915952",
           "returnType": {
             "rawType": "None"
           },
@@ -21956,7 +22010,7 @@
           ],
           "isLatent": false,
           "name": "SetWeaponType",
-          "offset": "8433844400",
+          "offset": "8081916080",
           "returnType": {
             "rawType": "None"
           },
@@ -22083,7 +22137,7 @@
           ],
           "isLatent": false,
           "name": "GetFogDistance",
-          "offset": "8433855888",
+          "offset": "8081927568",
           "returnType": {
             "rawType": "Float"
           },
@@ -22093,7 +22147,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSunDamage",
-          "offset": "8433855744",
+          "offset": "8081927424",
           "returnType": {
             "rawType": "Float"
           },
@@ -22103,7 +22157,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetSunGlare",
-          "offset": "8433855696",
+          "offset": "8081927376",
           "returnType": {
             "rawType": "Float"
           },
@@ -22113,7 +22167,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWindDirection",
-          "offset": "8433855792",
+          "offset": "8081927472",
           "returnType": {
             "rawType": "Float"
           },
@@ -22123,7 +22177,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetWindDirectionRange",
-          "offset": "8433855840",
+          "offset": "8081927520",
           "returnType": {
             "rawType": "Float"
           },
@@ -22178,11 +22232,11 @@
           ],
           "isLatent": false,
           "name": "CaptureFrameRate",
-          "offset": "140769551581184",
+          "offset": "25472632",
           "returnType": {
             "rawType": "String"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -22202,7 +22256,7 @@
           ],
           "isLatent": false,
           "name": "CreateAliasArray",
-          "offset": "8433837584",
+          "offset": "8081909264",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -22225,7 +22279,7 @@
           ],
           "isLatent": false,
           "name": "CreateBoolArray",
-          "offset": "8433837392",
+          "offset": "8081909072",
           "returnType": {
             "rawType": "BoolArray"
           },
@@ -22248,7 +22302,7 @@
           ],
           "isLatent": false,
           "name": "CreateFloatArray",
-          "offset": "8433837232",
+          "offset": "8081908912",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -22272,7 +22326,7 @@
           ],
           "isLatent": false,
           "name": "CreateFormArray",
-          "offset": "8433837584",
+          "offset": "8081909264",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -22295,7 +22349,7 @@
           ],
           "isLatent": false,
           "name": "CreateIntArray",
-          "offset": "8433837312",
+          "offset": "8081908992",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -22318,7 +22372,7 @@
           ],
           "isLatent": false,
           "name": "CreateStringArray",
-          "offset": "8433837504",
+          "offset": "8081909184",
           "returnType": {
             "rawType": "StringArray"
           },
@@ -22328,7 +22382,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "EndFrameRateCapture",
-          "offset": "18446603522432977800",
+          "offset": "14214739634290704",
           "returnType": {
             "rawType": "None"
           },
@@ -22355,7 +22409,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetAverageFrameRate",
-          "offset": "18446603522481761448",
+          "offset": "18446604199416753048",
           "returnType": {
             "rawType": "Float"
           },
@@ -22365,7 +22419,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetBudgetCount",
-          "offset": "24614936",
+          "offset": "18446604199427667944",
           "returnType": {
             "rawType": "Int"
           },
@@ -22382,11 +22436,11 @@
           ],
           "isLatent": false,
           "name": "GetBudgetName",
-          "offset": "18446603518608277506",
+          "offset": "17029472222838821",
           "returnType": {
             "rawType": "String"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -22399,7 +22453,7 @@
           ],
           "isLatent": false,
           "name": "GetCurrentBudget",
-          "offset": "25467584",
+          "offset": "18446604199501495328",
           "returnType": {
             "rawType": "Int"
           },
@@ -22419,11 +22473,11 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetCurrentMemory",
-          "offset": "140769551581184",
+          "offset": "25472632",
           "returnType": {
             "rawType": "Int"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [],
@@ -22446,7 +22500,7 @@
           ],
           "isLatent": false,
           "name": "GetINIBool",
-          "offset": "8433825312",
+          "offset": "8081896992",
           "returnType": {
             "rawType": "Bool"
           },
@@ -22463,7 +22517,7 @@
           ],
           "isLatent": false,
           "name": "GetINIFloat",
-          "offset": "8433825056",
+          "offset": "8081896736",
           "returnType": {
             "rawType": "Float"
           },
@@ -22480,7 +22534,7 @@
           ],
           "isLatent": false,
           "name": "GetINIInt",
-          "offset": "8433825184",
+          "offset": "8081896864",
           "returnType": {
             "rawType": "Int"
           },
@@ -22497,7 +22551,7 @@
           ],
           "isLatent": false,
           "name": "GetINIString",
-          "offset": "8433825440",
+          "offset": "8081897120",
           "returnType": {
             "rawType": "String"
           },
@@ -22507,7 +22561,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMaxFrameRate",
-          "offset": "18446603376874356745",
+          "offset": "25472632",
           "returnType": {
             "rawType": "Float"
           },
@@ -22517,7 +22571,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "GetMinFrameRate",
-          "offset": "25467584",
+          "offset": "20688762885898279",
           "returnType": {
             "rawType": "Float"
           },
@@ -22544,11 +22598,11 @@
           ],
           "isLatent": false,
           "name": "OverBudget",
-          "offset": "18446603522510105648",
+          "offset": "18446603374781595648",
           "returnType": {
             "rawType": "Bool"
           },
-          "useLongSignature": false
+          "useLongSignature": true
         },
         {
           "arguments": [
@@ -22620,7 +22674,7 @@
           ],
           "isLatent": false,
           "name": "ResizeAliasArray",
-          "offset": "8433838880",
+          "offset": "8081910560",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -22649,7 +22703,7 @@
           ],
           "isLatent": false,
           "name": "ResizeBoolArray",
-          "offset": "8433838128",
+          "offset": "8081909808",
           "returnType": {
             "rawType": "BoolArray"
           },
@@ -22678,7 +22732,7 @@
           ],
           "isLatent": false,
           "name": "ResizeFloatArray",
-          "offset": "8433837664",
+          "offset": "8081909344",
           "returnType": {
             "rawType": "FloatArray"
           },
@@ -22708,7 +22762,7 @@
           ],
           "isLatent": false,
           "name": "ResizeFormArray",
-          "offset": "8433838688",
+          "offset": "8081910368",
           "returnType": {
             "rawType": "ObjectArray"
           },
@@ -22737,7 +22791,7 @@
           ],
           "isLatent": false,
           "name": "ResizeIntArray",
-          "offset": "8433837904",
+          "offset": "8081909584",
           "returnType": {
             "rawType": "IntArray"
           },
@@ -22766,7 +22820,7 @@
           ],
           "isLatent": false,
           "name": "ResizeStringArray",
-          "offset": "8433838416",
+          "offset": "8081910096",
           "returnType": {
             "rawType": "StringArray"
           },
@@ -22868,7 +22922,7 @@
           "arguments": [],
           "isLatent": false,
           "name": "StartFrameRateCapture",
-          "offset": "25472632",
+          "offset": "17310951492747281",
           "returnType": {
             "rawType": "None"
           },

@@ -27,3 +27,7 @@ Function ResizeHeadpartsArray(ActorBase npc, Int newSize) global native
 Function ResizeTintsArray(Int newSize) global native
 
 Function SetFormIdUnsafe(Form form, Int newId) global native
+
+Function ClearTintMasks(Actor targetActor) global native
+
+Function PushTintMask(Actor targetActor, Int type, Int argb, String texturePath) global native

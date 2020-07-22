@@ -1,4 +1,5 @@
 #include "CallNativeApi.h"
+#include "CameraApi.h"
 #include "ConsoleApi.h"
 #include "DevApi.h"
 #include "DirectoryMonitor.h"
@@ -16,6 +17,7 @@
 #include "SystemPolyfill.h"
 #include "TaskQueue.h"
 #include "ThreadPoolWrapper.h"
+#include "skee/SKMain.h"
 #include <RE/ConsoleLog.h>
 #include <SKSE/API.h>
 #include <SKSE/Interfaces.h>
@@ -178,6 +180,7 @@ void JsTick(bool gameFunctionsAvailable)
           { { "skyrimPlatform",
               [fileDir](JsValue e) {
                 LoadGameApi::Register(e);
+                CameraApi::Register(e);
                 MpClientPluginApi::Register(e);
                 HttpClientApi::Register(e);
                 ConsoleApi::Register(e);
@@ -292,7 +295,7 @@ __declspec(dllexport) bool SKSEPlugin_Query(const SKSE::QueryInterface* skse,
     _FATALERROR("loaded in editor, marking as incompatible");
     return false;
   }
-  return true;
+  return SKEE::SKSEPlugin_Query((SKSEInterface*)skse, (PluginInfo*)info);
 }
 
 __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
@@ -324,7 +327,7 @@ __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
     (SKSEPapyrusInterface::RegisterFunctions)TESModPlatform::Register);
   TESModPlatform::onPapyrusUpdate = OnPapyrusUpdate;
 
-  return true;
+  return SKEE::SKSEPlugin_Load(skse);
 }
 };
 

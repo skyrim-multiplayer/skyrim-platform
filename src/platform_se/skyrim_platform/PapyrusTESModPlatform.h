@@ -11,6 +11,7 @@
 #include <RE/TESWorldSpace.h>
 #include <cstdint>
 #include <functional>
+#include <memory>
 
 namespace TESModPlatform {
 extern std::function<void(RE::BSScript::IVirtualMachine* vm,
@@ -80,10 +81,33 @@ void ResizeTintsArray(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
 void SetFormIdUnsafe(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
                      RE::StaticFunctionTag*, RE::TESForm* form, UInt32 newId);
 
+void ClearTintMasks(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                    RE::StaticFunctionTag*, RE::Actor* targetActor);
+
+void PushTintMask(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                  RE::StaticFunctionTag*, RE::Actor* targetActor, SInt32 type,
+                  UInt32 argb, RE::BSFixedString texturePath);
+
+/*SInt32 AllocateTintsArray(RE::BSScript::IVirtualMachine* vm,
+                          RE::VMStackID stackId, RE::StaticFunctionTag*,
+                          SInt32 size);
+
+void FreeTintsArray(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                    RE::StaticFunctionTag*, SInt32 tintsArrayId);
+
+void SetTintData(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                 RE::StaticFunctionTag*, SInt32 tintsArrayId, SInt32 idx,
+                 SInt32 type, SInt32 argb, RE::BSFixedString texturePath);
+
+void ApplyTints(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+                RE::StaticFunctionTag*, RE::Actor* target,
+                SInt32 tintsArrayId);*/
+
 // Threadsafe
 void BlockMoveRefrToPosition(bool blocked);
 int GetWeapDrawnMode(uint32_t actorId);
 uint64_t GetNumPapyrusUpdates();
+std::shared_ptr<RE::BSTArray<RE::TintMask*>> GetTintsFor(uint32_t actorId);
 
 void Update();
 

@@ -1,6 +1,8 @@
 #include "PapyrusTESModPlatform.h"
 #include "CallNativeApi.h"
 #include "NullPointerException.h"
+#include "skee/SKItemDataInterface.h"
+#include "skee/SKTintMaskInterface.h"
 #include <RE/BSScript/IFunctionArguments.h>
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
@@ -13,17 +15,16 @@
 #include <RE/TESNPC.h>
 #include <atomic>
 #include <mutex>
+#include <skse64/Colors.h>
 #include <skse64/GameForms.h> // IFormFactory::GetFactoryForType
 #include <skse64/GameReferences.h>
+#include <skse64/NiNodes.h>
+#include <skse64/PapyrusGame.h>
 #include <unordered_map>
 #include <unordered_set>
 
-#define COLOR_ALPHA(in) ((in >> 24) & 0xFF)
-#define COLOR_RED(in) ((in >> 16) & 0xFF)
-#define COLOR_GREEN(in) ((in >> 8) & 0xFF)
-#define COLOR_BLUE(in) ((in >> 0) & 0xFF)
-
 extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
+extern TintMaskInterface g_tintMaskInterface;
 
 namespace TESModPlatform {
 bool papyrusUpdateAllowed = false;
@@ -37,6 +38,26 @@ struct
   std::unordered_map<uint32_t, int> weapDrawnMode;
   std::recursive_mutex m;
 } share;
+
+struct
+{
+  // index is formID-0xff000000
+  std::vector<std::shared_ptr<RE::BSTArray<RE::TintMask*>>> actorsTints;
+  std::recursive_mutex m;
+} share2;
+
+namespace {
+RE::BSTArray<RE::TintMask*> Clone(const RE::BSTArray<RE::TintMask*>& original)
+{
+  RE::BSTArray<RE::TintMask*> res;
+  for (auto tint : original) {
+    res.push_back(nullptr);
+    res.back() = (RE::TintMask*)Heap_Allocate(sizeof(TintMask));
+    memcpy(res.back(), tint, sizeof(TintMask));
+  }
+  return res;
+}
+}
 
 class FunctionArguments : public RE::BSScript::IFunctionArguments
 {
@@ -264,35 +285,14 @@ RE::TESNPC* TESModPlatform::CreateNpc(RE::BSScript::IVirtualMachine* vm,
   npc_->aiForm.unk18.unk0 = doNothing;
   npc_->aiForm.unk18.next = nullptr;
 
+  auto sourceMorph = npc_->faceMorph;
+  npc_->faceMorph =
+    (TESNPC::FaceMorphs*)Heap_Allocate(sizeof(TESNPC::FaceMorphs));
+  if (!npc_->faceMorph)
+    return nullptr;
+  *npc_->faceMorph = *sourceMorph;
+
   return (RE::TESNPC*)npc;
-
-  /* auto factory = IFormFactory::GetFactoryForType(TESNPC::kTypeID);
-   if (!factory)
-     return nullptr;
-
-   return (RE::TESNPC*)factory->Create();*/
-
-  /*auto npc = (TESNPC*)malloc(sizeof TESNPC);
-  if (!npc)
-    return nullptr;
-
-  enum
-  {
-    AADeleteWhenDoneTestJeremyRegular = 0x0010D13E
-  };
-  const auto srcNpc =
-    (TESNPC*)LookupFormByID(AADeleteWhenDoneTestJeremyRegular);
-  assert(srcNpc);
-  assert(srcNpc->formType == kFormType_NPC);
-  if (!srcNpc || srcNpc->formType != kFormType_NPC)
-    return nullptr;
-  memcpy(npc, srcNpc, sizeof TESNPC);
-
-  npc->actorData.voiceType = (BGSVoiceType*)LookupFormByID(0x0002F7C3);
-  npc->formID = 0;
-
-  npc->SetFormID(AllocateFormId(), 1);
-  return (RE::TESNPC*)npc;*/
 }
 
 void TESModPlatform::SetNpcSex(RE::BSScript::IVirtualMachine* vm,
@@ -335,8 +335,8 @@ void TESModPlatform::SetNpcHairColor(RE::BSScript::IVirtualMachine* vm,
   if (!npc)
     return;
   if (!npc->headRelatedData) {
-    npc->headRelatedData =
-      (RE::TESNPC::HeadRelatedData*)malloc(sizeof RE::TESNPC::HeadRelatedData);
+    npc->headRelatedData = (RE::TESNPC::HeadRelatedData*)Heap_Allocate(
+      sizeof RE::TESNPC::HeadRelatedData);
     if (!npc->headRelatedData)
       return;
     npc->headRelatedData->faceDetails = nullptr;
@@ -372,39 +372,6 @@ void TESModPlatform::ResizeHeadpartsArray(RE::BSScript::IVirtualMachine* vm,
     for (SInt8 i = 0; i < npc->numHeadParts; ++i)
       npc->headParts[i] = nullptr;
   }
-
-  /*if (!npc)
-    return;
-  if (index < 0) {
-    npc->headParts = nullptr;
-    npc->numHeadParts = 0;
-  } else {
-    int newHeadpartsCount = index + 1;
-
-    std::vector<RE::BGSHeadPart*> prev;
-    if (npc->headParts)
-      for (size_t i = 0; i < npc->numHeadParts; ++i)
-        prev.push_back(npc->headParts[i]);
-
-    npc->headParts = new RE::BGSHeadPart*[newHeadpartsCount];
-    npc->numHeadParts = (uint8_t)newHeadpartsCount;
-  }*/
-
-  /*if (!npc ||
-      std::find(headparts.begin(), headparts.end(), nullptr) !=
-        headparts.end())
-    return;
-
-  if (headparts.size() > 0) {
-    npc->headParts = new RE::BGSHeadPart*[headparts.size()];
-    npc->numHeadParts = (uint8_t)headparts.size();
-  } else {
-    npc->headParts = nullptr;
-    npc->numHeadParts = 0;
-  }
-
-  for (size_t i = 0; i < headparts.size(); ++i)
-    npc->headParts[i] = headparts[i];*/
 }
 
 void TESModPlatform::ResizeTintsArray(RE::BSScript::IVirtualMachine* vm,
@@ -430,6 +397,85 @@ void TESModPlatform::SetFormIdUnsafe(RE::BSScript::IVirtualMachine* vm,
                                      UInt32 newId)
 {
   form->formID = newId;
+}
+
+void TESModPlatform::ClearTintMasks(RE::BSScript::IVirtualMachine* vm,
+                                    RE::VMStackID stackId,
+                                    RE::StaticFunctionTag*,
+                                    RE::Actor* targetActor)
+{
+  if (!targetActor) {
+    auto pc = RE::PlayerCharacter::GetSingleton();
+    return pc->tintMasks.clear();
+  }
+
+  if (targetActor->formID < 0xff000000)
+    return;
+  size_t i = targetActor->formID - 0xff000000;
+
+  std::lock_guard l(share2.m);
+  if (share2.actorsTints.size() > i)
+    share2.actorsTints[i].reset();
+}
+
+void TESModPlatform::PushTintMask(RE::BSScript::IVirtualMachine* vm,
+                                  RE::VMStackID stackId,
+                                  RE::StaticFunctionTag*,
+                                  RE::Actor* targetActor, SInt32 type,
+                                  UInt32 argb, RE::BSFixedString texturePath)
+{
+  auto newTm = (TintMask*)Heap_Allocate(sizeof TintMask);
+  if (!newTm)
+    return;
+
+  ARGBColor color(argb);
+  float alpha = color.GetAlpha() / 255.f;
+  if (alpha > 1.0)
+    alpha = 1.f;
+  if (alpha < 0.0)
+    alpha = 0.f;
+  newTm->color.alpha = color.GetAlpha();
+  newTm->alpha = alpha;
+  newTm->color.red = color.GetRed();
+  newTm->color.green = color.GetGreen();
+  newTm->color.blue = color.GetBlue();
+
+  newTm->texture = (TESTexture*)Heap_Allocate(sizeof TESTexture);
+  if (!newTm->texture)
+    return;
+  newTm->texture->str = *(BSFixedString*)&texturePath;
+
+  newTm->tintType = type;
+
+  if (targetActor == nullptr) {
+    auto targetArray = &RE::PlayerCharacter::GetSingleton()->tintMasks;
+    auto n = targetArray->size();
+    targetArray->resize(1 + n);
+    if (targetArray->size() == 1 + n) {
+      targetArray->back() = (RE::TintMask*)newTm;
+    }
+    return;
+  }
+
+  if (targetActor->formID < 0xff000000)
+    return;
+
+  size_t i = targetActor->formID - 0xff000000;
+  std::lock_guard l(share2.m);
+  share2.actorsTints.resize(std::max(i + 1, share2.actorsTints.size()));
+
+  std::shared_ptr<RE::BSTArray<RE::TintMask*>> tints(
+    new RE::BSTArray<RE::TintMask*>);
+  if (share2.actorsTints[i]) {
+    *tints = Clone(*share2.actorsTints[i]);
+  }
+  auto n = tints->size();
+  tints->resize(1 + n);
+  if (tints->size() == 1 + n) {
+    tints->back() = (RE::TintMask*)newTm;
+  }
+
+  share2.actorsTints[i] = tints;
 }
 
 int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
@@ -468,6 +514,19 @@ void TESModPlatform::Update()
 uint64_t TESModPlatform::GetNumPapyrusUpdates()
 {
   return numPapyrusUpdates;
+}
+
+std::shared_ptr<RE::BSTArray<RE::TintMask*>> TESModPlatform::GetTintsFor(
+  uint32_t actorId)
+{
+  if (actorId < 0xff000000)
+    return nullptr;
+
+  std::lock_guard l(share2.m);
+  auto i = actorId - 0xff000000;
+  if (i >= share2.actorsTints.size())
+    return nullptr;
+  return share2.actorsTints[i];
 }
 
 bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
@@ -554,6 +613,17 @@ bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
                                      RE::StaticFunctionTag*, RE::TESForm*,
                                      SInt32>(
       "SetFormIdUnsafe", "TESModPlatform", SetFormIdUnsafe));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(ClearTintMasks), void,
+                                     RE::StaticFunctionTag*, RE::Actor*>(
+      "ClearTintMasks", "TESModPlatform", ClearTintMasks));
+
+  vm->BindNativeMethod(
+    new RE::BSScript::NativeFunction<true, decltype(PushTintMask), void,
+                                     RE::StaticFunctionTag*, RE::Actor*,
+                                     SInt32, UInt32, RE::BSFixedString>(
+      "PushTintMask", "TESModPlatform", PushTintMask));
 
   static LoadGameEvent loadGameEvent;
 
