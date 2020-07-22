@@ -1,8 +1,6 @@
 #include "PapyrusTESModPlatform.h"
 #include "CallNativeApi.h"
 #include "NullPointerException.h"
-#include "skee/SKItemDataInterface.h"
-#include "skee/SKTintMaskInterface.h"
 #include <RE/BSScript/IFunctionArguments.h>
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
@@ -24,7 +22,6 @@
 #include <unordered_set>
 
 extern CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
-extern TintMaskInterface g_tintMaskInterface;
 
 namespace TESModPlatform {
 bool papyrusUpdateAllowed = false;

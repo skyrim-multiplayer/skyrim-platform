@@ -17,7 +17,6 @@
 #include "SystemPolyfill.h"
 #include "TaskQueue.h"
 #include "ThreadPoolWrapper.h"
-#include "skee/SKMain.h"
 #include <RE/ConsoleLog.h>
 #include <SKSE/API.h>
 #include <SKSE/Interfaces.h>
@@ -295,7 +294,7 @@ __declspec(dllexport) bool SKSEPlugin_Query(const SKSE::QueryInterface* skse,
     _FATALERROR("loaded in editor, marking as incompatible");
     return false;
   }
-  return SKEE::SKSEPlugin_Query((SKSEInterface*)skse, (PluginInfo*)info);
+  return true;
 }
 
 __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
@@ -327,7 +326,7 @@ __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
     (SKSEPapyrusInterface::RegisterFunctions)TESModPlatform::Register);
   TESModPlatform::onPapyrusUpdate = OnPapyrusUpdate;
 
-  return SKEE::SKSEPlugin_Load(skse);
+  return true;
 }
 };
 

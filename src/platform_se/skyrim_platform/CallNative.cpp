@@ -243,8 +243,7 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
     return ObjectPtr();
   }
 
-  bool isQueueNiNodeUpdate = (/*!stricmp(className.data(), "Actor") &&*/
-                              !stricmp(classFunc.data(), "queueNiNodeUpdate"));
+  bool isQueueNiNodeUpdate = !stricmp(classFunc.data(), "queueNiNodeUpdate");
   if (isQueueNiNodeUpdate) {
     CallNative::ObjectPtr _self = self;
     gameThrQ.AddTask([_self] {
