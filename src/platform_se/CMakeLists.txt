@@ -15,11 +15,7 @@ if (NOT EXISTS "${cmake_dir}")
 endif()
 
 set(lib_root "${SKYRIM_MP_ROOT}/submodules/CommonLibSSE")
-set(directxtex_root "${SKYRIM_MP_ROOT}/submodules/DirectXTex")
 set(third_party "${SKYRIM_MP_ROOT}/src/platform_se/third_party")
-
-set(BUILD_DX12 OFF CACHE BOOL "Build with DirectX12 Runtime support" FORCE)
-add_subdirectory(${directxtex_root} DirectXTex)
 
 file(GLOB_RECURSE lib_src "${lib_root}/src/*" "${lib_root}/include/*")
 add_library(CommonLibSSE STATIC ${lib_src})
@@ -73,7 +69,7 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
 
   file(GLOB_RECURSE platform_src "skyrim_platform/*" "${SKYRIM_MP_ROOT}/.clang-format")
   add_library(skyrim_platform SHARED ${platform_src})
-  target_link_libraries(skyrim_platform PUBLIC skse64 CommonLibSSE skyrim_plugin_resources DirectXTex)
+  target_link_libraries(skyrim_platform PUBLIC skse64 CommonLibSSE skyrim_plugin_resources)
   set_target_properties(skyrim_platform PROPERTIES OUTPUT_NAME "SkyrimPlatform")
   target_include_directories(skyrim_platform PRIVATE "${third_party}")
   target_link_libraries(skyrim_platform PRIVATE "${third_party}/frida/frida-gum.lib")
@@ -122,6 +118,5 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
 endif()
 
 apply_default_settings(TARGETS
-  DirectXTex texdiag texconv texassemble
   CommonLibSSE common skse64_common skse64
 )
