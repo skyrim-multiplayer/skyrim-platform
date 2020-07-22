@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include <RE/Actor.h>
 #include <RE/BGSColorForm.h>
 #include <RE/BSScript/ISavePatcherInterface.h>
@@ -87,21 +86,6 @@ void ClearTintMasks(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
 void PushTintMask(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
                   RE::StaticFunctionTag*, RE::Actor* targetActor, SInt32 type,
                   UInt32 argb, RE::BSFixedString texturePath);
-
-/*SInt32 AllocateTintsArray(RE::BSScript::IVirtualMachine* vm,
-                          RE::VMStackID stackId, RE::StaticFunctionTag*,
-                          SInt32 size);
-
-void FreeTintsArray(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
-                    RE::StaticFunctionTag*, SInt32 tintsArrayId);
-
-void SetTintData(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
-                 RE::StaticFunctionTag*, SInt32 tintsArrayId, SInt32 idx,
-                 SInt32 type, SInt32 argb, RE::BSFixedString texturePath);
-
-void ApplyTints(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
-                RE::StaticFunctionTag*, RE::Actor* target,
-                SInt32 tintsArrayId);*/
 
 // Threadsafe
 void BlockMoveRefrToPosition(bool blocked);

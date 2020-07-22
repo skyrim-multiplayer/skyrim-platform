@@ -227,12 +227,6 @@ RE::BGSColorForm* TESModPlatform::GetSkinColor(
   return col;
 }
 
-inline uint32_t AllocateFormId()
-{
-  static uint32_t g_formId = 0xffffffff;
-  return g_formId--;
-}
-
 RE::TESNPC* TESModPlatform::CreateNpc(RE::BSScript::IVirtualMachine* vm,
                                       RE::VMStackID stackId,
                                       RE::StaticFunctionTag*)
