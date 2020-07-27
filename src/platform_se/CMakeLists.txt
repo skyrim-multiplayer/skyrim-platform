@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 if ("${CMAKE_PROJECT_NAME}" STREQUAL "" OR "${CMAKE_PROJECT_NAME}" STREQUAL "platform_se")
+  set(CMAKE_SYSTEM_VERSION "10.0.17763.0" CACHE STRING INTERNAL FORCE)
+  set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION "10.0.17763.0" CACHE STRING INTERNAL FORCE)
   project(platform_se)
 endif()
 
@@ -12,8 +14,28 @@ if (NOT EXISTS "${cmake_dir}")
   message(FATAL_ERROR "\"${cmake_dir}\" does not exist")
 endif()
 
+if ("${CEF_DIR}" STREQUAL "")
+  message(FATAL_ERROR "CEF_DIR is not specified")
+endif()
+set(CEF_ROOT ${CEF_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CEF_ROOT}/cmake")
+find_package(CEF REQUIRED)
+add_subdirectory(${CEF_LIBCEF_DLL_WRAPPER_PATH} libcef_dll_wrapper)
+set(CEF_LIBRARIES
+  ${CEF_PATH}/$<CONFIG>/cef_sandbox.lib
+  ${CEF_PATH}/$<CONFIG>/libcef.lib
+  libcef_dll_wrapper
+)
+set(CEF_INCLUDE
+  ${CEF_DIR}
+)
+
 set(lib_root "${SKYRIM_MP_ROOT}/submodules/CommonLibSSE")
+set(directxtex_root "${SKYRIM_MP_ROOT}/submodules/DirectXTex")
 set(third_party "${SKYRIM_MP_ROOT}/src/platform_se/third_party")
+
+set(BUILD_DX12 OFF CACHE BOOL "Build with DirectX12 Runtime support" FORCE)
+add_subdirectory(${directxtex_root} DirectXTex)
 
 file(GLOB_RECURSE lib_src "${lib_root}/src/*" "${lib_root}/include/*")
 add_library(CommonLibSSE STATIC ${lib_src})
@@ -41,6 +63,24 @@ target_link_libraries(skse64 PUBLIC common skse64_common)
 include(${cmake_dir}/apply_default_settings.cmake)
 include(${cmake_dir}/integrate_vcpkg.cmake)
 
+file(GLOB_RECURSE core_library_src "${third_party}/cef/core_library/*")
+add_library(core_library STATIC ${core_library_src})
+target_include_directories(core_library PUBLIC "${third_party}/cef/core_library")
+integrate_vcpkg(
+  TARGETS core_library
+  VCPKG_PATH "${VCPKG_ROOT}"
+)
+
+file(GLOB_RECURSE ui_src "${third_party}/cef/ui/*")
+add_library(ui STATIC ${ui_src})
+target_link_libraries(ui PUBLIC ${CEF_LIBRARIES} core_library)
+target_include_directories(ui PUBLIC ${CEF_INCLUDE})
+target_include_directories(ui PRIVATE ${third_party}/cef/ui ${directxtex_root})
+integrate_vcpkg(
+  TARGETS ui
+  VCPKG_PATH "${VCPKG_ROOT}"
+)
+
 if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
 
   include(${cmake_dir}/CMakeRC.cmake)
@@ -67,7 +107,7 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
 
   file(GLOB_RECURSE platform_src "skyrim_platform/*" "${SKYRIM_MP_ROOT}/.clang-format")
   add_library(skyrim_platform SHARED ${platform_src})
-  target_link_libraries(skyrim_platform PUBLIC skse64 CommonLibSSE skyrim_plugin_resources)
+  target_link_libraries(skyrim_platform PUBLIC skse64 CommonLibSSE skyrim_plugin_resources DirectXTex)
   set_target_properties(skyrim_platform PROPERTIES OUTPUT_NAME "SkyrimPlatform")
   target_include_directories(skyrim_platform PRIVATE "${third_party}")
   target_link_libraries(skyrim_platform PRIVATE "${third_party}/frida/frida-gum.lib")
@@ -117,4 +157,5 @@ endif()
 
 apply_default_settings(TARGETS
   CommonLibSSE common skse64_common skse64
+  core_library ui DirectXTex texdiag texconv texassemble
 )
