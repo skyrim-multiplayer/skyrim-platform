@@ -16,6 +16,8 @@
 #include "ReadFile.h"
 #include "SkyrimPlatformProxy.h"
 #include "SystemPolyfill.h"
+#include "TPOverlayService.h"
+#include "TPRenderSystemD3D11.h"
 #include "TaskQueue.h"
 #include "ThreadPoolWrapper.h"
 #include <RE/ConsoleLog.h>
@@ -24,6 +26,12 @@
 #include <SKSE/Stubs.h>
 #include <Windows.h>
 #include <atomic>
+#include <cef/hooks/D3D11Hook.hpp>
+#include <cef/hooks/DInputHook.hpp>
+#include <cef/hooks/WindowsHook.hpp>
+#include <cef/reverse/App.hpp>
+#include <cef/reverse/AutoPtr.hpp>
+#include <cef/reverse/Entry.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -35,6 +43,7 @@
 #include <thread>
 
 #include <skse64/GameReferences.h>
+#include <skse64\NiRenderer.h>
 
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
@@ -272,8 +281,8 @@ void OnPapyrusUpdate(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId)
 }
 
 extern "C" {
-__declspec(dllexport) bool SKSEPlugin_Query(const SKSE::QueryInterface* skse,
-                                            SKSE::PluginInfo* info)
+__declspec(dllexport) bool SKSEPlugin_Query_Impl(
+  const SKSE::QueryInterface* skse, SKSE::PluginInfo* info)
 {
 
   info->infoVersion = SKSE::PluginInfo::kVersion;
@@ -287,7 +296,7 @@ __declspec(dllexport) bool SKSEPlugin_Query(const SKSE::QueryInterface* skse,
   return true;
 }
 
-__declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
+__declspec(dllexport) bool SKSEPlugin_Load_Impl(const SKSEInterface* skse)
 {
   g_messaging =
     (SKSEMessagingInterface*)skse->QueryInterface(kInterface_Messaging);
@@ -320,17 +329,56 @@ __declspec(dllexport) bool SKSEPlugin_Load(const SKSEInterface* skse)
 }
 };
 
-BOOL WINAPI DllMain(HANDLE hDllHandle, DWORD dwReason, LPVOID lpreserved)
+#define POINTER_SKYRIMSE(className, variableName, ...)                        \
+  static TiltedPhoques::AutoPtr<className> variableName(__VA_ARGS__)
+
+class SkyrimPlatformApp : public TiltedPhoques::App
 {
-  switch (dwReason) {
-    case DLL_PROCESS_ATTACH:
-      // StartSKSE(hDllHandle);
-      break;
+public:
+  static SkyrimPlatformApp& GetInstance()
+  {
+    static SkyrimPlatformApp g_inst;
+    return g_inst;
+  }
 
-    case DLL_PROCESS_DETACH:
-      FlowManager::CloseProcess(L"SkyrimSE.exe");
-      break;
-  };
+  void* GetMainAddress() const override
+  {
+    POINTER_SKYRIMSE(void, winMain, 0x1405ACBD0 - 0x140000000);
+    return winMain.GetPtr();
+  }
 
-  return TRUE;
-}
+  bool Attach() override { return true; }
+
+  bool Detach() override
+  {
+    FlowManager::CloseProcess(L"SkyrimSE.exe");
+    return true;
+  }
+
+  bool BeginMain() override
+  {
+    TiltedPhoques::D3D11Hook::Install();
+    TiltedPhoques::DInputHook::Install();
+    TiltedPhoques::WindowsHook::Install();
+
+    overlayService.reset(new OverlayService);
+    renderSystem.reset(new RenderSystemD3D11(*overlayService));
+    renderSystem->m_pSwapChain = reinterpret_cast<IDXGISwapChain*>(
+      BSRenderManager::GetSingleton()->swapChain);
+    return true;
+  }
+
+  bool EndMain() override
+  {
+    renderSystem.reset();
+    overlayService.reset();
+    return true;
+  }
+
+  void Update() override {}
+
+  std::shared_ptr<OverlayService> overlayService;
+  std::shared_ptr<RenderSystemD3D11> renderSystem;
+};
+
+DEFINE_DLL_ENTRY_INITIALIZER(SkyrimPlatformApp);

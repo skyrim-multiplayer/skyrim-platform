@@ -74,8 +74,9 @@ namespace TiltedPhoques
 
     void OverlayClient::Render() const noexcept
     {
-        if (m_pRenderHandler)
-            m_pRenderHandler->Render();
+      if (m_pRenderHandler) {
+        m_pRenderHandler->Render();
+      }
     }
 
     void OverlayClient::Reset() const noexcept

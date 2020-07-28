@@ -50,8 +50,10 @@ fs.watch(bin, (eventType, fileName) => {
     let cp = (from, targetDir) => writeFileSyncRecursive(path.join(targetDir, getFileName(from)), fs.readFileSync(from));
     let binPath = (file) => path.join(bin, `bin/${buildCfg}/${file}`);
 
-    cp(binPath('SkyrimPlatform.pdb'), './dist');
+		cp(binPath('SkyrimPlatform.pdb'), './dist');
     cp(binPath('ChakraCore.dll'), './dist');
+		cp(binPath('SkyrimPlatformCEF.exe'), './dist');
+    cp(binPath('SkyrimPlatformCEF.pdb'), './dist');
     cp(binPath('SkyrimPlatform.dll'), './dist/Data/SKSE/Plugins');
     cp(path.join(bin, `pex/TESModPlatform.pex`), './dist/Data/Scripts');
     cp(path.join(bin, `_codegen/skyrimPlatform.ts`), './dist/Data/Platform/Modules');
