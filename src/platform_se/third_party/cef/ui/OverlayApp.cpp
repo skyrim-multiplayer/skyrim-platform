@@ -19,10 +19,7 @@ void OverlayApp::Initialize() noexcept
 
   CefMainArgs args(GetModuleHandleA(nullptr));
 
-  const auto currentPath = TiltedPhoques::GetPath()
-                             .parent_path()
-                             .parent_path()
-                             .parent_path(); // Dll is in Data/SKSE/Plugins
+  const auto currentPath = std::filesystem::current_path();
 
   CefSettings settings;
 
@@ -37,22 +34,31 @@ void OverlayApp::Initialize() noexcept
   settings.log_severity = LOGSEVERITY_DEFAULT;
 #endif
 
-  /*CefString(&settings.log_file)
-    .FromWString(currentPath / L"logs" / L"cef_debug.log");
-  CefString(&settings.cache_path).FromWString(currentPath / L"cache");*/
+  CefString(&settings.log_file)
+    .FromWString(currentPath / L"Data" / L"Platform" / L"CEFTemp" /
+                 L"cef_debug.log");
+  CefString(&settings.cache_path)
+    .FromWString(currentPath / L"Data" / L"Platform" / L"CEFTemp");
 
   CefString(&settings.browser_subprocess_path)
     .FromWString(currentPath / m_processName);
-
-  // std::ofstream("debug_ee.txt") << (currentPath / m_processName);
 
   CefString(&settings.resources_dir_path)
     .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF");
   CefString(&settings.locales_dir_path)
     .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF");
 
+  LoadLibraryExA("libcef.dll", NULL, 0);
+
+  if (!SetCurrentDirectoryW(
+        L"Data/Platform/Distribution/RuntimeDependencies")) {
+    MessageBoxA(0, "SetCurrentDirectoryW (1) failed", "Error", MB_ICONERROR);
+  }
   if (!CefInitialize(args, settings, this, nullptr)) {
     MessageBoxA(0, "CefInitialize failed", "Error", MB_ICONERROR);
+  }
+  if (!SetCurrentDirectoryW(currentPath.c_str())) {
+    MessageBoxA(0, "SetCurrentDirectoryW (2) failed", "Error", MB_ICONERROR);
   }
 
   m_pGameClient = new OverlayClient(m_pRenderProvider->Create());
@@ -69,9 +75,8 @@ void OverlayApp::Initialize() noexcept
 
   if (!CefBrowserHost::CreateBrowser(
         info, m_pGameClient.get(),
-        L"https://google.com/" /*(currentPath / L"Data" / L"Online" / L"UI" /
-                                 L"index.html").wstring()*/
-        ,
+        L"file:///C:/Users/Leonid/Downloads/skymp-gamemode-outdated/"
+        L"skymp-gamemode-outdated/front/chat.html",
         browserSettings, nullptr, nullptr)) {
 
     MessageBoxA(0, "CreateBrowser failed", "Error", MB_ICONERROR);
@@ -133,7 +138,7 @@ void OverlayApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
   }
 }
 
-void OverlayApp::InjectMouseMove(const uint16_t aX, const uint16_t aY,
+void OverlayApp::InjectMouseMove(const float aX, const float aY,
                                  const uint32_t aModifier) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
@@ -145,7 +150,8 @@ void OverlayApp::InjectMouseMove(const uint16_t aX, const uint16_t aY,
 
     m_pGameClient->GetOverlayRenderHandler()->SetCursorLocation(aX, aY);
 
-    m_pGameClient->GetBrowser()->GetHost()->SendMouseMoveEvent(ev, false);
+    if (aX >= 0 && aY >= 0)
+      m_pGameClient->GetBrowser()->GetHost()->SendMouseMoveEvent(ev, false);
   }
 }
 

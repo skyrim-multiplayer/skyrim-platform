@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Stl.hpp>
+#include <memory>
+
+class IInputListener;
 
 namespace TiltedPhoques
 {
@@ -16,7 +19,7 @@ namespace TiltedPhoques
         void Acquire() const noexcept;
         void Unacquire() const noexcept;
 
-        static void Install() noexcept;
+        static void Install(std::shared_ptr<IInputListener> listener) noexcept;
         static DInputHook& Get() noexcept;
 
         void Update() const noexcept;

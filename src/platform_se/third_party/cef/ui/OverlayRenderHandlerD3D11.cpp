@@ -7,8 +7,11 @@
 #include <SimpleMath.h>
 #include <SpriteBatch.h>
 #include <WICTextureLoader.h>
+#include <cmrc/cmrc.hpp>
 
 #include <iostream>
+
+CMRC_DECLARE(skyrim_plugin_resources);
 
 namespace TiltedPhoques {
 OverlayRenderHandlerD3D11::OverlayRenderHandlerD3D11(
@@ -63,12 +66,12 @@ void OverlayRenderHandlerD3D11::Render()
       }
     }
 
-    if (m_pCursorTexture) {
-      m_pSpriteBatch->Draw(m_pCursorTexture.Get(),
-                           DirectX::SimpleMath::Vector2(m_cursorX, m_cursorY),
-                           nullptr, DirectX::Colors::White, 0.f,
-                           DirectX::SimpleMath::Vector2(0, 0),
-                           m_width / 1920.f);
+    if (m_pCursorTexture && m_cursorX >= 0 && m_cursorY >= 0) {
+      m_pSpriteBatch->Draw(
+        m_pCursorTexture.Get(),
+        DirectX::SimpleMath::Vector2(m_cursorX - 32, m_cursorY - 32), nullptr,
+        DirectX::Colors::White, 0.f, DirectX::SimpleMath::Vector2(0, 0),
+        m_width / 1920.f);
     }
 
     m_pSpriteBatch->End();
@@ -111,6 +114,25 @@ void OverlayRenderHandlerD3D11::Create()
       m_pDevice.Get(), m_pParent->GetCursorPathDDS().c_str(), nullptr,
       m_pCursorTexture.ReleaseAndGetAddressOf());
   }
+
+  cmrc::file file;
+  try {
+    file = cmrc::skyrim_plugin_resources::get_filesystem().open(
+      "assets/cursor.png");
+  } catch (std::exception& e) {
+    auto dir =
+      cmrc::skyrim_plugin_resources::get_filesystem().iterate_directory("");
+    std::stringstream ss;
+    ss << e.what() << std::endl << std::endl;
+    ss << "Root directory contents is: " << std::endl;
+    for (auto& entry : dir)
+      ss << entry.filename() << std::endl;
+    throw std::runtime_error(ss.str());
+  }
+
+  DirectX::CreateWICTextureFromMemory(
+    m_pDevice.Get(), reinterpret_cast<const uint8_t*>(file.begin()),
+    file.size(), nullptr, m_pCursorTexture.ReleaseAndGetAddressOf());
 
   std::unique_lock<std::mutex> _(m_textureLock);
 

@@ -125,6 +125,7 @@ target_link_libraries(ui PUBLIC ${CEF_LIBRARIES} core_library hooks reverse)
 target_include_directories(ui PUBLIC ${CEF_INCLUDE})
 target_include_directories(ui PRIVATE ${third_party}/cef/ui ${third_party}/directxtk/include)
 target_link_libraries(ui PUBLIC "${third_party}/directxtk/lib/x64/DirectXTK.lib" "d3d11.lib" "dxguid.lib")
+target_link_libraries(ui PUBLIC skyrim_plugin_resources)
 integrate_vcpkg(
   TARGETS ui
   VCPKG_PATH "${VCPKG_ROOT}"
@@ -141,8 +142,11 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
   include(${cmake_dir}/CMakeRC.cmake)
 
   # assets
-  set(ASSET_FILES ${CMAKE_SOURCE_DIR}/skyrim_platform/savefile/template.ess)
-    cmrc_add_resource_library(skyrim_plugin_resources ${ASSET_FILES}
+  set(ASSET_FILES
+    ${CMAKE_SOURCE_DIR}/skyrim_platform/savefile/template.ess
+    ${CMAKE_SOURCE_DIR}/skyrim_platform/assets/cursor.png
+  )
+  cmrc_add_resource_library(skyrim_plugin_resources ${ASSET_FILES}
     ALIAS assets NAMESPACE skyrim_plugin_resources WHENCE skyrim_platform
   )
   apply_default_settings(TARGETS skyrim_plugin_resources)
@@ -163,7 +167,7 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
   file(GLOB_RECURSE platform_src "skyrim_platform/*" "${SKYRIM_MP_ROOT}/.clang-format")
   add_library(skyrim_platform SHARED ${platform_src})
   target_link_libraries(skyrim_platform PUBLIC skse64 CommonLibSSE skyrim_plugin_resources ui)
-  set_target_properties(skyrim_platform PROPERTIES OUTPUT_NAME "SkyrimPlatform")
+  set_target_properties(skyrim_platform PROPERTIES OUTPUT_NAME "SkyrimPlatformImpl")
   target_include_directories(skyrim_platform PRIVATE "${third_party}")
   target_link_libraries(skyrim_platform PRIVATE "${third_party}/frida/frida-gum.lib")
   apply_default_settings(TARGETS skyrim_platform)
@@ -171,7 +175,15 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
     TARGETS skyrim_platform
     VCPKG_PATH "${VCPKG_ROOT}"
   )
-  set_target_properties(skyrim_platform SkyrimPlatformCEF PROPERTIES
+
+  file(GLOB_RECURSE platform_entry_src "skyrim_platform_entry/*")
+  list(APPEND platform_entry_src "${SKYRIM_MP_ROOT}/.clang-format")
+  add_library(skyrim_platform_entry SHARED ${platform_entry_src})
+  set_target_properties(skyrim_platform_entry PROPERTIES OUTPUT_NAME "SkyrimPlatform")
+  target_include_directories(skyrim_platform_entry PRIVATE "${third_party}")
+  apply_default_settings(TARGETS skyrim_platform_entry)
+
+  set_target_properties(skyrim_platform SkyrimPlatformCEF skyrim_platform_entry PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "bin"
     PDB_OUTPUT_DIRECTORY "bin"
   )
@@ -195,7 +207,10 @@ if (NOT "${SKIP_SKYRIM_PLATFORM_BUILDING}")
   endfunction()
 
   add_papyrus_library(NAME TESModPlatformPsc DIRECTORY "${CMAKE_SOURCE_DIR}/psc")
-  add_dependencies(TESModPlatformPsc skyrim_platform SkyrimPlatformCEF)
+  add_dependencies(TESModPlatformPsc skyrim_platform SkyrimPlatformCEF skyrim_platform_entry)
+
+  # For dev_service
+  file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/cef_dir.txt ${CEF_DIR})
 
   add_custom_command(
     TARGET TESModPlatformPsc POST_BUILD COMMAND

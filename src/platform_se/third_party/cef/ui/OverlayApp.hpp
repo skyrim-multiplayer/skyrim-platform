@@ -19,9 +19,10 @@ struct OverlayApp : CefApp
     TP_NOCOPYMOVE(RenderProvider);
   };
 
-  explicit OverlayApp(
-    std::unique_ptr<RenderProvider> apRenderProvider,
-    std::wstring aProcessName = L"SkyrimPlatformCEF.exe") noexcept;
+  explicit OverlayApp(std::unique_ptr<RenderProvider> apRenderProvider,
+                      std::wstring aProcessName =
+                        L"Data/Platform/Distribution/RuntimeDependencies/"
+                        L"SkyrimPlatformCEF.exe") noexcept;
   virtual ~OverlayApp() = default;
 
   TP_NOCOPYMOVE(OverlayApp);
@@ -41,8 +42,7 @@ struct OverlayApp : CefApp
   void InjectMouseButton(uint16_t aX, uint16_t aY,
                          cef_mouse_button_type_t aButton, bool aUp,
                          uint32_t aModifier) const noexcept;
-  void InjectMouseMove(uint16_t aX, uint16_t aY, uint32_t aModifier) const
-    noexcept;
+  void InjectMouseMove(float aX, float aY, uint32_t aModifier) const noexcept;
   void InjectMouseWheel(uint16_t aX, uint16_t aY, int16_t aDelta,
                         uint32_t aModifier) const noexcept;
 

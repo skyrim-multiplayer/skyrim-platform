@@ -8,6 +8,7 @@
 #include "FlowManager.h"
 #include "HttpClient.h"
 #include "HttpClientApi.h"
+#include "InputConverter.h"
 #include "JsEngine.h"
 #include "LoadGameApi.h"
 #include "MpClientPluginApi.h"
@@ -16,6 +17,7 @@
 #include "ReadFile.h"
 #include "SkyrimPlatformProxy.h"
 #include "SystemPolyfill.h"
+#include "TPInputService.h"
 #include "TPOverlayService.h"
 #include "TPRenderSystemD3D11.h"
 #include "TaskQueue.h"
@@ -28,14 +30,17 @@
 #include <atomic>
 #include <cef/hooks/D3D11Hook.hpp>
 #include <cef/hooks/DInputHook.hpp>
+#include <cef/hooks/IInputListener.h>
 #include <cef/hooks/WindowsHook.hpp>
 #include <cef/reverse/App.hpp>
 #include <cef/reverse/AutoPtr.hpp>
 #include <cef/reverse/Entry.hpp>
+#include <cef/ui/OverlayApp.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
 #include <shlobj.h>
+#include <skse64/GameMenus.h>
 #include <skse64/PluginAPI.h>
 #include <skse64/gamethreads.h>
 #include <sstream>
@@ -249,6 +254,23 @@ void PushJsTick(bool gameFunctionsAvailable)
 
 void OnUpdate()
 {
+  static auto getNthVTableElement = [](void* obj, size_t idx) {
+    using VTable = size_t*;
+    auto vtable = *(VTable*)obj;
+    return vtable[idx];
+  };
+
+  if (auto mm = MenuManager::GetSingleton()) {
+    static const auto s = new BSFixedString("Main Menu");
+    IMenu* m = mm->GetMenu(s);
+    if (auto c = RE::ConsoleLog::GetSingleton()) {
+      // auto offset =
+      //  std::to_string(getNthVTableElement(m, 6) - REL::Module::BaseAddr());
+      // auto offset = std::to_string((uint64_t)m - REL::Module::BaseAddr());
+      // c->Print("%s", offset.data());
+    }
+  }
+
   PushJsTick(false);
   TESModPlatform::Update();
 }
@@ -332,6 +354,218 @@ __declspec(dllexport) bool SKSEPlugin_Load_Impl(const SKSEInterface* skse)
 #define POINTER_SKYRIMSE(className, variableName, ...)                        \
   static TiltedPhoques::AutoPtr<className> variableName(__VA_ARGS__)
 
+inline uint32_t GetCefModifiers_(uint16_t aVirtualKey)
+{
+  uint32_t modifiers = EVENTFLAG_NONE;
+
+  if (GetAsyncKeyState(VK_MENU) & 0x8000) {
+    modifiers |= EVENTFLAG_ALT_DOWN;
+  }
+
+  if (GetAsyncKeyState(VK_CONTROL) & 0x8000) {
+    modifiers |= EVENTFLAG_CONTROL_DOWN;
+  }
+
+  if (GetAsyncKeyState(VK_SHIFT) & 0x8000) {
+    modifiers |= EVENTFLAG_SHIFT_DOWN;
+  }
+
+  if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) {
+    modifiers |= EVENTFLAG_LEFT_MOUSE_BUTTON;
+  }
+
+  if (GetAsyncKeyState(VK_RBUTTON) & 0x8000) {
+    modifiers |= EVENTFLAG_RIGHT_MOUSE_BUTTON;
+  }
+
+  if (GetAsyncKeyState(VK_MBUTTON) & 0x8000) {
+    modifiers |= EVENTFLAG_MIDDLE_MOUSE_BUTTON;
+  }
+
+  if (GetAsyncKeyState(VK_CAPITAL) & 1) {
+    modifiers |= EVENTFLAG_CAPS_LOCK_ON;
+  }
+
+  if (GetAsyncKeyState(VK_NUMLOCK) & 1) {
+    modifiers |= EVENTFLAG_NUM_LOCK_ON;
+  }
+
+  if (aVirtualKey) {
+    if (aVirtualKey == VK_RCONTROL || aVirtualKey == VK_RMENU ||
+        aVirtualKey == VK_RSHIFT) {
+      modifiers |= EVENTFLAG_IS_RIGHT;
+    } else if (aVirtualKey == VK_LCONTROL || aVirtualKey == VK_LMENU ||
+               aVirtualKey == VK_LSHIFT) {
+      modifiers |= EVENTFLAG_IS_LEFT;
+    } else if (aVirtualKey >= VK_NUMPAD0 && aVirtualKey <= VK_DIVIDE) {
+      modifiers |= EVENTFLAG_IS_KEY_PAD;
+    }
+  }
+
+  return modifiers;
+}
+
+class MyInputListener : public IInputListener
+{
+public:
+  MyInputListener()
+  {
+    pCursorX = (float*)(REL::Module::BaseAddr() + 0x2F6C104);
+    pCursorY = (float*)(REL::Module::BaseAddr() + 0x2F6C108);
+    vkCodeDownDur.fill(0);
+  }
+
+  void Init(std::shared_ptr<OverlayService> service_,
+            std::shared_ptr<InputConverter> conv_)
+  {
+    service = service_;
+    conv = conv_;
+  }
+
+  void InjectChar(uint8_t code)
+  {
+    if (auto app = service->GetOverlayApp()) {
+      int virtualKeyCode = VscToVk(code);
+      int scan = code;
+      auto capitalizeLetters = GetCefModifiers_(virtualKeyCode) &
+        (EVENTFLAG_SHIFT_DOWN | EVENTFLAG_CAPS_LOCK_ON);
+      auto ch = conv->VkCodeToChar(virtualKeyCode, capitalizeLetters);
+      if (ch)
+        app->InjectKey(cef_key_event_type_t::KEYEVENT_CHAR,
+                       GetCefModifiers_(virtualKeyCode), ch, scan);
+    }
+  }
+
+  void InjectKey(uint8_t code, bool down)
+  {
+    if (auto app = service->GetOverlayApp()) {
+      int virtualKeyCode = VscToVk(code);
+      int scan = code;
+      app->InjectKey(down ? cef_key_event_type_t::KEYEVENT_KEYDOWN
+                          : cef_key_event_type_t::KEYEVENT_KEYUP,
+                     GetCefModifiers_(virtualKeyCode), virtualKeyCode, scan);
+    }
+  }
+
+  int VscToVk(int code)
+  {
+    int vk = MapVirtualKeyA(code, MAPVK_VSC_TO_VK);
+    if (code == 203)
+      return VK_LEFT;
+    if (code == 205)
+      return VK_RIGHT;
+    return vk;
+  }
+
+  void OnKeyStateChange(uint8_t code, bool down) noexcept override
+  {
+    // Switch layout if need
+    bool switchLayoutDown = ((GetAsyncKeyState(VK_SHIFT) & 0x8000) &&
+                             (GetAsyncKeyState(VK_MENU) & 0x8000)) ||
+      (GetAsyncKeyState(VK_SHIFT) & 0x8000) &&
+        (GetAsyncKeyState(VK_CONTROL) & 0x8000);
+    if (switchLayoutDownWas != switchLayoutDown) {
+      switchLayoutDownWas = switchLayoutDown;
+      if (switchLayoutDown) {
+        conv->SwitchLayout();
+      }
+    }
+
+    // Fill vkCodeDownDur
+    int virtualKeyCode = VscToVk(code);
+    if (virtualKeyCode >= 0 && virtualKeyCode < vkCodeDownDur.size()) {
+      vkCodeDownDur[virtualKeyCode] = down ? clock() : 0;
+    }
+
+    if (auto app = service->GetOverlayApp()) {
+      InjectKey(code, down);
+
+      if (down) {
+        InjectChar(code);
+      }
+    }
+  }
+
+  void OnMouseWheel(int32_t delta) noexcept override
+  {
+    if (pCursorX && pCursorY)
+      if (auto app = service->GetOverlayApp()) {
+        app->InjectMouseWheel(*pCursorX, *pCursorY, delta,
+                              GetCefModifiers_(0));
+      }
+  }
+
+  void OnMouseMove(float deltaX, float deltaY) noexcept override
+  {
+    auto mm = MenuManager::GetSingleton();
+    if (!mm)
+      return;
+    static const auto fs = new BSFixedString("Cursor Menu");
+    if (!mm->IsMenuOpen(fs))
+      return;
+
+    if (pCursorX && pCursorY)
+      if (auto app = service->GetOverlayApp()) {
+        app->InjectMouseMove(*pCursorX, *pCursorY, GetCefModifiers_(0));
+      }
+  }
+
+  void OnMouseStateChange(MouseButton mouseButton, bool down) noexcept override
+  {
+    if (pCursorX && pCursorY)
+      if (auto app = service->GetOverlayApp()) {
+        cef_mouse_button_type_t btn;
+        switch (mouseButton) {
+          case MouseButton::Left:
+            btn = cef_mouse_button_type_t::MBT_LEFT;
+            break;
+          case MouseButton::Middle:
+            btn = cef_mouse_button_type_t::MBT_MIDDLE;
+            break;
+          case MouseButton::Right:
+            btn = cef_mouse_button_type_t::MBT_RIGHT;
+            break;
+        }
+        app->InjectMouseButton(*pCursorX, *pCursorY, btn, !down,
+                               GetCefModifiers_(0));
+      }
+  }
+
+  void OnUpdate() noexcept override
+  {
+    auto mm = MenuManager::GetSingleton();
+    if (!mm)
+      return;
+    static const auto fs = new BSFixedString("Cursor Menu");
+    if (!mm->IsMenuOpen(fs)) {
+      if (auto app = service->GetOverlayApp()) {
+        app->InjectMouseMove(-1.f, -1.f, GetCefModifiers_(0));
+      }
+    }
+
+    // Repeat the character until the key isn't released
+    for (int i = 0; i < 256; ++i) {
+      const auto pressMoment = this->vkCodeDownDur[i];
+      if (pressMoment && clock() - pressMoment > CLOCKS_PER_SEC / 2) {
+        if (i == VK_BACK || i == VK_RIGHT || i == VK_LEFT) {
+          InjectKey(MapVirtualKeyA(i, MAPVK_VK_TO_VSC), true);
+          InjectKey(MapVirtualKeyA(i, MAPVK_VK_TO_VSC), false);
+        } else {
+          InjectChar(MapVirtualKeyA(i, MAPVK_VK_TO_VSC));
+        }
+      }
+    }
+  }
+
+private:
+  std::shared_ptr<OverlayService> service;
+  std::shared_ptr<InputConverter> conv;
+  std::array<clock_t, 256> vkCodeDownDur;
+  float* pCursorX = nullptr;
+  float* pCursorY = nullptr;
+  bool switchLayoutDownWas = false;
+};
+
 class SkyrimPlatformApp : public TiltedPhoques::App
 {
 public:
@@ -357,28 +591,49 @@ public:
 
   bool BeginMain() override
   {
+    inputConverter.reset(new InputConverter);
+
+    myInputListener.reset(new MyInputListener);
+
     TiltedPhoques::D3D11Hook::Install();
-    TiltedPhoques::DInputHook::Install();
+    TiltedPhoques::DInputHook::Install(myInputListener);
     TiltedPhoques::WindowsHook::Install();
 
+    TiltedPhoques::DInputHook::Get().SetToggleKeys({ VK_F6 });
+    TiltedPhoques::DInputHook::Get().SetEnabled(true);
+
     overlayService.reset(new OverlayService);
+    myInputListener->Init(overlayService, inputConverter);
+
+    // inputService.reset(new InputService(*overlayService));
     renderSystem.reset(new RenderSystemD3D11(*overlayService));
     renderSystem->m_pSwapChain = reinterpret_cast<IDXGISwapChain*>(
       BSRenderManager::GetSingleton()->swapChain);
+
     return true;
   }
 
   bool EndMain() override
   {
+    // inputService.reset();
     renderSystem.reset();
     overlayService.reset();
     return true;
   }
 
-  void Update() override {}
+  void Update() override
+  {
+    // TiltedPhoques::DInputHook::Get().Update();
+    POINTER_SKYRIMSE(uint32_t, bAlwaysActive, 0x141DEED10 - 0x140000000);
+
+    *bAlwaysActive = 1;
+  }
 
   std::shared_ptr<OverlayService> overlayService;
+  // std::shared_ptr<InputService> inputService;
   std::shared_ptr<RenderSystemD3D11> renderSystem;
+  std::shared_ptr<MyInputListener> myInputListener;
+  std::shared_ptr<InputConverter> inputConverter;
 };
 
 DEFINE_DLL_ENTRY_INITIALIZER(SkyrimPlatformApp);
