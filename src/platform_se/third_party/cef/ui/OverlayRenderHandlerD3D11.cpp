@@ -18,7 +18,6 @@ OverlayRenderHandlerD3D11::OverlayRenderHandlerD3D11(
   Renderer* apRenderer) noexcept
   : m_pRenderer(apRenderer)
 {
-  m_visible = true;
   // So we need to lock this until we have the window dimension as a background
   // CEF thread will attempt to get it before we have it
   m_createLock.lock();
@@ -51,31 +50,28 @@ void OverlayRenderHandlerD3D11::Render()
 
   GetRenderTargetSize();
 
-  if (IsVisible()) {
+  m_pSpriteBatch->Begin(DirectX::SpriteSortMode_Deferred,
+                        m_pStates->NonPremultiplied());
 
-    m_pSpriteBatch->Begin(DirectX::SpriteSortMode_Deferred,
-                          m_pStates->NonPremultiplied());
+  if (Visible()) {
+    std::unique_lock<std::mutex> _(m_textureLock);
 
-    {
-      std::unique_lock<std::mutex> _(m_textureLock);
-
-      if (m_pTextureView) {
-        m_pSpriteBatch->Draw(m_pTextureView.Get(),
-                             DirectX::SimpleMath::Vector2(0.f, 0.f), nullptr,
-                             DirectX::Colors::White, 0.f);
-      }
+    if (m_pTextureView) {
+      m_pSpriteBatch->Draw(m_pTextureView.Get(),
+                           DirectX::SimpleMath::Vector2(0.f, 0.f), nullptr,
+                           DirectX::Colors::White, 0.f);
     }
-
-    if (m_pCursorTexture && m_cursorX >= 0 && m_cursorY >= 0) {
-      m_pSpriteBatch->Draw(
-        m_pCursorTexture.Get(),
-        DirectX::SimpleMath::Vector2(m_cursorX - 32, m_cursorY - 32), nullptr,
-        DirectX::Colors::White, 0.f, DirectX::SimpleMath::Vector2(0, 0),
-        m_width / 1920.f);
-    }
-
-    m_pSpriteBatch->End();
   }
+
+  if (m_pCursorTexture && m_cursorX >= 0 && m_cursorY >= 0) {
+    m_pSpriteBatch->Draw(
+      m_pCursorTexture.Get(),
+      DirectX::SimpleMath::Vector2(m_cursorX - 32, m_cursorY - 32), nullptr,
+      DirectX::Colors::White, 0.f, DirectX::SimpleMath::Vector2(0, 0),
+      m_width / 1920.f);
+  }
+
+  m_pSpriteBatch->End();
 }
 
 void OverlayRenderHandlerD3D11::Reset()

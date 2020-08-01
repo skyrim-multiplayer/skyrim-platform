@@ -44,10 +44,10 @@ void ProcessMouseData(DIMOUSESTATE2* apMouseState)
     g_listener->OnMouseMove(apMouseState->lX, apMouseState->lY);
 
   if (apMouseState->lZ != 0) {
-    /*if (!g_listener->OnMouseWheelRotate(apMouseState->lZ)) {
-      apMouseState->lZ = 0;
-    }*/
     g_listener->OnMouseWheel(apMouseState->lZ);
+    if (TiltedPhoques::DInputHook::ChromeFocus()) {
+      apMouseState->lZ = 0;
+    }
   }
 
   static const IInputListener::MouseButton mouseBtns[] = {
@@ -238,10 +238,6 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
   if (!g_listener)
     return DI_OK;
   g_listener->OnUpdate();
-  /*if (DInputHook::Get().IsEnabled()) {
-    std::memset(outData, 0, outDataLen);
-    return 0;
-  }*/
 
   // return IDirectInputDevice8_GetDeviceState(m_pDevice, outDataLen, outData);
 
@@ -264,7 +260,6 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
 
     memcpy(outData, rawData, outDataLen < 256 ? outDataLen : 256);
 
-    return hr;
   } else {
     HRESULT ret =
       IDirectInputDevice8_GetDeviceState(m_pDevice, outDataLen, outData);
@@ -285,8 +280,16 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
     DIMOUSESTATE2* mouseState = (DIMOUSESTATE2*)outData;
 
     ProcessMouseData(mouseState);
-
-    return ret;
+  }
+  if (DInputHook::ChromeFocus()) {
+    // std::memset(outData, 0, outDataLen);
+    DIMOUSESTATE2* mouseState = (DIMOUSESTATE2*)outData;
+    for (int i = 0; i < 8; ++i) {
+      uint8_t& state = mouseState->rgbButtons[i];
+      constexpr int pressed = 0x80;
+      state &= ~pressed;
+    }
+    return 0;
   }
   return DI_OK;
 }
@@ -295,6 +298,8 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceData(
   DWORD dataSize, LPDIDEVICEOBJECTDATA outData, LPDWORD outDataLen,
   DWORD flags)
 {
+  DInputHook::Get().RunTasks();
+
   auto& input = DInputHook::Get();
 
   const auto result = IDirectInputDevice8_GetDeviceData(
@@ -305,12 +310,6 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceData(
   if (IDirectInputDevice8_GetDeviceInfo(m_pDevice, &instanceInfo) != DI_OK) {
     return result;
   }
-
-  /*if (input.IsEnabled()) {
-    *outDataLen = 0;
-
-    return result;
-  }*/
 
   if (instanceInfo.guidInstance == GUID_SysKeyboard) {
     /*for (DWORD i = 0; i < *outDataLen; ++i) {
@@ -328,6 +327,11 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceData(
     if (hr == DI_OK) {
       ProcessKeyboardData(rawData);
       memset(rawData, 0, 256);
+    }
+    if (DInputHook::ChromeFocus()) {
+      *outDataLen = 0;
+
+      return result;
     }
   }
 

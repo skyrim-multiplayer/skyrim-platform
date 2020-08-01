@@ -7,6 +7,13 @@
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow)
 {
-  TiltedPhoques::UIMain(lpCmdLine, hInstance,
-                        []() { return new ProcessHandler; });
+  std::function<TiltedPhoques::OverlayRenderProcessHandler*()> f = []() {
+    return new ProcessHandler;
+  };
+  [&]() {
+    __try {
+      TiltedPhoques::UIMain(lpCmdLine, hInstance, f);
+    } __except (EXCEPTION_CONTINUE_EXECUTION) {
+    }
+  }();
 }

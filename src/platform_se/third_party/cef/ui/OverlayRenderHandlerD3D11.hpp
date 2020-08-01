@@ -19,6 +19,12 @@ struct ID3D11Device;
 namespace TiltedPhoques {
 struct OverlayRenderHandlerD3D11 : OverlayRenderHandler
 {
+  static bool& Visible()
+  {
+    static bool g_visible = false;
+    return g_visible;
+  }
+
   struct Renderer
   {
     Renderer() = default;

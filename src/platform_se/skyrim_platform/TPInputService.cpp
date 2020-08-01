@@ -188,7 +188,7 @@ void ProcessMouseMove(uint16_t aX, uint16_t aY)
   const auto active = pRenderer->IsVisible();
 
   if (active) {
-    pApp->InjectMouseMove(aX, aY, GetCefModifiers(0));
+    pApp->InjectMouseMove(aX, aY, GetCefModifiers(0), true);
   }
 }
 

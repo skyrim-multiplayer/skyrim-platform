@@ -1,3 +1,4 @@
+#include "BrowserApi.h"
 #include "CallNativeApi.h"
 #include "CameraApi.h"
 #include "ConsoleApi.h"
@@ -60,6 +61,7 @@ static SKSETaskInterface* g_taskInterface = nullptr;
 static SKSEMessagingInterface* g_messaging = nullptr;
 ThreadPoolWrapper g_pool;
 HttpClient g_httpClient;
+std::shared_ptr<BrowserApi::State> g_browserApiState(new BrowserApi::State);
 
 CallNativeApi::NativeCallRequirements g_nativeCallRequirements;
 TaskQueue g_taskQueue;
@@ -189,6 +191,7 @@ void JsTick(bool gameFunctionsAvailable)
                 ConsoleApi::Register(e);
                 DevApi::Register(e, &engine, {}, fileDir);
                 EventsApi::Register(e);
+                BrowserApi::Register(e, g_browserApiState);
                 CallNativeApi::Register(
                   e, [] { return g_nativeCallRequirements; });
                 e.SetProperty(
@@ -408,6 +411,8 @@ inline uint32_t GetCefModifiers_(uint16_t aVirtualKey)
 class MyInputListener : public IInputListener
 {
 public:
+  bool IsBrowserFocused() { return TiltedPhoques::DInputHook::ChromeFocus(); }
+
   MyInputListener()
   {
     pCursorX = (float*)(REL::Module::BaseAddr() + 0x2F6C104);
@@ -459,6 +464,9 @@ public:
 
   void OnKeyStateChange(uint8_t code, bool down) noexcept override
   {
+    if (!IsBrowserFocused())
+      return;
+
     // Switch layout if need
     bool switchLayoutDown = ((GetAsyncKeyState(VK_SHIFT) & 0x8000) &&
                              (GetAsyncKeyState(VK_MENU) & 0x8000)) ||
@@ -488,6 +496,8 @@ public:
 
   void OnMouseWheel(int32_t delta) noexcept override
   {
+    if (!IsBrowserFocused())
+      return;
     if (pCursorX && pCursorY)
       if (auto app = service->GetOverlayApp()) {
         app->InjectMouseWheel(*pCursorX, *pCursorY, delta,
@@ -506,12 +516,15 @@ public:
 
     if (pCursorX && pCursorY)
       if (auto app = service->GetOverlayApp()) {
-        app->InjectMouseMove(*pCursorX, *pCursorY, GetCefModifiers_(0));
+        app->InjectMouseMove(*pCursorX, *pCursorY, GetCefModifiers_(0),
+                             IsBrowserFocused());
       }
   }
 
   void OnMouseStateChange(MouseButton mouseButton, bool down) noexcept override
   {
+    if (!IsBrowserFocused())
+      return;
     if (pCursorX && pCursorY)
       if (auto app = service->GetOverlayApp()) {
         cef_mouse_button_type_t btn;
@@ -539,7 +552,7 @@ public:
     static const auto fs = new BSFixedString("Cursor Menu");
     if (!mm->IsMenuOpen(fs)) {
       if (auto app = service->GetOverlayApp()) {
-        app->InjectMouseMove(-1.f, -1.f, GetCefModifiers_(0));
+        app->InjectMouseMove(-1.f, -1.f, GetCefModifiers_(0), false);
       }
     }
 
@@ -603,7 +616,9 @@ public:
     TiltedPhoques::DInputHook::Get().SetEnabled(true);
 
     overlayService.reset(new OverlayService);
+    overlayService->GetOverlayApp();
     myInputListener->Init(overlayService, inputConverter);
+    g_browserApiState->overlayService = overlayService;
 
     // inputService.reset(new InputService(*overlayService));
     renderSystem.reset(new RenderSystemD3D11(*overlayService));

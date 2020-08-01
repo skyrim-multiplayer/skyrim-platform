@@ -3,7 +3,39 @@
 #include <filesystem>
 #include <fstream>
 
+#include <random>
+#include <string>
+
+// https://stackoverflow.com/questions/440133/how-do-i-create-a-random-alpha-numeric-string-in-c
+namespace {
+std::string random_string(std::string::size_type length)
+{
+  static auto& chrs = "0123456789"
+                      "abcdefghijklmnopqrstuvwxyz"
+                      "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  thread_local static std::mt19937 rg{ std::random_device{}() };
+  thread_local static std::uniform_int_distribution<std::string::size_type>
+    pick(0, sizeof(chrs) - 2);
+
+  std::string s;
+
+  s.reserve(length);
+
+  while (length--)
+    s += chrs[pick(rg)];
+
+  return s;
+}
+}
+
 namespace TiltedPhoques {
+std::string OverlayApp::GetCurrentSpToken()
+{
+  static const auto str = random_string(32);
+  return str;
+}
+
 OverlayApp::OverlayApp(std::unique_ptr<RenderProvider> apRenderProvider,
                        std::wstring aProcessName) noexcept
   : m_pBrowserProcessHandler(new OverlayBrowserProcessHandler)
@@ -29,9 +61,9 @@ void OverlayApp::Initialize() noexcept
 
 #ifdef DEBUG
   settings.log_severity = LOGSEVERITY_VERBOSE;
-  settings.remote_debugging_port = 8384;
 #else
   settings.log_severity = LOGSEVERITY_DEFAULT;
+  settings.remote_debugging_port = 9000;
 #endif
 
   CefString(&settings.log_file)
@@ -46,7 +78,8 @@ void OverlayApp::Initialize() noexcept
   CefString(&settings.resources_dir_path)
     .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF");
   CefString(&settings.locales_dir_path)
-    .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF");
+    .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF" /
+                 "locales");
 
   LoadLibraryExA("libcef.dll", NULL, 0);
 
@@ -68,14 +101,14 @@ void OverlayApp::Initialize() noexcept
   browserSettings.file_access_from_file_urls = STATE_ENABLED;
   browserSettings.universal_access_from_file_urls = STATE_ENABLED;
   browserSettings.web_security = STATE_DISABLED;
-  browserSettings.windowless_frame_rate = 60;
+  browserSettings.windowless_frame_rate = 30;
 
   CefWindowInfo info;
   info.SetAsWindowless(m_pRenderProvider->GetWindow());
 
   if (!CefBrowserHost::CreateBrowser(
         info, m_pGameClient.get(),
-        L"file:///C:/Users/Leonid/Downloads/skymp-gamemode-outdated/"
+        L" "
         L"skymp-gamemode-outdated/front/chat.html",
         browserSettings, nullptr, nullptr)) {
 
@@ -139,9 +172,13 @@ void OverlayApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
 }
 
 void OverlayApp::InjectMouseMove(const float aX, const float aY,
-                                 const uint32_t aModifier) const noexcept
+                                 const uint32_t aModifier,
+                                 bool isBrowserFocused) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
+    m_pGameClient->GetBrowser()->GetMainFrame()->ExecuteJavaScript(
+      "window.spBrowserToken = '" + GetCurrentSpToken() + "';", "my mind", 0);
+
     CefMouseEvent ev;
 
     ev.x = aX;
@@ -150,7 +187,7 @@ void OverlayApp::InjectMouseMove(const float aX, const float aY,
 
     m_pGameClient->GetOverlayRenderHandler()->SetCursorLocation(aX, aY);
 
-    if (aX >= 0 && aY >= 0)
+    if (isBrowserFocused && aX >= 0 && aY >= 0)
       m_pGameClient->GetBrowser()->GetHost()->SendMouseMoveEvent(ev, false);
   }
 }
@@ -168,6 +205,16 @@ void OverlayApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
 
     m_pGameClient->GetBrowser()->GetHost()->SendMouseWheelEvent(ev, 0, aDelta);
   }
+}
+
+bool OverlayApp::LoadUrl(const wchar_t* url) const noexcept
+{
+  if (m_pGameClient && m_pGameClient->IsReady()) {
+    CefString s(url);
+    m_pGameClient->GetBrowser()->GetMainFrame()->LoadURL(s);
+    return true;
+  }
+  return false;
 }
 
 void OverlayApp::OnBeforeCommandLineProcessing(

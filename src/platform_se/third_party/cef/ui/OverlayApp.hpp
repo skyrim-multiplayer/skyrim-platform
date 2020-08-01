@@ -19,6 +19,8 @@ struct OverlayApp : CefApp
     TP_NOCOPYMOVE(RenderProvider);
   };
 
+  static std::string GetCurrentSpToken();
+
   explicit OverlayApp(std::unique_ptr<RenderProvider> apRenderProvider,
                       std::wstring aProcessName =
                         L"Data/Platform/Distribution/RuntimeDependencies/"
@@ -42,9 +44,12 @@ struct OverlayApp : CefApp
   void InjectMouseButton(uint16_t aX, uint16_t aY,
                          cef_mouse_button_type_t aButton, bool aUp,
                          uint32_t aModifier) const noexcept;
-  void InjectMouseMove(float aX, float aY, uint32_t aModifier) const noexcept;
+  void InjectMouseMove(float aX, float aY, uint32_t aModifier,
+                       bool isBrowserFocused) const noexcept;
   void InjectMouseWheel(uint16_t aX, uint16_t aY, int16_t aDelta,
                         uint32_t aModifier) const noexcept;
+
+  bool LoadUrl(const wchar_t* url) const noexcept;
 
   void OnBeforeCommandLineProcessing(
     const CefString& aProcessType,
