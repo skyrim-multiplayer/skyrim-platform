@@ -1,8 +1,8 @@
-#include <OverlayBrowserProcessHandler.hpp>
+#include <MyBrowserProcessHandler.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    void OverlayBrowserProcessHandler::OnBeforeChildProcessLaunch(CefRefPtr<CefCommandLine> command_line)
+    void MyBrowserProcessHandler::OnBeforeChildProcessLaunch(CefRefPtr<CefCommandLine> command_line)
     {
         command_line->AppendSwitchWithValue("pid", std::to_string(GetCurrentProcessId()));
     }

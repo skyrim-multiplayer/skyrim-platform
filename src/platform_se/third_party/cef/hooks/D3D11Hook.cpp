@@ -14,7 +14,7 @@ using TD3D11CreateDeviceAndSwapChain = HRESULT(*)(IDXGIAdapter* pAdapter, D3D_DR
 TD3D11CreateDeviceAndSwapChain RealD3D11CreateDeviceAndSwapChain = nullptr;
 TDXGISwapChainPresent RealDXGISwapChainPresent = nullptr;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     HRESULT __stdcall HookDXGISwapChainPresent(IDXGISwapChain* This, UINT SyncInterval, UINT Flags)
     {

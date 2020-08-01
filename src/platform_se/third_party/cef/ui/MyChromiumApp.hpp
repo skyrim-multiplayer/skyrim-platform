@@ -1,19 +1,19 @@
 #pragma once
 
-#include "OverlayBrowserProcessHandler.hpp"
+#include "MyBrowserProcessHandler.hpp"
 #include "OverlayClient.hpp"
 #include <include/cef_app.h>
 
 #include <Meta.hpp>
 
-namespace TiltedPhoques {
-struct OverlayApp : CefApp
+namespace CEFUtils {
+struct MyChromiumApp : CefApp
 {
   struct RenderProvider
   {
     RenderProvider() = default;
     virtual ~RenderProvider() = default;
-    virtual OverlayRenderHandler* Create() = 0;
+    virtual MyRenderHandler* Create() = 0;
     virtual HWND GetWindow() = 0;
 
     TP_NOCOPYMOVE(RenderProvider);
@@ -21,13 +21,13 @@ struct OverlayApp : CefApp
 
   static std::string GetCurrentSpToken();
 
-  explicit OverlayApp(std::unique_ptr<RenderProvider> apRenderProvider,
+  explicit MyChromiumApp(std::unique_ptr<RenderProvider> apRenderProvider,
                       std::wstring aProcessName =
                         L"Data/Platform/Distribution/RuntimeDependencies/"
                         L"SkyrimPlatformCEF.exe") noexcept;
-  virtual ~OverlayApp() = default;
+  virtual ~MyChromiumApp() = default;
 
-  TP_NOCOPYMOVE(OverlayApp);
+  TP_NOCOPYMOVE(MyChromiumApp);
 
   void Initialize() noexcept;
   void ExecuteAsync(const std::string& acFunction,
@@ -60,10 +60,10 @@ struct OverlayApp : CefApp
     return m_pBrowserProcessHandler;
   }
 
-  IMPLEMENT_REFCOUNTING(OverlayApp);
+  IMPLEMENT_REFCOUNTING(MyChromiumApp);
 
 private:
-  CefRefPtr<OverlayBrowserProcessHandler> m_pBrowserProcessHandler;
+  CefRefPtr<MyBrowserProcessHandler> m_pBrowserProcessHandler;
   CefRefPtr<OverlayClient> m_pGameClient;
   std::unique_ptr<RenderProvider> m_pRenderProvider;
   std::wstring m_processName;

@@ -7,7 +7,7 @@
 
 #define RtlOffsetToPointer(Base, Offset) ((PCHAR)(((PCHAR)(Base)) + ((ULONG_PTR)(Offset))))
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     static void** GetImportedFunction(const char* acpLibraryName, const char* acpMethod) noexcept;
 

@@ -11,7 +11,7 @@
 #include <memory>
 #include <string>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     template<class T>
     using Vector = std::vector<T, StlAllocator<T>>;
@@ -63,9 +63,9 @@ namespace TiltedPhoques
 
 namespace std
 {
-    template<> struct hash<TiltedPhoques::String>
+    template<> struct hash<CEFUtils::String>
     {
-        std::size_t operator()(const TiltedPhoques::String& aString) const noexcept
+        std::size_t operator()(const CEFUtils::String& aString) const noexcept
         {
             return std::hash<std::string>{}(aString.data());
         }

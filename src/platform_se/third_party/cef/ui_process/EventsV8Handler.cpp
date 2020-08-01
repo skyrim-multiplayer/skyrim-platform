@@ -1,6 +1,6 @@
 #include "EventsV8Handler.hpp"
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 EventsV8Handler::EventsV8Handler(
   const CefRefPtr<CefV8Context> apContext) noexcept
   : m_pContext(apContext)

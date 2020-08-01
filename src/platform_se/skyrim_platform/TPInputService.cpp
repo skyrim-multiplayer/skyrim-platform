@@ -2,7 +2,7 @@
 #include "TPOverlayService.h"
 #include <DInputHook.hpp>
 #include <WindowsHook.hpp>
-#include <cef/ui/OverlayApp.hpp>
+#include <cef/ui/MyChromiumApp.hpp>
 #include <include/internal/cef_types.h>
 
 static OverlayService* s_pOverlay = nullptr;
@@ -142,7 +142,7 @@ void ProcessKeyboard(uint16_t aKey, uint16_t aScanCode,
 
   auto& overlay = *s_pOverlay;
 
-  const auto pApp = overlay.GetOverlayApp();
+  const auto pApp = overlay.GetMyChromiumApp();
   if (!pApp)
     return;
 
@@ -150,7 +150,7 @@ void ProcessKeyboard(uint16_t aKey, uint16_t aScanCode,
   if (!pClient)
     return;
 
-  const auto pRenderer = pClient->GetOverlayRenderHandler();
+  const auto pRenderer = pClient->GetMyRenderHandler();
   if (!pRenderer)
     return;
 
@@ -158,8 +158,8 @@ void ProcessKeyboard(uint16_t aKey, uint16_t aScanCode,
 
   if (aType == KEYEVENT_KEYDOWN && aKey == VK_RCONTROL) {
 #if defined(TP_SKYRIM)
-    TiltedPhoques::DInputHook::Get().SetEnabled(
-      !TiltedPhoques::DInputHook::Get().IsEnabled());
+    CEFUtils::DInputHook::Get().SetEnabled(
+      !CEFUtils::DInputHook::Get().IsEnabled());
 #else
     pRenderer->SetVisible(!active);
 #endif
@@ -173,7 +173,7 @@ void ProcessMouseMove(uint16_t aX, uint16_t aY)
 {
   auto& overlay = *s_pOverlay;
 
-  const auto pApp = overlay.GetOverlayApp();
+  const auto pApp = overlay.GetMyChromiumApp();
   if (!pApp)
     return;
 
@@ -181,7 +181,7 @@ void ProcessMouseMove(uint16_t aX, uint16_t aY)
   if (!pClient)
     return;
 
-  const auto pRenderer = pClient->GetOverlayRenderHandler();
+  const auto pRenderer = pClient->GetMyRenderHandler();
   if (!pRenderer)
     return;
 
@@ -197,7 +197,7 @@ void ProcessMouseButton(uint16_t aX, uint16_t aY,
 {
   auto& overlay = *s_pOverlay;
 
-  const auto pApp = overlay.GetOverlayApp();
+  const auto pApp = overlay.GetMyChromiumApp();
   if (!pApp)
     return;
 
@@ -205,7 +205,7 @@ void ProcessMouseButton(uint16_t aX, uint16_t aY,
   if (!pClient)
     return;
 
-  const auto pRenderer = pClient->GetOverlayRenderHandler();
+  const auto pRenderer = pClient->GetMyRenderHandler();
   if (!pRenderer)
     return;
 
@@ -220,7 +220,7 @@ void ProcessMouseWheel(uint16_t aX, uint16_t aY, int16_t aZ)
 {
   auto& overlay = *s_pOverlay;
 
-  const auto pApp = overlay.GetOverlayApp();
+  const auto pApp = overlay.GetMyChromiumApp();
   if (!pApp)
     return;
 
@@ -228,7 +228,7 @@ void ProcessMouseWheel(uint16_t aX, uint16_t aY, int16_t aZ)
   if (!pClient)
     return;
 
-  const auto pRenderer = pClient->GetOverlayRenderHandler();
+  const auto pRenderer = pClient->GetMyRenderHandler();
   if (!pRenderer)
     return;
 
@@ -242,7 +242,7 @@ void ProcessMouseWheel(uint16_t aX, uint16_t aY, int16_t aZ)
 static LRESULT CALLBACK InputServiceWndProc(HWND hwnd, UINT uMsg,
                                             WPARAM wParam, LPARAM lParam)
 {
-  const auto pApp = s_pOverlay->GetOverlayApp();
+  const auto pApp = s_pOverlay->GetMyChromiumApp();
   if (!pApp)
     return 0;
 
@@ -250,7 +250,7 @@ static LRESULT CALLBACK InputServiceWndProc(HWND hwnd, UINT uMsg,
   if (!pClient)
     return 0;
 
-  const auto pRenderer = pClient->GetOverlayRenderHandler();
+  const auto pRenderer = pClient->GetMyRenderHandler();
   if (!pRenderer)
     return 0;
 
@@ -336,12 +336,12 @@ InputService::InputService(OverlayService& aOverlay) noexcept
 {
   s_pOverlay = &aOverlay;
 
-  TiltedPhoques::WindowsHook::Get().SetCallback(InputServiceWndProc);
+  CEFUtils::WindowsHook::Get().SetCallback(InputServiceWndProc);
 }
 
 InputService::~InputService() noexcept
 {
-  TiltedPhoques::WindowsHook::Get().SetCallback(nullptr);
+  CEFUtils::WindowsHook::Get().SetCallback(nullptr);
 
   s_pOverlay = nullptr;
 }

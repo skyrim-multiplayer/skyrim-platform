@@ -1,15 +1,15 @@
-#include "OverlayApp.hpp"
+#include "MyChromiumApp.hpp"
 
 #include <thread>
 
-namespace TiltedPhoques {
-OverlayApp::OverlayApp(
+namespace CEFUtils {
+MyChromiumApp::MyChromiumApp(
   const std::function<OverlayRenderProcessHandler*()>& aFactory) noexcept
   : m_pRenderProcess(aFactory())
 {
 }
 
-CefRefPtr<CefRenderProcessHandler> OverlayApp::GetRenderProcessHandler()
+CefRefPtr<CefRenderProcessHandler> MyChromiumApp::GetRenderProcessHandler()
 {
   return m_pRenderProcess;
 }
@@ -42,7 +42,7 @@ int UIMain(
   t.detach();
 
   CefMainArgs mainArgs(aInstance);
-  CefRefPtr<OverlayApp> App = new OverlayApp(acFactory);
+  CefRefPtr<MyChromiumApp> App = new MyChromiumApp(acFactory);
 
   return CefExecuteProcess(mainArgs, App, nullptr);
 }

@@ -4,7 +4,7 @@
 
 #include <Meta.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct WindowsHook
     {

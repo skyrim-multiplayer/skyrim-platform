@@ -2,9 +2,9 @@
 
 #include "Allocator.hpp"
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    struct MimallocAllocator : Allocator
+    struct MimallocAllocator : AllocatorBase
     {
         MimallocAllocator() noexcept = default;
         virtual ~MimallocAllocator() = default;

@@ -3,7 +3,7 @@
 
 #include <cassert>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     BasicAutoPtr::BasicAutoPtr(Pattern aPattern) noexcept
     {

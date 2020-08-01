@@ -4,7 +4,7 @@
 
 struct IDXGISwapChain;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct D3D11Hook
     {

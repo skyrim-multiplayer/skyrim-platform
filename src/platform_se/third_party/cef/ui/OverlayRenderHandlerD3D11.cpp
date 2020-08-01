@@ -1,5 +1,5 @@
 #include <OverlayClient.hpp>
-#include <OverlayRenderHandlerD3D11.hpp>
+#include <DX11RenderHandler.hpp>
 
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
@@ -13,8 +13,8 @@
 
 CMRC_DECLARE(skyrim_plugin_resources);
 
-namespace TiltedPhoques {
-OverlayRenderHandlerD3D11::OverlayRenderHandlerD3D11(
+namespace CEFUtils {
+DX11RenderHandler::DX11RenderHandler(
   Renderer* apRenderer) noexcept
   : m_pRenderer(apRenderer)
 {
@@ -23,9 +23,9 @@ OverlayRenderHandlerD3D11::OverlayRenderHandlerD3D11(
   m_createLock.lock();
 }
 
-OverlayRenderHandlerD3D11::~OverlayRenderHandlerD3D11() = default;
+DX11RenderHandler::~DX11RenderHandler() = default;
 
-void OverlayRenderHandlerD3D11::Render()
+void DX11RenderHandler::Render()
 {
   // We need contexts first
   if (!m_pImmediateContext || !m_pContext) {
@@ -74,12 +74,12 @@ void OverlayRenderHandlerD3D11::Render()
   m_pSpriteBatch->End();
 }
 
-void OverlayRenderHandlerD3D11::Reset()
+void DX11RenderHandler::Reset()
 {
   Create();
 }
 
-void OverlayRenderHandlerD3D11::Create()
+void DX11RenderHandler::Create()
 {
   const auto hr = m_pRenderer->GetSwapChain()->GetDevice(
     IID_ID3D11Device,
@@ -136,7 +136,7 @@ void OverlayRenderHandlerD3D11::Create()
     CreateRenderTexture();
 }
 
-void OverlayRenderHandlerD3D11::GetViewRect(CefRefPtr<CefBrowser> browser,
+void DX11RenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser,
                                             CefRect& rect)
 {
   std::scoped_lock _(m_createLock);
@@ -144,7 +144,7 @@ void OverlayRenderHandlerD3D11::GetViewRect(CefRefPtr<CefBrowser> browser,
   rect = CefRect(0, 0, m_width, m_height);
 }
 
-void OverlayRenderHandlerD3D11::OnPaint(CefRefPtr<CefBrowser> browser,
+void DX11RenderHandler::OnPaint(CefRefPtr<CefBrowser> browser,
                                         PaintElementType type,
                                         const RectList& dirtyRects,
                                         const void* buffer, int width,
@@ -174,7 +174,7 @@ void OverlayRenderHandlerD3D11::OnPaint(CefRefPtr<CefBrowser> browser,
   }
 }
 
-void OverlayRenderHandlerD3D11::GetRenderTargetSize()
+void DX11RenderHandler::GetRenderTargetSize()
 {
   Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRenderTargetView;
 
@@ -212,7 +212,7 @@ void OverlayRenderHandlerD3D11::GetRenderTargetSize()
   }
 }
 
-void OverlayRenderHandlerD3D11::CreateRenderTexture()
+void DX11RenderHandler::CreateRenderTexture()
 {
   D3D11_TEXTURE2D_DESC textDesc;
   textDesc.Width = m_width;

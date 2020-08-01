@@ -1,9 +1,9 @@
 #pragma once
 #include <include/cef_render_handler.h>
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 struct OverlayClient;
-struct OverlayRenderHandler : CefRenderHandler
+struct MyRenderHandler : CefRenderHandler
 {
   virtual void Reset() = 0;
   virtual void Render() = 0;

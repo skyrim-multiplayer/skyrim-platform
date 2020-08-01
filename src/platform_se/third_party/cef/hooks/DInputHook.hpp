@@ -7,7 +7,7 @@
 
 class IInputListener;
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 struct DInputHook
 {
   static bool& ChromeFocus()

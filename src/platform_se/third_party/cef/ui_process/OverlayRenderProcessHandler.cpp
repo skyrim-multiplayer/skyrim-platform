@@ -1,7 +1,7 @@
 #include "OverlayRenderProcessHandler.hpp"
 #include "../core_library/Platform.hpp"
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 OverlayRenderProcessHandler::OverlayRenderProcessHandler(
   std::string aCoreObjectName /* = "core" */) noexcept
   : m_coreObjectName(std::move(aCoreObjectName))

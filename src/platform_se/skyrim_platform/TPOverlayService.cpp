@@ -1,29 +1,29 @@
 #include "TPOverlayService.h"
 
-#include <cef/ui/OverlayApp.hpp>
+#include <cef/ui/MyChromiumApp.hpp>
 
 #include <D3D11Hook.hpp>
 
-#include <cef/ui/OverlayRenderHandler.hpp>
-#include <cef/ui/OverlayRenderHandlerD3D11.hpp>
+#include <cef/ui/MyRenderHandler.hpp>
+#include <cef/ui/DX11RenderHandler.hpp>
 
 #include "TPRenderSystemD3D11.h"
 
-using TiltedPhoques::OverlayRenderHandlerD3D11;
-using TiltedPhoques::OverlayRenderHandler;
+using CEFUtils::DX11RenderHandler;
+using CEFUtils::MyRenderHandler;
 
 struct D3D11RenderProvider final
-  : OverlayApp::RenderProvider
-  , OverlayRenderHandlerD3D11::Renderer
+  : MyChromiumApp::RenderProvider
+  , DX11RenderHandler::Renderer
 {
   explicit D3D11RenderProvider(RenderSystemD3D11* apRenderSystem)
     : m_pRenderSystem(apRenderSystem)
   {
   }
 
-  OverlayRenderHandler* Create() override
+  MyRenderHandler* Create() override
   {
-    return new OverlayRenderHandlerD3D11(this);
+    return new DX11RenderHandler(this);
   }
 
   [[nodiscard]] HWND GetWindow() override
@@ -51,7 +51,7 @@ OverlayService::~OverlayService() noexcept
 void OverlayService::Create(RenderSystemD3D11* apRenderSystem)
 {
   m_pOverlay =
-    new OverlayApp(std::make_unique<D3D11RenderProvider>(apRenderSystem));
+    new MyChromiumApp(std::make_unique<D3D11RenderProvider>(apRenderSystem));
   m_pOverlay->Initialize();
   m_pOverlay->GetClient()->Create();
 }

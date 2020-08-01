@@ -18,7 +18,7 @@ static TPresent RealPresent = nullptr;
 static TCreateDevice RealCreateDevice = nullptr;
 static TDirect3DCreate9 RealDirect3DCreate9 = nullptr;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
 
     static HRESULT __stdcall HookReset(IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pPresentationParameters)

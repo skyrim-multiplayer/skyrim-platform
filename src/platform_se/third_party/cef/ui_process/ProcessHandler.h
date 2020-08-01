@@ -3,7 +3,7 @@
 #include "../core_library/Meta.hpp"
 #include "OverlayRenderProcessHandler.hpp"
 
-struct ProcessHandler : TiltedPhoques::OverlayRenderProcessHandler
+struct ProcessHandler : CEFUtils::OverlayRenderProcessHandler
 {
   ProcessHandler() noexcept;
   virtual ~ProcessHandler() = default;

@@ -3,14 +3,14 @@
 #include <include/cef_load_handler.h>
 #include <Meta.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    struct OverlayLoadHandler final : CefLoadHandler
+    struct MyLoadHandler final : CefLoadHandler
     {
-        OverlayLoadHandler() = default;
-        virtual ~OverlayLoadHandler() = default;
+        MyLoadHandler() = default;
+        virtual ~MyLoadHandler() = default;
 
-        TP_NOCOPYMOVE(OverlayLoadHandler);
+        TP_NOCOPYMOVE(MyLoadHandler);
 
         void OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type) override;
         void OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode) override;
@@ -18,7 +18,7 @@ namespace TiltedPhoques
 
         [[nodiscard]] bool IsReady() const noexcept { return m_ready; }
 
-        IMPLEMENT_REFCOUNTING(OverlayLoadHandler);
+        IMPLEMENT_REFCOUNTING(MyLoadHandler);
 
     private:
 

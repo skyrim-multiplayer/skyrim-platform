@@ -4,16 +4,16 @@
 #include <functional>
 #include <include/cef_app.h>
 
-namespace TiltedPhoques {
-struct OverlayApp final : CefApp
+namespace CEFUtils {
+struct MyChromiumApp final : CefApp
 {
-  explicit OverlayApp(
+  explicit MyChromiumApp(
     const std::function<OverlayRenderProcessHandler*()>& aFactory) noexcept;
-  ~OverlayApp() = default;
+  ~MyChromiumApp() = default;
 
   CefRefPtr<CefRenderProcessHandler> GetRenderProcessHandler() override;
 
-  IMPLEMENT_REFCOUNTING(OverlayApp);
+  IMPLEMENT_REFCOUNTING(MyChromiumApp);
 
 private:
   CefRefPtr<OverlayRenderProcessHandler> m_pRenderProcess;

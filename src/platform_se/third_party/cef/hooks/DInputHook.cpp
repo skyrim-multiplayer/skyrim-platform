@@ -45,7 +45,7 @@ void ProcessMouseData(DIMOUSESTATE2* apMouseState)
 
   if (apMouseState->lZ != 0) {
     g_listener->OnMouseWheel(apMouseState->lZ);
-    if (TiltedPhoques::DInputHook::ChromeFocus()) {
+    if (CEFUtils::DInputHook::ChromeFocus()) {
       apMouseState->lZ = 0;
     }
   }
@@ -66,10 +66,10 @@ void ProcessMouseData(DIMOUSESTATE2* apMouseState)
 
 }
 
-namespace TiltedPhoques {
-struct StubIDirectInputDevice8A
+namespace CEFUtils {
+struct FakeIDirectInputDevice8A
 {
-  StubIDirectInputDevice8A(IDirectInputDevice8A* apDevice)
+  FakeIDirectInputDevice8A(IDirectInputDevice8A* apDevice)
     : m_pDevice(apDevice)
   {
   }
@@ -230,9 +230,9 @@ using TDirectInput8Create = HRESULT(_stdcall*)(HINSTANCE, DWORD, REFIID,
 static TIDirectInputA_CreateDevice RealIDirectInputA_CreateDevice = nullptr;
 static TDirectInput8Create RealDirectInput8Create = nullptr;
 
-static Set<StubIDirectInputDevice8A*> s_devices;
+static Set<FakeIDirectInputDevice8A*> s_devices;
 
-HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
+HRESULT _stdcall FakeIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
                                                           LPVOID outData)
 {
   if (!g_listener)
@@ -294,7 +294,7 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceState(DWORD outDataLen,
   return DI_OK;
 }
 
-HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceData(
+HRESULT _stdcall FakeIDirectInputDevice8A::GetDeviceData(
   DWORD dataSize, LPDIDEVICEOBJECTDATA outData, LPDWORD outDataLen,
   DWORD flags)
 {
@@ -338,7 +338,7 @@ HRESULT _stdcall StubIDirectInputDevice8A::GetDeviceData(
   return result;
 }
 
-ULONG _stdcall StubIDirectInputDevice8A::Release()
+ULONG _stdcall FakeIDirectInputDevice8A::Release()
 {
   const auto result = IDirectInputDevice8_Release(m_pDevice);
   if (result == 0) {
@@ -358,7 +358,7 @@ HRESULT _stdcall HookIDirectInputA_CreateDevice(
     RealIDirectInputA_CreateDevice(pDirectInput, typeGuid, apDevice, unused);
 
   if (result == DI_OK) {
-    auto pStub = new StubIDirectInputDevice8A(*apDevice);
+    auto pStub = new FakeIDirectInputDevice8A(*apDevice);
 
     s_devices.insert(pStub);
 

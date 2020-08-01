@@ -1,4 +1,4 @@
-#include "OverlayApp.hpp"
+#include "MyChromiumApp.hpp"
 #include "ProcessHandler.h"
 #include <filesystem>
 #include <fstream>
@@ -7,12 +7,12 @@
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                      LPSTR lpCmdLine, int nCmdShow)
 {
-  std::function<TiltedPhoques::OverlayRenderProcessHandler*()> f = []() {
+  std::function<CEFUtils::OverlayRenderProcessHandler*()> f = []() {
     return new ProcessHandler;
   };
   [&]() {
     __try {
-      TiltedPhoques::UIMain(lpCmdLine, hInstance, f);
+      CEFUtils::UIMain(lpCmdLine, hInstance, f);
     } __except (EXCEPTION_CONTINUE_EXECUTION) {
     }
   }();

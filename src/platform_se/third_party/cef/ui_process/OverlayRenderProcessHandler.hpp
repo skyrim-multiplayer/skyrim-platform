@@ -7,7 +7,7 @@
 #include "EventsV8Handler.hpp"
 #include "OverlayV8Handler.hpp"
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 struct OverlayRenderProcessHandler : CefRenderProcessHandler
 {
   explicit OverlayRenderProcessHandler(

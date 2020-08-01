@@ -1,5 +1,5 @@
 #include <Filesystem.hpp>
-#include <OverlayApp.hpp>
+#include <MyChromiumApp.hpp>
 #include <filesystem>
 #include <fstream>
 
@@ -29,22 +29,22 @@ std::string random_string(std::string::size_type length)
 }
 }
 
-namespace TiltedPhoques {
-std::string OverlayApp::GetCurrentSpToken()
+namespace CEFUtils {
+std::string MyChromiumApp::GetCurrentSpToken()
 {
   static const auto str = random_string(32);
   return str;
 }
 
-OverlayApp::OverlayApp(std::unique_ptr<RenderProvider> apRenderProvider,
+MyChromiumApp::MyChromiumApp(std::unique_ptr<RenderProvider> apRenderProvider,
                        std::wstring aProcessName) noexcept
-  : m_pBrowserProcessHandler(new OverlayBrowserProcessHandler)
+  : m_pBrowserProcessHandler(new MyBrowserProcessHandler)
   , m_pRenderProvider(std::move(apRenderProvider))
   , m_processName(std::move(aProcessName))
 {
 }
 
-void OverlayApp::Initialize() noexcept
+void MyChromiumApp::Initialize() noexcept
 {
   if (m_pGameClient)
     return;
@@ -116,7 +116,7 @@ void OverlayApp::Initialize() noexcept
   }
 }
 
-void OverlayApp::ExecuteAsync(const std::string& acFunction,
+void MyChromiumApp::ExecuteAsync(const std::string& acFunction,
                               const CefRefPtr<CefListValue>& apArguments) const
   noexcept
 {
@@ -138,7 +138,7 @@ void OverlayApp::ExecuteAsync(const std::string& acFunction,
   }
 }
 
-void OverlayApp::InjectKey(const cef_key_event_type_t aType,
+void MyChromiumApp::InjectKey(const cef_key_event_type_t aType,
                            const uint32_t aModifiers, const uint16_t aKey,
                            const uint16_t aScanCode) const noexcept
 {
@@ -154,7 +154,7 @@ void OverlayApp::InjectKey(const cef_key_event_type_t aType,
   }
 }
 
-void OverlayApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
+void MyChromiumApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
                                    const cef_mouse_button_type_t aButton,
                                    const bool aUp,
                                    const uint32_t aModifier) const noexcept
@@ -171,7 +171,7 @@ void OverlayApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
   }
 }
 
-void OverlayApp::InjectMouseMove(const float aX, const float aY,
+void MyChromiumApp::InjectMouseMove(const float aX, const float aY,
                                  const uint32_t aModifier,
                                  bool isBrowserFocused) const noexcept
 {
@@ -185,14 +185,14 @@ void OverlayApp::InjectMouseMove(const float aX, const float aY,
     ev.y = aY;
     ev.modifiers = aModifier;
 
-    m_pGameClient->GetOverlayRenderHandler()->SetCursorLocation(aX, aY);
+    m_pGameClient->GetMyRenderHandler()->SetCursorLocation(aX, aY);
 
     if (isBrowserFocused && aX >= 0 && aY >= 0)
       m_pGameClient->GetBrowser()->GetHost()->SendMouseMoveEvent(ev, false);
   }
 }
 
-void OverlayApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
+void MyChromiumApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
                                   const int16_t aDelta,
                                   const uint32_t aModifier) const noexcept
 {
@@ -207,7 +207,7 @@ void OverlayApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
   }
 }
 
-bool OverlayApp::LoadUrl(const wchar_t* url) const noexcept
+bool MyChromiumApp::LoadUrl(const wchar_t* url) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
     CefString s(url);
@@ -217,7 +217,7 @@ bool OverlayApp::LoadUrl(const wchar_t* url) const noexcept
   return false;
 }
 
-void OverlayApp::OnBeforeCommandLineProcessing(
+void MyChromiumApp::OnBeforeCommandLineProcessing(
   const CefString& aProcessType, CefRefPtr<CefCommandLine> aCommandLine)
 {
 }

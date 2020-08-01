@@ -2,12 +2,12 @@
 
 #include <include/cef_browser_process_handler.h>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    struct OverlayBrowserProcessHandler : CefBrowserProcessHandler
+    struct MyBrowserProcessHandler : CefBrowserProcessHandler
     {
         void OnBeforeChildProcessLaunch(CefRefPtr<CefCommandLine> command_line) override;
 
-        IMPLEMENT_REFCOUNTING(OverlayBrowserProcessHandler);
+        IMPLEMENT_REFCOUNTING(MyBrowserProcessHandler);
     };
 }

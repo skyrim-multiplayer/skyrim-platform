@@ -1,19 +1,19 @@
 #include <OverlayClient.hpp>
-#include <OverlayContextHandler.hpp>
+#include <MyCtxHandler.hpp>
 #include <filesystem>
 #include <Filesystem.hpp>
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    OverlayClient::OverlayClient(OverlayRenderHandler* apHandler) noexcept
+    OverlayClient::OverlayClient(MyRenderHandler* apHandler) noexcept
         : m_pRenderHandler(apHandler)
-        , m_pLoadHandler(new OverlayLoadHandler)
+        , m_pLoadHandler(new MyLoadHandler)
         , m_pBrowser(nullptr)
-        , m_pContextMenuHandler(new OverlayContextHandler)
+        , m_pContextMenuHandler(new MyCtxHandler)
     {
-        const auto currentPath = TiltedPhoques::GetPath();
+        const auto currentPath = CEFUtils::GetPath();
 
         m_cursorPathPNG = (currentPath / "assets" / "images" / "cursor.png").wstring();
         m_cursorPathDDS = (currentPath / "assets" / "images" / "cursor.dds").wstring();
@@ -21,7 +21,7 @@ namespace TiltedPhoques
         apHandler->SetParent(this);
     }
 
-    CefRefPtr<OverlayRenderHandler> OverlayClient::GetOverlayRenderHandler()
+    CefRefPtr<MyRenderHandler> OverlayClient::GetMyRenderHandler()
     {
         return m_pRenderHandler;
     }

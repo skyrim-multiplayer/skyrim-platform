@@ -2,7 +2,7 @@
 
 #include <Pattern.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct BasicAutoPtr
     {

@@ -1,8 +1,8 @@
-#include <OverlayContextHandler.hpp>
+#include <MyCtxHandler.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    void OverlayContextHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model)
+    void MyCtxHandler::OnBeforeContextMenu(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, CefRefPtr<CefContextMenuParams> params, CefRefPtr<CefMenuModel> model)
     {
         model->Clear();
     }

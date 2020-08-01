@@ -36,7 +36,7 @@
 #include <cef/reverse/App.hpp>
 #include <cef/reverse/AutoPtr.hpp>
 #include <cef/reverse/Entry.hpp>
-#include <cef/ui/OverlayApp.hpp>
+#include <cef/ui/MyChromiumApp.hpp>
 #include <map>
 #include <memory>
 #include <mutex>
@@ -355,7 +355,7 @@ __declspec(dllexport) bool SKSEPlugin_Load_Impl(const SKSEInterface* skse)
 };
 
 #define POINTER_SKYRIMSE(className, variableName, ...)                        \
-  static TiltedPhoques::AutoPtr<className> variableName(__VA_ARGS__)
+  static CEFUtils::AutoPtr<className> variableName(__VA_ARGS__)
 
 inline uint32_t GetCefModifiers_(uint16_t aVirtualKey)
 {
@@ -411,7 +411,7 @@ inline uint32_t GetCefModifiers_(uint16_t aVirtualKey)
 class MyInputListener : public IInputListener
 {
 public:
-  bool IsBrowserFocused() { return TiltedPhoques::DInputHook::ChromeFocus(); }
+  bool IsBrowserFocused() { return CEFUtils::DInputHook::ChromeFocus(); }
 
   MyInputListener()
   {
@@ -429,7 +429,7 @@ public:
 
   void InjectChar(uint8_t code)
   {
-    if (auto app = service->GetOverlayApp()) {
+    if (auto app = service->GetMyChromiumApp()) {
       int virtualKeyCode = VscToVk(code);
       int scan = code;
       auto capitalizeLetters = GetCefModifiers_(virtualKeyCode) &
@@ -443,7 +443,7 @@ public:
 
   void InjectKey(uint8_t code, bool down)
   {
-    if (auto app = service->GetOverlayApp()) {
+    if (auto app = service->GetMyChromiumApp()) {
       int virtualKeyCode = VscToVk(code);
       int scan = code;
       app->InjectKey(down ? cef_key_event_type_t::KEYEVENT_KEYDOWN
@@ -485,7 +485,7 @@ public:
       vkCodeDownDur[virtualKeyCode] = down ? clock() : 0;
     }
 
-    if (auto app = service->GetOverlayApp()) {
+    if (auto app = service->GetMyChromiumApp()) {
       InjectKey(code, down);
 
       if (down) {
@@ -499,7 +499,7 @@ public:
     if (!IsBrowserFocused())
       return;
     if (pCursorX && pCursorY)
-      if (auto app = service->GetOverlayApp()) {
+      if (auto app = service->GetMyChromiumApp()) {
         app->InjectMouseWheel(*pCursorX, *pCursorY, delta,
                               GetCefModifiers_(0));
       }
@@ -515,7 +515,7 @@ public:
       return;
 
     if (pCursorX && pCursorY)
-      if (auto app = service->GetOverlayApp()) {
+      if (auto app = service->GetMyChromiumApp()) {
         app->InjectMouseMove(*pCursorX, *pCursorY, GetCefModifiers_(0),
                              IsBrowserFocused());
       }
@@ -526,7 +526,7 @@ public:
     if (!IsBrowserFocused())
       return;
     if (pCursorX && pCursorY)
-      if (auto app = service->GetOverlayApp()) {
+      if (auto app = service->GetMyChromiumApp()) {
         cef_mouse_button_type_t btn;
         switch (mouseButton) {
           case MouseButton::Left:
@@ -551,7 +551,7 @@ public:
       return;
     static const auto fs = new BSFixedString("Cursor Menu");
     if (!mm->IsMenuOpen(fs)) {
-      if (auto app = service->GetOverlayApp()) {
+      if (auto app = service->GetMyChromiumApp()) {
         app->InjectMouseMove(-1.f, -1.f, GetCefModifiers_(0), false);
       }
     }
@@ -579,7 +579,7 @@ private:
   bool switchLayoutDownWas = false;
 };
 
-class SkyrimPlatformApp : public TiltedPhoques::App
+class SkyrimPlatformApp : public CEFUtils::SKSEPluginBase
 {
 public:
   static SkyrimPlatformApp& GetInstance()
@@ -608,15 +608,15 @@ public:
 
     myInputListener.reset(new MyInputListener);
 
-    TiltedPhoques::D3D11Hook::Install();
-    TiltedPhoques::DInputHook::Install(myInputListener);
-    TiltedPhoques::WindowsHook::Install();
+    CEFUtils::D3D11Hook::Install();
+    CEFUtils::DInputHook::Install(myInputListener);
+    CEFUtils::WindowsHook::Install();
 
-    TiltedPhoques::DInputHook::Get().SetToggleKeys({ VK_F6 });
-    TiltedPhoques::DInputHook::Get().SetEnabled(true);
+    CEFUtils::DInputHook::Get().SetToggleKeys({ VK_F6 });
+    CEFUtils::DInputHook::Get().SetEnabled(true);
 
     overlayService.reset(new OverlayService);
-    overlayService->GetOverlayApp();
+    overlayService->GetMyChromiumApp();
     myInputListener->Init(overlayService, inputConverter);
     g_browserApiState->overlayService = overlayService;
 
@@ -638,7 +638,7 @@ public:
 
   void Update() override
   {
-    // TiltedPhoques::DInputHook::Get().Update();
+    // CEFUtils::DInputHook::Get().Update();
     POINTER_SKYRIMSE(uint32_t, bAlwaysActive, 0x141DEED10 - 0x140000000);
 
     *bAlwaysActive = 1;

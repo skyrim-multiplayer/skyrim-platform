@@ -7,7 +7,7 @@
 
 
 using std::size_t;
-namespace TiltedPhoques
+namespace CEFUtils
 {
     namespace details
     {

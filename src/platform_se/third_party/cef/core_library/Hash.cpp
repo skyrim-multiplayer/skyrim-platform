@@ -1,6 +1,6 @@
 #include "Hash.hpp"
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     namespace FHash
     {

@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <algorithm>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     ProcessMemory::ProcessMemory(void* apMemoryLocation, const size_t aSize) noexcept
         : m_oldProtect(0)

@@ -9,7 +9,7 @@
 #include <algorithm>
 #include <cassert>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     AutoPtrManager AutoPtrManager::s_instance;
 

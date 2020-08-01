@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <cstddef>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     namespace FHash
     {

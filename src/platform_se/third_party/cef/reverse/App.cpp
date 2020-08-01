@@ -1,22 +1,22 @@
 #include <App.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    App::App() noexcept
+    SKSEPluginBase::SKSEPluginBase() noexcept
         : m_ready(false)
     {
     }
 
-    App::~App() = default;
+    SKSEPluginBase::~SKSEPluginBase() = default;
 
-    void App::Start() noexcept
+    void SKSEPluginBase::Start() noexcept
     {
         m_ready = true;
 
         BeginMain();
     }
 
-    bool App::IsReady() const noexcept
+    bool SKSEPluginBase::IsReady() const noexcept
     {
         return m_ready;
     }

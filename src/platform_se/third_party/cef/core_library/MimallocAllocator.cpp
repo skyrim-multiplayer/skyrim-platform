@@ -2,7 +2,7 @@
 
 #include <mimalloc.h>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     void* MimallocAllocator::Allocate(const size_t aSize) noexcept
     {

@@ -5,7 +5,7 @@
 struct IDirect3D9;
 struct IDirect3DDevice9;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct D3D9Hook
     {

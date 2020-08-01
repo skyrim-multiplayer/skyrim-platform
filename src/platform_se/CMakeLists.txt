@@ -226,3 +226,11 @@ apply_default_settings(TARGETS
   CommonLibSSE common skse64_common skse64
   core_library hooks reverse ui SkyrimPlatformCEF
 )
+
+foreach(tgt SkyrimPlatformCEF ui hooks reverse core_library)
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    target_compile_options(${tgt} PRIVATE "/GR-")
+  else()
+    message(FATAL_ERROR "Disabling RTTI is not implemented for this compiler")
+  endif()
+endforeach()

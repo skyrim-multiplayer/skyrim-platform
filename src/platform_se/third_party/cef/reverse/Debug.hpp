@@ -1,6 +1,6 @@
 #pragma once
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct Debug
     {

@@ -3,14 +3,14 @@
 #include <cef/core_library/Meta.hpp>
 #include <include/internal/cef_ptr.h>
 
-namespace TiltedPhoques {
-struct OverlayApp;
+namespace CEFUtils {
+struct MyChromiumApp;
 }
 
 struct RenderSystemD3D9;
 struct RenderSystemD3D11;
 
-using TiltedPhoques::OverlayApp;
+using CEFUtils::MyChromiumApp;
 
 struct OverlayService
 {
@@ -24,8 +24,8 @@ struct OverlayService
   void Render() const;
   void Reset() const;
 
-  OverlayApp* GetOverlayApp() const noexcept { return m_pOverlay.get(); }
+  MyChromiumApp* GetMyChromiumApp() const noexcept { return m_pOverlay.get(); }
 
 private:
-  CefRefPtr<OverlayApp> m_pOverlay{ nullptr };
+  CefRefPtr<MyChromiumApp> m_pOverlay{ nullptr };
 };

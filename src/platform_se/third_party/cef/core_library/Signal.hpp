@@ -6,7 +6,7 @@
 
 #include <Stl.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     namespace details
     {

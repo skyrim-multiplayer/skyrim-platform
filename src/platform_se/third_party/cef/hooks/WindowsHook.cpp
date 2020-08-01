@@ -14,7 +14,7 @@ TRegisterClassExW RealRegisterClassExW = nullptr;
 
 static WNDPROC RealWndProc;
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
 
     LRESULT CALLBACK HookWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

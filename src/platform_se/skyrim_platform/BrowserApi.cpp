@@ -1,8 +1,8 @@
 #include "BrowserApi.h"
 #include "NullPointerException.h"
 #include <cef/hooks/DInputHook.hpp>
-#include <cef/ui/OverlayApp.hpp>
-#include <cef/ui/OverlayRenderHandlerD3D11.hpp>
+#include <cef/ui/MyChromiumApp.hpp>
+#include <cef/ui/DX11RenderHandler.hpp>
 #include <skse64/GameMenus.h>
 
 namespace {
@@ -11,14 +11,14 @@ thread_local bool g_cursorIsOpenByFocus = false;
 
 JsValue BrowserApi::SetVisible(const JsFunctionArguments& args)
 {
-  bool& v = TiltedPhoques::OverlayRenderHandlerD3D11::Visible();
+  bool& v = CEFUtils::DX11RenderHandler::Visible();
   v = (bool)args[1];
   return JsValue::Undefined();
 }
 
 JsValue BrowserApi::SetFocused(const JsFunctionArguments& args)
 {
-  bool& v = TiltedPhoques::DInputHook::ChromeFocus();
+  bool& v = CEFUtils::DInputHook::ChromeFocus();
   bool newFocus = (bool)args[1];
   if (v != newFocus) {
     v = newFocus;
@@ -53,8 +53,8 @@ JsValue BrowserApi::LoadUrl(const JsFunctionArguments& args,
   if (!state)
     throw NullPointerException("state");
   if (!state->overlayService)
-    throw NullPointerException("overlayApp");
-  auto app = state->overlayService->GetOverlayApp();
+    throw NullPointerException("MyChromiumApp");
+  auto app = state->overlayService->GetMyChromiumApp();
   if (!app)
     throw NullPointerException("app");
 
@@ -64,5 +64,5 @@ JsValue BrowserApi::LoadUrl(const JsFunctionArguments& args,
 
 JsValue BrowserApi::GetToken(const JsFunctionArguments& args)
 {
-  return OverlayApp::GetCurrentSpToken();
+  return MyChromiumApp::GetCurrentSpToken();
 }

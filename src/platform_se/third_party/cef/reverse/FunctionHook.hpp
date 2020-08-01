@@ -5,7 +5,7 @@
 #include <Stl.hpp>
 #include <ProcessMemory.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct FunctionHook
     {
@@ -99,13 +99,13 @@ namespace TiltedPhoques
     }
 }
 
-#define TP_HOOK(systemFunction, hookFunction) TiltedPhoques::FunctionHookManager::GetInstance().Add(systemFunction, hookFunction, true)
-#define TP_HOOK_IMMEDIATE(systemFunction, hookFunction) TiltedPhoques::FunctionHookManager::GetInstance().Add(systemFunction, hookFunction, false)
+#define TP_HOOK(systemFunction, hookFunction) CEFUtils::FunctionHookManager::GetInstance().Add(systemFunction, hookFunction, true)
+#define TP_HOOK_IMMEDIATE(systemFunction, hookFunction) CEFUtils::FunctionHookManager::GetInstance().Add(systemFunction, hookFunction, false)
 
-#define TP_HOOK_SYSTEM(libraryName, functionName, hookFunction) TiltedPhoques::FunctionHookManager::GetInstance().AddSystem(libraryName, functionName, hookFunction)
-#define TP_HOOK_IAT(functionName, libraryName) Real ##functionName = (T ##functionName)TiltedPhoques::FunctionHookManager::GetInstance().Add(Hook ## functionName, libraryName, #functionName)
+#define TP_HOOK_SYSTEM(libraryName, functionName, hookFunction) CEFUtils::FunctionHookManager::GetInstance().AddSystem(libraryName, functionName, hookFunction)
+#define TP_HOOK_IAT(functionName, libraryName) Real ##functionName = (T ##functionName)CEFUtils::FunctionHookManager::GetInstance().Add(Hook ## functionName, libraryName, #functionName)
 
-#define TP_HOOK_COMMIT TiltedPhoques::FunctionHookManager::GetInstance().InstallDelayedHooks();
+#define TP_HOOK_COMMIT CEFUtils::FunctionHookManager::GetInstance().InstallDelayedHooks();
 
 #define TP_EMPTY_HOOK_PLACEHOLDER \
 __nop(); \

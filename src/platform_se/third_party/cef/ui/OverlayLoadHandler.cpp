@@ -1,8 +1,8 @@
-#include <OverlayLoadHandler.hpp>
+#include <MyLoadHandler.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    void OverlayLoadHandler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type)
+    void MyLoadHandler::OnLoadStart(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, TransitionType transition_type)
     {
         if (frame->IsMain() && transition_type == TT_EXPLICIT)
         {
@@ -10,7 +10,7 @@ namespace TiltedPhoques
         }
     }
 
-    void OverlayLoadHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode)
+    void MyLoadHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int httpStatusCode)
     {
         if (frame->IsMain())
         {
@@ -18,7 +18,7 @@ namespace TiltedPhoques
         }
     }
 
-    bool OverlayLoadHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+    bool MyLoadHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
         CefLoadHandler::ErrorCode errorCode, const CefString& failedUrl, CefString& errorText)
     {
         return false;

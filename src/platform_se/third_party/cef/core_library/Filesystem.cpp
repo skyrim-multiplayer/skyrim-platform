@@ -10,7 +10,7 @@
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #endif
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     std::filesystem::path GetPath() noexcept
     {

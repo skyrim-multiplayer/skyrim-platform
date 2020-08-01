@@ -1,22 +1,22 @@
 #pragma once
 
-#include "OverlayLoadHandler.hpp"
-#include "OverlayRenderHandler.hpp"
+#include "MyLoadHandler.hpp"
+#include "MyRenderHandler.hpp"
 #include <include/cef_client.h>
 
 #include <Meta.hpp>
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 struct OverlayClient
   : CefClient
   , CefLifeSpanHandler
   , CefContextMenuHandler
 {
-  explicit OverlayClient(OverlayRenderHandler* apHandler) noexcept;
+  explicit OverlayClient(MyRenderHandler* apHandler) noexcept;
 
   TP_NOCOPYMOVE(OverlayClient);
 
-  [[nodiscard]] CefRefPtr<OverlayRenderHandler> GetOverlayRenderHandler();
+  [[nodiscard]] CefRefPtr<MyRenderHandler> GetMyRenderHandler();
   CefRefPtr<CefRenderHandler> GetRenderHandler() override;
   CefRefPtr<CefLoadHandler> GetLoadHandler() override;
   CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() override;
@@ -44,8 +44,8 @@ struct OverlayClient
 private:
   void SetBrowser(const CefRefPtr<CefBrowser>& aBrowser) noexcept;
 
-  CefRefPtr<OverlayRenderHandler> m_pRenderHandler;
-  CefRefPtr<OverlayLoadHandler> m_pLoadHandler;
+  CefRefPtr<MyRenderHandler> m_pRenderHandler;
+  CefRefPtr<MyLoadHandler> m_pLoadHandler;
   CefRefPtr<CefBrowser> m_pBrowser;
   CefRefPtr<CefContextMenuHandler> m_pContextMenuHandler;
 

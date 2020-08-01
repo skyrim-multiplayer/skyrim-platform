@@ -3,10 +3,10 @@
 #include "Allocator.hpp"
 #include <memory>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     template <size_t Bytes>
-    struct StackAllocator : Allocator
+    struct StackAllocator : AllocatorBase
     {
         StackAllocator() noexcept;
         virtual ~StackAllocator();

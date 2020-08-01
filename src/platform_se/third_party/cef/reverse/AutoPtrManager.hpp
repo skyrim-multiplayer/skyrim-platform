@@ -3,7 +3,7 @@
 #include <Pattern.hpp>
 #include <mutex>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct AutoPtrManager
     {

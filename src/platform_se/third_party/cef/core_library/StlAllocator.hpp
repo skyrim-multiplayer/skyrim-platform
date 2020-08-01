@@ -3,7 +3,7 @@
 #include "Allocator.hpp"
 #include <new>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     template <class T>
     struct StlAllocator
@@ -12,7 +12,7 @@ namespace TiltedPhoques
 
         StlAllocator()
         {
-            m_pAllocator = Allocator::Get();
+            m_pAllocator = AllocatorBase::Get();
         }
 
         template <class U>
@@ -37,7 +37,7 @@ namespace TiltedPhoques
         }
 
 
-        Allocator* m_pAllocator;
+        AllocatorBase* m_pAllocator;
     };
 
     template <class T, class U>

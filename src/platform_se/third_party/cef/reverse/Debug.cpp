@@ -3,7 +3,7 @@
 
 #include <windows.h>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     void Debug::WaitForDebugger() noexcept
     {

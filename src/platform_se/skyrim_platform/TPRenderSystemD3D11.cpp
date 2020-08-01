@@ -17,7 +17,7 @@ RenderSystemD3D11::RenderSystemD3D11(OverlayService& aOverlay/*,
   , m_overlay(aOverlay)
 //, m_imguiService(aImguiService)
 {
-  auto& d3d11 = TiltedPhoques::D3D11Hook::Get();
+  auto& d3d11 = CEFUtils::D3D11Hook::Get();
 
   m_createConnection = d3d11.OnCreate.Connect(
     std::bind(&RenderSystemD3D11::HandleCreate, this, std::placeholders::_1));
@@ -29,7 +29,7 @@ RenderSystemD3D11::RenderSystemD3D11(OverlayService& aOverlay/*,
 
 RenderSystemD3D11::~RenderSystemD3D11()
 {
-  auto& d3d11 = TiltedPhoques::D3D11Hook::Get();
+  auto& d3d11 = CEFUtils::D3D11Hook::Get();
 
   d3d11.OnCreate.Disconnect(m_createConnection);
   d3d11.OnPresent.Disconnect(m_renderConnection);

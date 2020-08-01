@@ -3,7 +3,7 @@
 #include <include/cef_v8.h>
 #include <Stl.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     using TCallbacks = Map<std::string, std::pair<CefRefPtr<CefV8Context>, CefRefPtr<CefV8Value>>>;
 

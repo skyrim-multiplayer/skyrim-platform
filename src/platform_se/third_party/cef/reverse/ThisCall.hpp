@@ -2,7 +2,7 @@
 
 #include <AutoPtr.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     template<class TFunc, class TThis, class... TArgs>
     constexpr decltype(auto) ThisCall(TFunc* aFunction, TThis* apThis, TArgs&& ... args) noexcept

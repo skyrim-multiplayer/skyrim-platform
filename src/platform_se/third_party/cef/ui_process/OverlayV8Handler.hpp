@@ -2,7 +2,7 @@
 
 #include <include/cef_v8.h>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct OverlayV8Handler final : CefV8Handler
     {

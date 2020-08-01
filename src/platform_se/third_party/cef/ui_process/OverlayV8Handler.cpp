@@ -1,7 +1,7 @@
 #include "OverlayV8Handler.hpp"
 #include "../core_library/Platform.hpp"
 
-namespace TiltedPhoques {
+namespace CEFUtils {
 OverlayV8Handler::OverlayV8Handler(
   const CefRefPtr<CefBrowser>& apBrowser) noexcept
   : m_pBrowser(apBrowser)

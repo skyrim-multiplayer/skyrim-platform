@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OverlayRenderHandler.hpp"
+#include "MyRenderHandler.hpp"
 #include <Signal.hpp>
 #include <mutex>
 #include <wrl.h>
@@ -16,8 +16,8 @@ struct ID3D11ShaderResourceView;
 struct ID3D11DeviceContext;
 struct ID3D11Device;
 
-namespace TiltedPhoques {
-struct OverlayRenderHandlerD3D11 : OverlayRenderHandler
+namespace CEFUtils {
+struct DX11RenderHandler : MyRenderHandler
 {
   static bool& Visible()
   {
@@ -34,10 +34,10 @@ struct OverlayRenderHandlerD3D11 : OverlayRenderHandler
     TP_NOCOPYMOVE(Renderer);
   };
 
-  explicit OverlayRenderHandlerD3D11(Renderer* apRenderer) noexcept;
-  virtual ~OverlayRenderHandlerD3D11();
+  explicit DX11RenderHandler(Renderer* apRenderer) noexcept;
+  virtual ~DX11RenderHandler();
 
-  TP_NOCOPYMOVE(OverlayRenderHandlerD3D11);
+  TP_NOCOPYMOVE(DX11RenderHandler);
 
   void Create() override;
   void Render() override;
@@ -48,7 +48,7 @@ struct OverlayRenderHandlerD3D11 : OverlayRenderHandler
                const RectList& dirtyRects, const void* buffer, int width,
                int height) override;
 
-  IMPLEMENT_REFCOUNTING(OverlayRenderHandlerD3D11);
+  IMPLEMENT_REFCOUNTING(DX11RenderHandler);
 
 protected:
   void GetRenderTargetSize();

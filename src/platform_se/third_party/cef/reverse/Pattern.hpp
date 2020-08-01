@@ -2,7 +2,7 @@
 
 #include <Stl.hpp>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct Pattern
     {
@@ -24,9 +24,9 @@ namespace TiltedPhoques
 
 namespace std
 {
-    template<> struct less<TiltedPhoques::Pattern>
+    template<> struct less<CEFUtils::Pattern>
     {
-        bool operator() (const TiltedPhoques::Pattern& lhs, const TiltedPhoques::Pattern& rhs) const noexcept
+        bool operator() (const CEFUtils::Pattern& lhs, const CEFUtils::Pattern& rhs) const noexcept
         {
             return lhs.BytePattern < rhs.BytePattern;
         }

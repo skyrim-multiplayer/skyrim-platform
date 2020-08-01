@@ -3,7 +3,7 @@
 #include <AutoPtr.hpp>
 #include <type_traits>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct ProcessMemory
     {

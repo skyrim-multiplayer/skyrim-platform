@@ -2,7 +2,7 @@
 #include "MimallocAllocator.hpp"
 #include <cassert>
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
     struct AllocatorStack
     {
@@ -14,10 +14,10 @@ namespace TiltedPhoques
         AllocatorStack() noexcept
             : m_index(0)
         {
-            m_stack[0] = Allocator::GetDefault();
+            m_stack[0] = AllocatorBase::GetDefault();
         }
 
-        void Push(Allocator* apAllocator) noexcept
+        void Push(AllocatorBase* apAllocator) noexcept
         {
             assert(m_index + 1 < kMaxAllocatorCount);
 
@@ -25,7 +25,7 @@ namespace TiltedPhoques
             m_stack[m_index] = apAllocator;
         }
 
-        Allocator* Pop() noexcept
+        AllocatorBase* Pop() noexcept
         {
             assert(m_index > 0);
 
@@ -35,7 +35,7 @@ namespace TiltedPhoques
             return pAllocator;
         }
 
-        [[nodiscard]] Allocator* Get() noexcept
+        [[nodiscard]] AllocatorBase* Get() noexcept
         {
             return m_stack[m_index];
         }
@@ -49,50 +49,50 @@ namespace TiltedPhoques
     private:
 
         uint32_t m_index;
-        Allocator* m_stack[kMaxAllocatorCount]{};
+        AllocatorBase* m_stack[kMaxAllocatorCount]{};
     };
 
 
-    void Allocator::Push(Allocator* apAllocator) noexcept
+    void AllocatorBase::Push(AllocatorBase* apAllocator) noexcept
     {
         AllocatorStack::Instance().Push(apAllocator);
     }
 
-    void Allocator::Push(Allocator& aAllocator) noexcept
+    void AllocatorBase::Push(AllocatorBase& aAllocator) noexcept
     {
         Push(&aAllocator);
     }
 
-    Allocator* Allocator::Pop() noexcept
+    AllocatorBase* AllocatorBase::Pop() noexcept
     {
         return AllocatorStack::Instance().Pop();
     }
 
-    Allocator* Allocator::Get() noexcept
+    AllocatorBase* AllocatorBase::Get() noexcept
     {
         return AllocatorStack::Instance().Get();
     }
 
-    Allocator* Allocator::GetDefault() noexcept
+    AllocatorBase* AllocatorBase::GetDefault() noexcept
     {
         static MimallocAllocator s_allocator;
         return &s_allocator;
     }
 
-    ScopedAllocator::ScopedAllocator(Allocator* apAllocator) noexcept
+    ScopedAllocator::ScopedAllocator(AllocatorBase* apAllocator) noexcept
         : m_pAllocator(apAllocator)
     {
-        Allocator::Push(m_pAllocator);
+        AllocatorBase::Push(m_pAllocator);
     }
 
-    ScopedAllocator::ScopedAllocator(Allocator& aAllocator) noexcept
+    ScopedAllocator::ScopedAllocator(AllocatorBase& aAllocator) noexcept
         : ScopedAllocator(&aAllocator)
     {
     }
 
     ScopedAllocator::~ScopedAllocator() noexcept
     {
-        Allocator::Pop();
+        AllocatorBase::Pop();
     }
 
 }

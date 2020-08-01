@@ -1,11 +1,11 @@
 #pragma once
 
-namespace TiltedPhoques
+namespace CEFUtils
 {
-    struct App
+    struct SKSEPluginBase
     {
-        App() noexcept;
-        virtual ~App();
+        SKSEPluginBase() noexcept;
+        virtual ~SKSEPluginBase();
 
         // Retrieve the program's main address, if null is returned the main function will not be hooked
         [[nodiscard]] virtual void* GetMainAddress() const = 0;
@@ -31,7 +31,7 @@ namespace TiltedPhoques
         [[nodiscard]] bool IsReady() const noexcept;
 
 
-        static App& GetInstance() noexcept;
+        static SKSEPluginBase& GetInstance() noexcept;
 
     private:
 
