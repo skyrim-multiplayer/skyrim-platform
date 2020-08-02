@@ -10,6 +10,7 @@
 #include "HttpClient.h"
 #include "HttpClientApi.h"
 #include "InputConverter.h"
+#include "InventoryApi.h"
 #include "JsEngine.h"
 #include "LoadGameApi.h"
 #include "MpClientPluginApi.h"
@@ -45,11 +46,12 @@
 #include <skse64/PluginAPI.h>
 #include <skse64/gamethreads.h>
 #include <sstream>
+
 #include <string>
 #include <thread>
 
 #include <skse64/GameReferences.h>
-#include <skse64\NiRenderer.h>
+#include <skse64/NiRenderer.h>
 
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
@@ -192,6 +194,7 @@ void JsTick(bool gameFunctionsAvailable)
                 DevApi::Register(e, &engine, {}, fileDir);
                 EventsApi::Register(e);
                 BrowserApi::Register(e, g_browserApiState);
+                InventoryApi::Register(e);
                 CallNativeApi::Register(
                   e, [] { return g_nativeCallRequirements; });
                 e.SetProperty(
@@ -596,10 +599,7 @@ public:
     return winMain.GetPtr();
   }
 
-  bool Attach() override
-  {
-    return true;
-  }
+  bool Attach() override { return true; }
 
   bool Detach() override
   {

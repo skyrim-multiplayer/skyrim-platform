@@ -48,13 +48,34 @@ interface MpClientPlugin {
 }
 export declare let mpClientPlugin: MpClientPlugin;
 
-interface Browser {
+export interface Browser {
   setVisible(visible: boolean): void;
   setFocused(focused: boolean): void;
   loadUrl(url: string): void;
   getToken(): string;
 }
 export declare let browser: Browser;
+
+export interface ExtraData {
+  type: 'Health'
+}
+export interface ExtraHealth extends ExtraData {
+  type: 'Health'
+  health: number;
+}
+export type BaseExtraList = ExtraData[];
+export interface InventoryChangesEntry {
+  countDelta: number;
+  baseId: number;
+  extendDataList: BaseExtraList[];
+}
+export declare let getExtraContainerChanges: (objectReferenceId: number) => InventoryChangesEntry[];
+
+export interface InventoryEntry {
+  count: number;
+  baseId: number;
+}
+export declare let getContainer: (baseId: number) => InventoryEntry[];
 
 export interface ActivateEvent {
     target: ObjectReference,
