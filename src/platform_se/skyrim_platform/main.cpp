@@ -555,6 +555,8 @@ public:
         app->InjectMouseMove(-1.f, -1.f, GetCefModifiers_(0), false);
       }
     }
+    if (auto app = service->GetMyChromiumApp())
+      app->RunTasks();
 
     // Repeat the character until the key isn't released
     for (int i = 0; i < 256; ++i) {
@@ -594,11 +596,15 @@ public:
     return winMain.GetPtr();
   }
 
-  bool Attach() override { return true; }
+  bool Attach() override
+  {
+    return true;
+  }
 
   bool Detach() override
   {
     FlowManager::CloseProcess(L"SkyrimSE.exe");
+    FlowManager::CloseProcess(L"SkyrimPlatformCEF.exe");
     return true;
   }
 
@@ -636,13 +642,7 @@ public:
     return true;
   }
 
-  void Update() override
-  {
-    // CEFUtils::DInputHook::Get().Update();
-    POINTER_SKYRIMSE(uint32_t, bAlwaysActive, 0x141DEED10 - 0x140000000);
-
-    *bAlwaysActive = 1;
-  }
+  void Update() override {}
 
   std::shared_ptr<OverlayService> overlayService;
   // std::shared_ptr<InputService> inputService;

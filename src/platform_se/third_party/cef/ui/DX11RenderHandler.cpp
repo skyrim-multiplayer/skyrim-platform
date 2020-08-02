@@ -1,5 +1,5 @@
-#include <OverlayClient.hpp>
 #include <DX11RenderHandler.hpp>
+#include <OverlayClient.hpp>
 
 #include <CommonStates.h>
 #include <DDSTextureLoader.h>
@@ -14,8 +14,7 @@
 CMRC_DECLARE(skyrim_plugin_resources);
 
 namespace CEFUtils {
-DX11RenderHandler::DX11RenderHandler(
-  Renderer* apRenderer) noexcept
+DX11RenderHandler::DX11RenderHandler(Renderer* apRenderer) noexcept
   : m_pRenderer(apRenderer)
 {
   // So we need to lock this until we have the window dimension as a background
@@ -66,7 +65,7 @@ void DX11RenderHandler::Render()
   if (m_pCursorTexture && m_cursorX >= 0 && m_cursorY >= 0) {
     m_pSpriteBatch->Draw(
       m_pCursorTexture.Get(),
-      DirectX::SimpleMath::Vector2(m_cursorX - 32, m_cursorY - 32), nullptr,
+      DirectX::SimpleMath::Vector2(m_cursorX - 24, m_cursorY - 25), nullptr,
       DirectX::Colors::White, 0.f, DirectX::SimpleMath::Vector2(0, 0),
       m_width / 1920.f);
   }
@@ -137,7 +136,7 @@ void DX11RenderHandler::Create()
 }
 
 void DX11RenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser,
-                                            CefRect& rect)
+                                    CefRect& rect)
 {
   std::scoped_lock _(m_createLock);
 
@@ -145,10 +144,9 @@ void DX11RenderHandler::GetViewRect(CefRefPtr<CefBrowser> browser,
 }
 
 void DX11RenderHandler::OnPaint(CefRefPtr<CefBrowser> browser,
-                                        PaintElementType type,
-                                        const RectList& dirtyRects,
-                                        const void* buffer, int width,
-                                        int height)
+                                PaintElementType type,
+                                const RectList& dirtyRects, const void* buffer,
+                                int width, int height)
 {
   if (type == PET_VIEW && m_width == width && m_height == height) {
     std::unique_lock<std::mutex> _(m_textureLock);

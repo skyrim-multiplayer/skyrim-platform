@@ -37,7 +37,7 @@ std::string MyChromiumApp::GetCurrentSpToken()
 }
 
 MyChromiumApp::MyChromiumApp(std::unique_ptr<RenderProvider> apRenderProvider,
-                       std::wstring aProcessName) noexcept
+                             std::wstring aProcessName) noexcept
   : m_pBrowserProcessHandler(new MyBrowserProcessHandler)
   , m_pRenderProvider(std::move(apRenderProvider))
   , m_processName(std::move(aProcessName))
@@ -62,7 +62,7 @@ void MyChromiumApp::Initialize() noexcept
 #ifdef DEBUG
   settings.log_severity = LOGSEVERITY_VERBOSE;
 #else
-  settings.log_severity = LOGSEVERITY_DEFAULT;
+  settings.log_severity = LOGSEVERITY_VERBOSE;
   settings.remote_debugging_port = 9000;
 #endif
 
@@ -81,17 +81,8 @@ void MyChromiumApp::Initialize() noexcept
     .FromWString(currentPath / "Data" / "Platform" / "Distribution" / "CEF" /
                  "locales");
 
-  LoadLibraryExA("libcef.dll", NULL, 0);
-
-  if (!SetCurrentDirectoryW(
-        L"Data/Platform/Distribution/RuntimeDependencies")) {
-    MessageBoxA(0, "SetCurrentDirectoryW (1) failed", "Error", MB_ICONERROR);
-  }
   if (!CefInitialize(args, settings, this, nullptr)) {
     MessageBoxA(0, "CefInitialize failed", "Error", MB_ICONERROR);
-  }
-  if (!SetCurrentDirectoryW(currentPath.c_str())) {
-    MessageBoxA(0, "SetCurrentDirectoryW (2) failed", "Error", MB_ICONERROR);
   }
 
   m_pGameClient = new OverlayClient(m_pRenderProvider->Create());
@@ -116,9 +107,9 @@ void MyChromiumApp::Initialize() noexcept
   }
 }
 
-void MyChromiumApp::ExecuteAsync(const std::string& acFunction,
-                              const CefRefPtr<CefListValue>& apArguments) const
-  noexcept
+void MyChromiumApp::ExecuteAsync(
+  const std::string& acFunction,
+  const CefRefPtr<CefListValue>& apArguments) const noexcept
 {
   if (!m_pGameClient)
     return;
@@ -139,8 +130,8 @@ void MyChromiumApp::ExecuteAsync(const std::string& acFunction,
 }
 
 void MyChromiumApp::InjectKey(const cef_key_event_type_t aType,
-                           const uint32_t aModifiers, const uint16_t aKey,
-                           const uint16_t aScanCode) const noexcept
+                              const uint32_t aModifiers, const uint16_t aKey,
+                              const uint16_t aScanCode) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
     CefKeyEvent ev;
@@ -155,9 +146,9 @@ void MyChromiumApp::InjectKey(const cef_key_event_type_t aType,
 }
 
 void MyChromiumApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
-                                   const cef_mouse_button_type_t aButton,
-                                   const bool aUp,
-                                   const uint32_t aModifier) const noexcept
+                                      const cef_mouse_button_type_t aButton,
+                                      const bool aUp,
+                                      const uint32_t aModifier) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
     CefMouseEvent ev;
@@ -172,12 +163,24 @@ void MyChromiumApp::InjectMouseButton(const uint16_t aX, const uint16_t aY,
 }
 
 void MyChromiumApp::InjectMouseMove(const float aX, const float aY,
-                                 const uint32_t aModifier,
-                                 bool isBrowserFocused) const noexcept
+                                    const uint32_t aModifier,
+                                    bool isBrowserFocused) const noexcept
 {
+  std::string url;
+  {
+    std::lock_guard l(share.m);
+    url = share.url;
+  }
+
   if (m_pGameClient && m_pGameClient->IsReady()) {
+
+    auto script = "window.spBrowserToken = '" + GetCurrentSpToken() + "';";
+    if (url.size() > 0)
+      script += " if (window.location.href !== '" + url +
+        "') window.location.href = '" + url + "';";
+
     m_pGameClient->GetBrowser()->GetMainFrame()->ExecuteJavaScript(
-      "window.spBrowserToken = '" + GetCurrentSpToken() + "';", "my mind", 0);
+      script, "my mind", 0);
 
     CefMouseEvent ev;
 
@@ -193,8 +196,8 @@ void MyChromiumApp::InjectMouseMove(const float aX, const float aY,
 }
 
 void MyChromiumApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
-                                  const int16_t aDelta,
-                                  const uint32_t aModifier) const noexcept
+                                     const int16_t aDelta,
+                                     const uint32_t aModifier) const noexcept
 {
   if (m_pGameClient && m_pGameClient->IsReady()) {
     CefMouseEvent ev;
@@ -207,14 +210,17 @@ void MyChromiumApp::InjectMouseWheel(const uint16_t aX, const uint16_t aY,
   }
 }
 
-bool MyChromiumApp::LoadUrl(const wchar_t* url) const noexcept
+bool MyChromiumApp::LoadUrl(const char* url) noexcept
 {
-  if (m_pGameClient && m_pGameClient->IsReady()) {
-    CefString s(url);
-    m_pGameClient->GetBrowser()->GetMainFrame()->LoadURL(s);
-    return true;
+  {
+    std::lock_guard l(share.m);
+    share.url = url;
   }
-  return false;
+  return true;
+}
+
+void MyChromiumApp::RunTasks()
+{
 }
 
 void MyChromiumApp::OnBeforeCommandLineProcessing(

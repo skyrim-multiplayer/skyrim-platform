@@ -10,6 +10,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   std::function<CEFUtils::OverlayRenderProcessHandler*()> f = []() {
     return new ProcessHandler;
   };
+
   [&]() {
     __try {
       CEFUtils::UIMain(lpCmdLine, hInstance, f);

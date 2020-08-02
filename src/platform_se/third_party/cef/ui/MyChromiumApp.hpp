@@ -2,9 +2,11 @@
 
 #include "MyBrowserProcessHandler.hpp"
 #include "OverlayClient.hpp"
-#include <include/cef_app.h>
-
 #include <Meta.hpp>
+#include <functional>
+#include <include/cef_app.h>
+#include <mutex>
+#include <vector>
 
 namespace CEFUtils {
 struct MyChromiumApp : CefApp
@@ -22,9 +24,9 @@ struct MyChromiumApp : CefApp
   static std::string GetCurrentSpToken();
 
   explicit MyChromiumApp(std::unique_ptr<RenderProvider> apRenderProvider,
-                      std::wstring aProcessName =
-                        L"Data/Platform/Distribution/RuntimeDependencies/"
-                        L"SkyrimPlatformCEF.exe") noexcept;
+                         std::wstring aProcessName =
+                           L"Data/Platform/Distribution/RuntimeDependencies/"
+                           L"SkyrimPlatformCEF.exe") noexcept;
   virtual ~MyChromiumApp() = default;
 
   TP_NOCOPYMOVE(MyChromiumApp);
@@ -49,7 +51,9 @@ struct MyChromiumApp : CefApp
   void InjectMouseWheel(uint16_t aX, uint16_t aY, int16_t aDelta,
                         uint32_t aModifier) const noexcept;
 
-  bool LoadUrl(const wchar_t* url) const noexcept;
+  bool LoadUrl(const char* url) noexcept;
+
+  void RunTasks();
 
   void OnBeforeCommandLineProcessing(
     const CefString& aProcessType,
@@ -67,5 +71,11 @@ private:
   CefRefPtr<OverlayClient> m_pGameClient;
   std::unique_ptr<RenderProvider> m_pRenderProvider;
   std::wstring m_processName;
+
+  mutable struct
+  {
+    mutable std::recursive_mutex m;
+    std::string url;
+  } share;
 };
 }

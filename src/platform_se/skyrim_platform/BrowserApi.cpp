@@ -1,8 +1,8 @@
 #include "BrowserApi.h"
 #include "NullPointerException.h"
 #include <cef/hooks/DInputHook.hpp>
-#include <cef/ui/MyChromiumApp.hpp>
 #include <cef/ui/DX11RenderHandler.hpp>
+#include <cef/ui/MyChromiumApp.hpp>
 #include <skse64/GameMenus.h>
 
 namespace {
@@ -58,8 +58,8 @@ JsValue BrowserApi::LoadUrl(const JsFunctionArguments& args,
   if (!app)
     throw NullPointerException("app");
 
-  auto wstr = (std::wstring)args[1];
-  return JsValue::Bool(app->LoadUrl(wstr.data()));
+  auto str = (std::string)args[1];
+  return JsValue::Bool(app->LoadUrl(str.data()));
 }
 
 JsValue BrowserApi::GetToken(const JsFunctionArguments& args)
