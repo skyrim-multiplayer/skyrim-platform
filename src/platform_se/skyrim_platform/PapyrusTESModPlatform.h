@@ -87,6 +87,10 @@ void PushTintMask(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
                   RE::StaticFunctionTag*, RE::Actor* targetActor, SInt32 type,
                   UInt32 argb, RE::BSFixedString texturePath);
 
+void AddItemEx(RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
+               RE::StaticFunctionTag*, RE::TESObjectREFR* containerRefr,
+               RE::TESForm* item, SInt32 countDelta, float health);
+
 // Threadsafe
 void BlockMoveRefrToPosition(bool blocked);
 int GetWeapDrawnMode(uint32_t actorId);

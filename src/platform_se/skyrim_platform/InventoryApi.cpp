@@ -34,6 +34,8 @@ JsValue ToJsValue(BaseExtraList* extraList)
 
   std::vector<JsValue> jData;
 
+  BSReadLocker lock(&extraList->m_lock);
+
   for (auto data = extraList->m_data; data != nullptr; data = data->next) {
     auto extra = ToJsValue(data);
     if (extra.GetType() != JsValue::Type::Undefined)

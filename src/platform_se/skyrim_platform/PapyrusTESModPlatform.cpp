@@ -5,6 +5,7 @@
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
 #include <RE/ConsoleLog.h>
+#include <RE/ExtraHealth.h>
 #include <RE/Offsets.h>
 #include <RE/PlayerCharacter.h>
 #include <RE/PlayerControls.h>
@@ -12,9 +13,12 @@
 #include <RE/SkyrimVM.h>
 #include <RE/TESNPC.h>
 #include <atomic>
+#include <map>
 #include <mutex>
 #include <skse64/Colors.h>
+#include <skse64/GameExtraData.h>
 #include <skse64/GameForms.h> // IFormFactory::GetFactoryForType
+#include <skse64/GameRTTI.h>
 #include <skse64/GameReferences.h>
 #include <skse64/NiNodes.h>
 #include <skse64/PapyrusGame.h>
@@ -469,6 +473,58 @@ void TESModPlatform::PushTintMask(RE::BSScript::IVirtualMachine* vm,
   share2.actorsTints[i] = tints;
 }
 
+void TESModPlatform::AddItemEx(RE::BSScript::IVirtualMachine* vm,
+                               RE::VMStackID stackId, RE::StaticFunctionTag*,
+                               RE::TESObjectREFR* containerRefr,
+                               RE::TESForm* item, SInt32 countDelta,
+                               float health)
+{
+  if (!containerRefr || !item)
+    return;
+
+  auto boundObject = reinterpret_cast<RE::TESBoundObject*>(
+    DYNAMIC_CAST(reinterpret_cast<TESForm*>(item), TESForm, TESBoundObject));
+  if (!boundObject)
+    return;
+
+  thread_local std::map<std::tuple<float>, RE::ExtraDataList*> g_map;
+
+  auto& extraList = g_map[std::make_tuple(health)];
+  if (!extraList) {
+    bool needed = false;
+    extraList = new RE::ExtraDataList;
+
+    auto extraList_ = reinterpret_cast<BaseExtraList*>(extraList);
+
+    auto p = reinterpret_cast<uint8_t*>(Heap_Allocate(0x18));
+    for (int i = 0; i < 0x18; ++i) {
+      p[i] = 0;
+    }
+    reinterpret_cast<void*&>(extraList_->m_presence) = p;
+
+    if (health > 1.0) {
+      needed = true;
+      // extraList->Add(new RE::ExtraHealth(health));
+
+      extraList_->Add(kExtraData_Health,
+                      (ExtraHealth*)new RE::ExtraHealth(health));
+    }
+
+    if (!needed)
+      extraList = nullptr;
+  }
+
+  if (countDelta > 0) {
+
+    containerRefr->AddObjectToContainer(boundObject, extraList, countDelta,
+                                        nullptr);
+  } else if (countDelta < 0) {
+    containerRefr->RemoveItem(boundObject, -countDelta,
+                              RE::ITEM_REMOVE_REASON::kRemove, extraList,
+                              nullptr);
+  }
+}
+
 int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
 {
   std::lock_guard l(share.m);
@@ -615,6 +671,11 @@ bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
                                      RE::StaticFunctionTag*, RE::Actor*,
                                      SInt32, UInt32, RE::BSFixedString>(
       "PushTintMask", "TESModPlatform", PushTintMask));
+
+  vm->BindNativeMethod(new RE::BSScript::NativeFunction<
+                       true, decltype(AddItemEx), void, RE::StaticFunctionTag*,
+                       RE::TESObjectREFR*, RE::TESForm*, SInt32, float>(
+    "AddItemEx", "TESModPlatform", AddItemEx));
 
   static LoadGameEvent loadGameEvent;
 
