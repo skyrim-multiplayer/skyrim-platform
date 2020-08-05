@@ -1,5 +1,8 @@
 #include "InventoryApi.h"
 #include "NullPointerException.h"
+#include <RE/ExtraPoison.h>
+#include <RE/ExtraWorn.h>
+#include <RE/ExtraWornLeft.h>
 #include <set>
 #include <skse64/GameExtraData.h>
 #include <skse64/GameRTTI.h>
@@ -16,12 +19,100 @@ JsValue ToJsValue(ExtraHealth& extra)
   return res;
 }
 
+JsValue ToJsValue(ExtraCount& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("count", static_cast<int>(extra.count));
+  res.SetProperty("type", "Count");
+  return res;
+}
+
+JsValue ToJsValue(ExtraEnchantment& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty(
+    "enchantmentId",
+    static_cast<double>(extra.enchant ? extra.enchant->formID : 0));
+  res.SetProperty("maxCharge", extra.maxCharge);
+  res.SetProperty("type", "Enchantment");
+  return res;
+}
+
+JsValue ToJsValue(ExtraCharge& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("charge", extra.charge);
+  res.SetProperty("type", "Charge");
+  return res;
+}
+
+JsValue ToJsValue(ExtraTextDisplayData& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("name", extra.name.data);
+  res.SetProperty("type", "TextDisplayData");
+  return res;
+}
+
+JsValue ToJsValue(ExtraSoul& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("soul", static_cast<int>(extra.count));
+  res.SetProperty("type", "Soul");
+  return res;
+}
+
+JsValue ToJsValue(ExtraPoison& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty(
+    "poisonId", static_cast<double>(extra.poison ? extra.poison->formID : 0));
+  res.SetProperty(
+    "count",
+    static_cast<double>(reinterpret_cast<RE::ExtraPoison&>(extra).count));
+  res.SetProperty("type", "Poison");
+  return res;
+}
+
+JsValue ToJsValue(ExtraWorn& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("type", "Worn");
+  return res;
+}
+
+JsValue ToJsValue(ExtraWornLeft& extra)
+{
+  auto res = JsValue::Object();
+  res.SetProperty("type", "WornLeft");
+  return res;
+}
+
 JsValue ToJsValue(BSExtraData* extraData)
 {
   if (extraData) {
+    // reinterpret_cast<RE::BSExtraData*>(extraData);
     switch (extraData->GetType()) {
       case kExtraData_Health:
         return ToJsValue(*reinterpret_cast<ExtraHealth*>(extraData));
+      case kExtraData_Count:
+        return ToJsValue(*reinterpret_cast<ExtraCount*>(extraData));
+      case kExtraData_Enchantment:
+        return ToJsValue(*reinterpret_cast<ExtraEnchantment*>(extraData));
+      case kExtraData_Charge:
+        return ToJsValue(*reinterpret_cast<ExtraCharge*>(extraData));
+      case kExtraData_TextDisplayData:
+        return ToJsValue(*reinterpret_cast<ExtraTextDisplayData*>(extraData));
+      case kExtraData_Soul:
+        return ToJsValue(*reinterpret_cast<ExtraSoul*>(extraData));
+      case kExtraData_Poison:
+        return ToJsValue(*reinterpret_cast<ExtraPoison*>(extraData));
+      case kExtraData_Worn:
+        return ToJsValue(*reinterpret_cast<ExtraWorn*>(extraData));
+      case kExtraData_WornLeft:
+        return ToJsValue(*reinterpret_cast<ExtraWornLeft*>(extraData));
+        // default:
+        //  return (int)extraData->GetType();
     }
   }
   return JsValue::Undefined();
@@ -122,103 +213,3 @@ JsValue InventoryApi::GetContainer(const JsFunctionArguments& args)
   }
   return res;
 }
-
-/*JsValue InventoryApi::GetInventory(const JsFunctionArguments& args)
-{
-  auto objectReferenceId = static_cast<double>(args[1]);
-
-  auto refr =
-    reinterpret_cast<TESObjectREFR*>(LookupFormByID(objectReferenceId));
-  if (!refr ||
-      (refr->formType != kFormType_Character &&
-       refr->formType != kFormType_Reference)) {
-    return JsValue::Array(0);
-  }
-
-  TESForm* pBaseForm = refr->baseForm;
-  if (!pBaseForm)
-    return JsValue::Array(0);
-  TESContainer* pContainer = DYNAMIC_CAST(pBaseForm, TESForm, TESContainer);
-  if (!pContainer)
-    return JsValue::Array(0);
-
-  auto extraCntainerChanges = reinterpret_cast<ExtraContainerChanges*>(
-    refr->extraData.GetByType(kExtraData_ContainerChanges));
-  if (!extraCntainerChanges || !extraCntainerChanges->data)
-    return JsValue::Array(0);
-
-  tList<InventoryEntryData>* objList = extraCntainerChanges->data->objList;
-  if (!objList)
-    throw NullPointerException("objList");
-
-  std::vector<JsValue> res;
-  std::set<uint32_t> formIdsInRes;
-
-  for (uint32_t i = 0; i < objList->Count(); ++i) {
-    InventoryEntryData* entry = objList->GetNthItem(i);
-    if (!entry)
-      continue;
-
-    std::vector<JsValue> jExtraData;
-
-    if (auto extendDataList = entry->extendDataList) {
-      for (int j = 0; j < extendDataList->Count(); ++j) {
-        auto baseExtraList = extendDataList->GetNthItem(j);
-        if (!baseExtraList)
-          continue;
-        BSReadLocker l(&baseExtraList->m_lock);
-
-        for (auto data = baseExtraList->m_data; data != nullptr;
-             data = data->next) {
-          switch (data->GetType()) {
-            case kExtraData_Health: {
-              auto jExtra = JsValue::Object();
-              jExtra.SetProperty("type", "Health");
-              jExtra.SetProperty("health",
-                                 reinterpret_cast<ExtraHealth*>(data)->health);
-              jExtraData.push_back(jExtra);
-              break;
-            }
-          }
-        }
-      }
-    }
-
-    const auto baseId = entry->type ? entry->type->formID : 0;
-    const bool hasExtraData =
-      entry->extendDataList && entry->extendDataList->Count() > 0;
-
-    // marked to be ignored while base container is being processed
-    if (!hasExtraData)
-      formIdsInRes.insert(baseId);
-
-    int count = entry->countDelta;
-    if (jExtraData.empty() && entry->type && !hasExtraData) {
-      count += pContainer->CountItem(entry->type);
-    }
-    if (count == 0)
-      continue;
-
-    JsValue jEntry = JsValue::Object();
-    jEntry.SetProperty("baseId", JsValue::Double(baseId));
-    jEntry.SetProperty("count", JsValue::Int(count));
-    jEntry.SetProperty("extraData", jExtraData);
-    res.push_back(jEntry);
-  }
-
-  for (auto it = pContainer->entries;
-       it != pContainer->entries + pContainer->numEntries; ++it) {
-    auto f = (*it)->form;
-    if (!f)
-      continue;
-    if (!formIdsInRes.count(f->formID)) {
-      JsValue jEntry = JsValue::Object();
-      jEntry.SetProperty("baseId", JsValue::Double(f->formID));
-      jEntry.SetProperty("count", JsValue::Int((*it)->count));
-      jEntry.SetProperty("extraData", JsValue::Array(0));
-      res.push_back(jEntry);
-    }
-  }
-
-  return res;
-}*/

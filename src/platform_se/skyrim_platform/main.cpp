@@ -258,26 +258,30 @@ void PushJsTick(bool gameFunctionsAvailable)
   g_pool.Push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
 }
 
+namespace {
+class ContainerResetter
+{
+public:
+  ContainerResetter()
+  {
+    /*auto pc = *g_thePlayer;
+    auto npc = (TESNPC*)pc->baseForm;
+    npc->container.entries = 0;
+    npc->container.numEntries = 0;
+    npc->defaultOutfit = 0;*/
+  }
+};
+}
+
 void OnUpdate()
 {
-  static auto getNthVTableElement = [](void* obj, size_t idx) {
-    using VTable = size_t*;
-    auto vtable = *(VTable*)obj;
-    return vtable[idx];
-  };
+  PushJsTick(false);
 
   if (auto mm = MenuManager::GetSingleton()) {
-    static const auto s = new BSFixedString("Main Menu");
-    IMenu* m = mm->GetMenu(s);
-    if (auto c = RE::ConsoleLog::GetSingleton()) {
-      // auto offset =
-      //  std::to_string(getNthVTableElement(m, 6) - REL::Module::BaseAddr());
-      // auto offset = std::to_string((uint64_t)m - REL::Module::BaseAddr());
-      // c->Print("%s", offset.data());
-    }
+    static auto fs = new BSFixedString("Main Menu");
+    if (mm->IsMenuOpen(fs))
+      static ContainerResetter g_contResetter;
   }
-
-  PushJsTick(false);
   TESModPlatform::Update();
 }
 

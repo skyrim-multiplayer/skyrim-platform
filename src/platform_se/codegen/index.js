@@ -57,11 +57,44 @@ export interface Browser {
 export declare let browser: Browser;
 
 export interface ExtraData {
-  type: 'Health'
+  type: 'Health' | 'Count' | 'Enchantment' | 'Charge' | 'TextDisplayData' | 'Soul' | 'Poison' | 'Worn' | 'WornLeft';
 }
 export interface ExtraHealth extends ExtraData {
-  type: 'Health'
+  type: 'Health';
   health: number;
+}
+export interface ExtraCount extends ExtraData {
+  type: 'Count';
+  count: number;
+}
+export interface ExtraEnchantment extends ExtraData {
+  type: 'Enchantment';
+  enchantmentId: number;
+  maxCharge: number;
+  removeOnUnequip: boolean;
+}
+export interface ExtraCharge extends ExtraData {
+  type: 'Charge';
+  charge: number;
+}
+export interface ExtraTextDisplayData extends ExtraData {
+  type: 'TextDisplayData';
+  name: string;
+}
+export interface ExtraSoul extends ExtraData {
+  type: 'Soul';
+  soul: 0 | 1 | 2 | 3 | 4 | 5;
+}
+export interface ExtraPoison extends ExtraData {
+  type: 'Poison';
+  poisonId: number;
+  count: number;
+}
+export interface ExtraWorn extends ExtraData {
+  type: 'Worn';
+}
+export interface ExtraWornLeft extends ExtraData {
+  type: 'WornLeft';
 }
 export type BaseExtraList = ExtraData[];
 export interface InventoryChangesEntry {
