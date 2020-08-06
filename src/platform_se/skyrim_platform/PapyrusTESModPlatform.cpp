@@ -558,9 +558,6 @@ void TESModPlatform::AddItemEx(
   if (!containerRefr || !item)
     return;
 
-  if (item->formType == RE::FormType::Ammo)
-    return;
-
   const auto refrId = containerRefr->GetFormID();
 
   auto boundObject = reinterpret_cast<RE::TESBoundObject*>(
@@ -591,7 +588,7 @@ void TESModPlatform::AddItemEx(
 
   // Our extra-less items support is disgusting! EquipItem crashes when we try
   // an iron sword. This hack saves our slav lives
-  if (health <= 1)
+  if (item->formType != RE::FormType::Ammo && health <= 1)
     health = 1.01f;
 
   if (health > 1 || enchantment || chargePercent > 0 ||
@@ -647,12 +644,15 @@ void TESModPlatform::AddItemEx(
     if (containerRefr != (void*)LookupFormByID(refrId))
       return;
 
+    auto optExtraList =
+      item->formType == RE::FormType::Ammo ? nullptr : extraList;
+
     if (countDelta > 0) {
-      containerRefr->AddObjectToContainer(boundObject, extraList, countDelta,
-                                          nullptr);
+      containerRefr->AddObjectToContainer(boundObject, optExtraList,
+                                          countDelta, nullptr);
     } else if (countDelta < 0) {
       containerRefr->RemoveItem(boundObject, -countDelta,
-                                RE::ITEM_REMOVE_REASON::kRemove, extraList,
+                                RE::ITEM_REMOVE_REASON::kRemove, optExtraList,
                                 nullptr);
     }
   });
@@ -662,7 +662,10 @@ void TESModPlatform::AddItemEx(
 
   const bool needEquipShieldLike = (g_worn || g_wornLeft) && isShieldLike;
 
-  if (needEquipWeap || needEquipShieldLike) {
+  const bool needEquipAmmo =
+    (g_worn || g_wornLeft) && item->formType == RE::FormType::Ammo;
+
+  if (needEquipWeap || needEquipShieldLike || needEquipAmmo) {
     auto s = RE::ActorEquipManager::GetSingleton();
     if (containerRefr->formType == RE::FormType::ActorCharacter) {
 
@@ -680,6 +683,11 @@ void TESModPlatform::AddItemEx(
 
         if (g_wornLeft && !needEquipShieldLike) // wornLeft + shield = deadlock
           slot = reinterpret_cast<RE::BGSEquipSlot*>(GetLeftHandSlot());
+
+        if (item->formType == RE::FormType::Ammo) {
+          extraList = nullptr;
+          slot = nullptr;
+        }
 
         if (countDelta > 0) {
           g_lastEquippedExtraList[g_worn ? false : true][tuple] = extraList;
