@@ -257,10 +257,6 @@ CallNative::AnySafe CallNative::CallNativeSafe(Arguments& args_)
       if (nativeActorPtr->formType != RE::FormType::ActorCharacter)
         throw std::runtime_error("QueueNiNodeUpdate must be called on Actor");
       papyrusActor::QueueNiNodeUpdate((Actor*)nativeActorPtr);
-
-      /*((RE::Actor*)nativeActorPtr)
-        ->currentProcess->Update3DModel((RE::Actor*)nativeActorPtr);*/
-
     });
     return ObjectPtr();
   }

@@ -4,6 +4,7 @@
 #include <RE/AIProcess.h>
 #include <RE/ActorEquipManager.h>
 #include <RE/AlchemyItem.h>
+#include <RE/BGSEquipSlot.h>
 #include <RE/BSScript/IFunctionArguments.h>
 #include <RE/BSScript/IStackCallbackFunctor.h>
 #include <RE/BSScript/NativeFunction.h>
@@ -13,6 +14,7 @@
 #include <RE/ExtraEnchantment.h>
 #include <RE/ExtraHealth.h>
 #include <RE/ExtraPoison.h>
+#include <RE/ExtraShouldWear.h>
 #include <RE/ExtraSoul.h>
 #include <RE/ExtraTextDisplayData.h>
 #include <RE/ExtraWorn.h>
@@ -23,7 +25,10 @@
 #include <RE/PlayerControls.h>
 #include <RE/ScriptEventSourceHolder.h>
 #include <RE/SkyrimVM.h>
+#include <RE/TESForm.h>
 #include <RE/TESNPC.h>
+#include <RE/TESObjectARMO.h>
+#include <RE/TESObjectWEAP.h>
 #include <atomic>
 #include <map>
 #include <mutex>
@@ -506,7 +511,8 @@ RE::ExtraDataList* CreateExtraDataList()
 }
 
 namespace {
-thread_local bool g_worn = false, g_wornLeft = false;
+thread_local bool g_worn = false;
+thread_local bool g_wornLeft = false;
 }
 
 void TESModPlatform::PushWornState(RE::BSScript::IVirtualMachine* vm,
@@ -528,18 +534,15 @@ public:
   MyBSExtraData* next; // 08
 };
 
-template <bool isLeft>
-class MyExtraWorn : public MyBSExtraData
+template <ExtraDataType t>
+class MyExtra : public MyBSExtraData
 {
 public:
-  MyExtraWorn() = default;
+  MyExtra() = default;
 
-  virtual ~MyExtraWorn() = default;
+  virtual ~MyExtra() = default;
 
-  UInt32 GetType() override
-  {
-    return isLeft ? kExtraData_WornLeft : kExtraData_Worn;
-  }
+  UInt32 GetType() override { return t; }
 };
 
 #include <skse64/GameReferences.h>
@@ -555,12 +558,41 @@ void TESModPlatform::AddItemEx(
   if (!containerRefr || !item)
     return;
 
+  if (item->formType == RE::FormType::Ammo)
+    return;
+
+  const auto refrId = containerRefr->GetFormID();
+
   auto boundObject = reinterpret_cast<RE::TESBoundObject*>(
     DYNAMIC_CAST(reinterpret_cast<TESForm*>(item), TESForm, TESBoundObject));
   if (!boundObject)
     return;
 
+  auto tuple = std::make_tuple(
+    containerRefr->formID, item, health, enchantment, maxCharge,
+    removeEnchantmentOnUnequip, chargePercent,
+    (std::string)textDisplayData.data(), soul, poison, poisonCount);
+
+  using Tuple = decltype(tuple);
+
+  thread_local std::map<Tuple, RE::ExtraDataList*> g_lastEquippedExtraList[2];
+
   RE::ExtraDataList* extraList = nullptr;
+
+  const bool isShieldLike =
+    (item->formType == RE::FormType::Armor &&
+     reinterpret_cast<RE::TESObjectARMO*>(item)->IsShield());
+
+  const bool isTorch = item->formType == RE::FormType::Light;
+
+  const bool isClothes =
+    (item->formType == RE::FormType::Armor && !isShieldLike) ||
+    item->formType == RE::FormType::Light;
+
+  // Our extra-less items support is disgusting! EquipItem crashes when we try
+  // an iron sword. This hack saves our slav lives
+  if (health <= 1)
+    health = 1.01f;
 
   if (health > 1 || enchantment || chargePercent > 0 ||
       strlen(textDisplayData.data()) > 0 || (soul > 0 && soul <= 5) ||
@@ -570,15 +602,17 @@ void TESModPlatform::AddItemEx(
     auto extraList_ = reinterpret_cast<BaseExtraList*>(extraList);
 
     if (g_worn) {
-      if (item->formType == RE::FormType::Armor) {
-        auto extra = reinterpret_cast<BSExtraData*>(new MyExtraWorn<false>());
+      if (isClothes) {
+        auto extra =
+          reinterpret_cast<BSExtraData*>(new MyExtra<kExtraData_Worn>);
         extraList_->Add(kExtraData_Worn, extra);
       }
     }
 
     if (g_wornLeft) {
-      if (item->formType == RE::FormType::Armor) {
-        auto extra = reinterpret_cast<BSExtraData*>(new MyExtraWorn<true>());
+      if (isClothes) {
+        auto extra =
+          reinterpret_cast<BSExtraData*>(new MyExtra<kExtraData_WornLeft>);
         extraList_->Add(kExtraData_WornLeft, extra);
       }
     }
@@ -609,51 +643,60 @@ void TESModPlatform::AddItemEx(
     }
   }
 
-  if (countDelta > 0) {
+  g_nativeCallRequirements.gameThrQ->AddTask([=] {
+    if (containerRefr != (void*)LookupFormByID(refrId))
+      return;
 
-    containerRefr->AddObjectToContainer(boundObject, extraList, countDelta,
-                                        nullptr);
-  } else if (countDelta < 0) {
-    containerRefr->RemoveItem(boundObject, -countDelta,
-                              RE::ITEM_REMOVE_REASON::kRemove, extraList,
-                              nullptr);
-  }
+    if (countDelta > 0) {
+      containerRefr->AddObjectToContainer(boundObject, extraList, countDelta,
+                                          nullptr);
+    } else if (countDelta < 0) {
+      containerRefr->RemoveItem(boundObject, -countDelta,
+                                RE::ITEM_REMOVE_REASON::kRemove, extraList,
+                                nullptr);
+    }
+  });
 
-  if (g_worn && item->formType == RE::FormType::Weapon) {
+  const bool needEquipWeap =
+    (g_worn || g_wornLeft) && item->formType == RE::FormType::Weapon;
+
+  const bool needEquipShieldLike = (g_worn || g_wornLeft) && isShieldLike;
+
+  if (needEquipWeap || needEquipShieldLike) {
     auto s = RE::ActorEquipManager::GetSingleton();
     if (containerRefr->formType == RE::FormType::ActorCharacter) {
+
+      enum EquipSlot
+      {
+        BothHands = 0x13f45,
+        LeftHand = 0x13f43,
+        RightHand = 0x13f42
+      };
+      static const auto g_bothHandsSlot = LookupFormByID(BothHands);
 
       RE::Actor* actor = reinterpret_cast<RE::Actor*>(containerRefr);
       if (s) {
         auto slot = reinterpret_cast<RE::BGSEquipSlot*>(GetRightHandSlot());
-        s->EquipObject(actor, boundObject, extraList, 1, slot);
+
+        if (g_wornLeft && !needEquipShieldLike) // wornLeft + shield = deadlock
+          slot = reinterpret_cast<RE::BGSEquipSlot*>(GetLeftHandSlot());
+
+        if (countDelta > 0) {
+          g_lastEquippedExtraList[g_worn ? false : true][tuple] = extraList;
+          g_nativeCallRequirements.gameThrQ->AddTask([=] {
+            if (actor != (void*)LookupFormByID(refrId))
+              return;
+            s->EquipObject(actor, boundObject, extraList, 1, slot);
+          });
+        } else if (countDelta < 0)
+          g_nativeCallRequirements.gameThrQ->AddTask([=] {
+            if (actor != (void*)LookupFormByID(refrId))
+              return;
+            s->UnequipObject(actor, boundObject, extraList, 1, slot);
+          });
       }
     }
   }
-
-  /*if (countDelta > 0) {
-    if ((g_worn || g_wornLeft) && item->formType == RE::FormType::Weapon) {
-      auto s = RE::ActorEquipManager::GetSingleton();
-      if (containerRefr->formType == RE::FormType::ActorCharacter) {
-
-        RE::Actor* actor = reinterpret_cast<RE::Actor*>(containerRefr);
-        if (s) {
-          auto slot = reinterpret_cast<RE::BGSEquipSlot*>(GetRightHandSlot());
-          if (g_wornLeft)
-            slot = reinterpret_cast<RE::BGSEquipSlot*>(GetLeftHandSlot());
-          if (g_wornLeft && g_worn)
-            slot = reinterpret_cast<RE::BGSEquipSlot*>(GetEitherHandSlot());
-          s->EquipObject(actor, boundObject, extraList, 1, slot);
-        }
-      }
-    }
-  }*/
-
-  /*RE::Actor* actor = reinterpret_cast<RE::Actor*>(containerRefr);
-  auto slot = reinterpret_cast<RE::BGSEquipSlot*>(GetRightHandSlot());
-  if (auto s = RE::ActorEquipManager::GetSingleton())
-    if (g_worn)
-      s->EquipObject(actor, boundObject, extraList, 1, slot);*/
 
   g_worn = false;
   g_wornLeft = false;
@@ -678,10 +721,6 @@ void TESModPlatform::UpdateEquipment(RE::BSScript::IVirtualMachine* vm,
 
   const auto backup = ref;
   ref = (TESForm*)item;
-
-  // CALL_MEMBER_FN(ac->processManager, UpdateEquipment)(ac);
-
-  // ref = backup;
 }
 
 void TESModPlatform::ResetContainer(RE::BSScript::IVirtualMachine* vm,
