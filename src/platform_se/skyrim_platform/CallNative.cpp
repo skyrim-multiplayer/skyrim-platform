@@ -14,10 +14,6 @@
 #include <optional>
 #include <skse64/PapyrusActor.h>
 
-#include <re/Actor.h>
-#include <re/aiprocess.h>
-#include <skse64/GameReferences.h>
-
 RE::BSScript::Variable CallNative::AnySafeToVariable(
   const CallNative::AnySafe& v, bool treatNumberAsInt = false)
 {

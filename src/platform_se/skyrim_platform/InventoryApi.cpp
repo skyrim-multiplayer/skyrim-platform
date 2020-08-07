@@ -91,7 +91,6 @@ JsValue ToJsValue(ExtraWornLeft& extra)
 JsValue ToJsValue(BSExtraData* extraData)
 {
   if (extraData) {
-    // reinterpret_cast<RE::BSExtraData*>(extraData);
     switch (extraData->GetType()) {
       case kExtraData_Health:
         return ToJsValue(*reinterpret_cast<ExtraHealth*>(extraData));
@@ -111,8 +110,6 @@ JsValue ToJsValue(BSExtraData* extraData)
         return ToJsValue(*reinterpret_cast<ExtraWorn*>(extraData));
       case kExtraData_WornLeft:
         return ToJsValue(*reinterpret_cast<ExtraWornLeft*>(extraData));
-        // default:
-        //  return (int)extraData->GetType();
     }
   }
   return JsValue::Undefined();

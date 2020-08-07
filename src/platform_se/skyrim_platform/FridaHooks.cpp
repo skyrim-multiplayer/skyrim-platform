@@ -36,8 +36,7 @@ enum _ExampleHookId
   DRAW_SHEATHE_WEAPON_PC,
   QUEUE_NINODE_UPDATE,
   APPLY_MASKS_TO_RENDER_TARGET,
-  RENDER_MAIN_MENU,
-  TESNPC_LOAD
+  RENDER_MAIN_MENU
 };
 
 static void example_listener_iface_init(gpointer g_iface, gpointer iface_data);
@@ -98,7 +97,6 @@ void SetupFridaHooks()
   w.Attach(listener, 6893840, QUEUE_NINODE_UPDATE);
   w.Attach(listener, 4043808, APPLY_MASKS_TO_RENDER_TARGET);
   w.Attach(listener, 5367792, RENDER_MAIN_MENU);
-  // w.Attach(listener, 3524752, TESNPC_LOAD);
 }
 
 thread_local uint32_t g_queueNiNodeActorId = 0;
@@ -247,26 +245,6 @@ static void example_listener_on_leave(GumInvocationListener* listener,
             *viewPtr = g_prevMainMenuView;
             g_prevMainMenuView = nullptr;
           }
-      break;
-    }
-    case TESNPC_LOAD: {
-      break;
-      auto _ic = (_GumInvocationContext*)ic;
-      auto this__ = (RE::TESNPC***)_ic->cpu_context->rcx;
-
-      auto thiss_ = this__ ? *this__ : nullptr;
-
-      auto this_ = thiss_ ? *thiss_ : nullptr;
-
-      if (auto c = RE::ConsoleLog::GetSingleton())
-        c->Print("%x", this_ ? this_->formID : 0);
-      char text[256];
-      auto id = this_ ? this_->formID : 0;
-      if (id > 0) {
-
-        sprintf_s(text, "%x", id);
-        MessageBoxA(0, text, "lol", 0);
-      }
       break;
     }
   }

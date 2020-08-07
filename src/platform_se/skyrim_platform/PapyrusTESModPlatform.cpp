@@ -545,8 +545,6 @@ public:
   UInt32 GetType() override { return t; }
 };
 
-#include <skse64/GameReferences.h>
-
 void TESModPlatform::AddItemEx(
   RE::BSScript::IVirtualMachine* vm, RE::VMStackID stackId,
   RE::StaticFunctionTag*, RE::TESObjectREFR* containerRefr, RE::TESForm* item,

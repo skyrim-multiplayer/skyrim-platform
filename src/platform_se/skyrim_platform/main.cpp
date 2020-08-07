@@ -43,15 +43,13 @@
 #include <mutex>
 #include <shlobj.h>
 #include <skse64/GameMenus.h>
+#include <skse64/GameReferences.h>
+#include <skse64/NiRenderer.h>
 #include <skse64/PluginAPI.h>
 #include <skse64/gamethreads.h>
 #include <sstream>
-
 #include <string>
 #include <thread>
-
-#include <skse64/GameReferences.h>
-#include <skse64/NiRenderer.h>
 
 #define PLUGIN_NAME "SkyrimPlatform"
 #define PLUGIN_VERSION 0
@@ -258,30 +256,9 @@ void PushJsTick(bool gameFunctionsAvailable)
   g_pool.Push([=](int) { JsTick(gameFunctionsAvailable); }).wait();
 }
 
-namespace {
-class ContainerResetter
-{
-public:
-  ContainerResetter()
-  {
-    /*auto pc = *g_thePlayer;
-    auto npc = (TESNPC*)pc->baseForm;
-    npc->container.entries = 0;
-    npc->container.numEntries = 0;
-    npc->defaultOutfit = 0;*/
-  }
-};
-}
-
 void OnUpdate()
 {
   PushJsTick(false);
-
-  if (auto mm = MenuManager::GetSingleton()) {
-    static auto fs = new BSFixedString("Main Menu");
-    if (mm->IsMenuOpen(fs))
-      static ContainerResetter g_contResetter;
-  }
   TESModPlatform::Update();
 }
 
