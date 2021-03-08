@@ -102,7 +102,7 @@ Before your start make sure that your system meets the conditions:
 * [NodeJS 12.x](https://nodejs.org/en/download/) or higher
 * [CMake 3.20](https://cmake.org/download/) or higher
 
-### Installation
+### Configuring Project
 
 1. Clone the repo, including submodules
    ```sh
@@ -118,7 +118,41 @@ Before your start make sure that your system meets the conditions:
    cmake ..
    ```
 
+### Building
 
+1. Open `build/platform_se.sln` with Visual Studio, then `Build -> Build Solution`
+2. Form a SkyrimPlatform distribution with dev_service
+   ```sh
+   cd tools/dev_service
+   npm run pack
+   ```
+   Normally you would see something like
+   ```
+   > dev_service@1.0.0 pack c:\projects\skyrim-platform\tools\dev_service
+   > cross-env DEV_SERVICE_ONLY_ONCE=yes DEV_SERVICE_NO_GAME=yes node .
+
+   Dev service started
+   Binary dir is 'c:\projects\skyrim-platform\build'
+   Source dir is 'c:\projects\skyrim-platform'
+   Skyrim Platform Release x64 updated.
+   ```
+3. Copy contents of `tools/dev_service/dist` folder to the Skyrim SE root
+
+### Interactive Building
+
+1. Create `tools/dev_service/config.js` with `SkyrimSEFolder` specified like in the example below
+   ```js
+   module.exports = {
+     SkyrimSEFolder:
+       "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition",
+   };
+   ```
+2. Launch dev_service in dev mode
+   ```sh
+   cd tools/dev_service
+   npm run dev
+   ```
+After doing these steps you would see that dev_service restarts your game automatically every time you compile Skyrim Platform.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
