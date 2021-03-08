@@ -138,7 +138,9 @@ Before your start make sure that your system meets the conditions:
    ```
 3. Copy contents of `tools/dev_service/dist` folder to the Skyrim SE root
 
-### Interactive Building
+### Building in Watch Mode
+
+Copying binaries and restarting the game on each compilation may be boring and frustrating. Let's turn on the watch mode letting dev_service doing its job.
 
 1. Create `tools/dev_service/config.js` with `SkyrimSEFolder` specified like in the example below
    ```js
@@ -147,10 +149,10 @@ Before your start make sure that your system meets the conditions:
        "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Skyrim Special Edition",
    };
    ```
-2. Launch dev_service in dev mode
+2. Launch dev_service in watch mode
    ```sh
    cd tools/dev_service
-   npm run dev
+   npm run watch
    ```
 After doing these steps you would see that dev_service restarts your game automatically every time you compile Skyrim Platform.
 
