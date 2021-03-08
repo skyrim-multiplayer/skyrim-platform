@@ -12,7 +12,7 @@
 <br />
 <p align="center">
   <a href="https://skymp.io">
-    <img src="skymp.jpg" alt="Logo" width="80" height="80">
+    <img src="skymp.jpg" alt="Logo" width="200" height="200">
   </a>
 
   <h3 align="center">SKYRIM PLATFORM</h3>
