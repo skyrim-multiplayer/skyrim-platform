@@ -2,6 +2,9 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 jobs:
   build:
     runs-on: windows-latest
@@ -12,19 +15,22 @@ jobs:
         with:
           submodules: "recursive"
           fetch-depth: 0
-      - uses: suisei-cn/actions-download-file@v1
-        id: downloadfile # Remember to give an ID if you need the output
-        name: Download the file
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v6
         with:
-          url: "https://cef-builds.spotifycdn.com/cef_binary_84.3.7%2Bg97011bc%2Bchromium-84.0.4147.89_windows64.tar.bz2"
-          target: cef_download/
-      - run: ls cef_download/
-      - run: 7z x cef_binary_84.3.7%2Bg97011bc%2Bchromium-84.0.4147.89_windows64.tar.bz2
-        working-directory: cef_download/
-      - run: 7z x cef_binary_84.3.7%2Bg97011bc%2Bchromium-84.0.4147.89_windows64.tar
-        working-directory: cef_download/
-      - run: ls cef_download/
-      #-uses: actions/cache@v1   <===== YOU DO NOT NEED THIS!
+          # Just install vcpkg for now, do not install any ports in this step yet.
+          setupOnly: true
+          # Location of the vcpkg as submodule of the repository.
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
+          # compute its hash and append this to the computed cache's key.
+          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
+          vcpkgTriplet: x64-windows-sp.cmake
+          # Ensure the vcpkg artifacts are cached, they are generated in the 'CMAKE_BINARY_DIR/vcpkg_installed'.
+          additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
+          # Provides the arguments appended to 'vcpkg install'. It is recommended to use a response file to provide either the triplet and the list of packages to be installed. , e.g. `@<github.workspace>/vcpkg_osx.txt`. Note the 'at' character prepended to the path denotes a response file.
+          vcpkgArguments: '--overlay-ports ${{ github.workspace }}/overlay_ports'
 
       # Install latest CMake.
       - uses: lukka/get-cmake@latest
@@ -32,10 +38,6 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "12"
-      - name: Install dev_service dependencies
-        working-directory: ./tools/dev_service
-        run: npm install
-
       - name: Run CMake to generate project file and build the project
         uses: lukka/run-cmake@v3
         with:
@@ -57,6 +59,7 @@ jobs:
       - run: ls .
       - run: ls ./tools/dev_service/dist
       - uses: shallwefootball/s3-upload-action@master
+        if: ${{ github.event_name == 'push' }}
         name: Upload S3
         id: S3
         with:
