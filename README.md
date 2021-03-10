@@ -48,24 +48,30 @@ on('update', () => {
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+SkyrimPlatform is a new scripting system for Skyrim Special Edition that allows you to develop mods in modern TypeScript (JavaScript) as an alternative to Papyrus.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
+## Features
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
+### Hot Reload
+Scripts on SkyrimPlatform can be added/modified/removed without restarting the game, which greatly improves the development experience. You can literally minimize the game, make a change to the script, and maximize it again.
 
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+### Speed
+The code is significantly faster than Papyrus. You can call any function every game frame. The speed is limited only by the performance of the user's PC. The overhead of the JavaScript engine itself is reduced through various optimizations.
 
-### Built With
+### Global Scripts
+SkyrimPlatform allows you to create global scripts that are not attached to a specific object and run continuously. Including, during a pause and in the main menu. There is no need to create .esp.
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
+### SKSE Compatibility
+SkyrimPlatform is technically an SKSE plugin written in C++. When writing scripts, you can use standard SKSE functions and functions from SKSE plugins.
 
+### ES6 Modules
+SkyrimPlatform supports imports/exports thanks to its own module loader which mimics [systemjs](https://github.com/systemjs/systemjs).
+
+## Built With
+
+* [ChakraCore](https://github.com/chakra-core/ChakraCore)
+* [CEF](https://bitbucket.org/chromiumembedded/cef)
+* [Frida](https://frida.re/)
 
 
 <!-- GETTING STARTED -->
