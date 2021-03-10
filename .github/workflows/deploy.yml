@@ -10,7 +10,6 @@ jobs:
     runs-on: windows-latest
     env:
       buildDir: "${{ github.workspace }}/build/"
-      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
     steps:
       - uses: actions/checkout@master
         with:
