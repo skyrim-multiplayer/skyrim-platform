@@ -1,11 +1,3 @@
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -194,4 +186,3 @@ Use of this source code is subject to the Skymp Service Agreement provided on th
 Leonid Pospelov - Pospelov#3228 - pospelovlm@yandex.ru
 
 Project Link: [https://github.com/skyrim-multiplayer/skyrim-platform](https://github.com/skyrim-multiplayer/skyrim-platform)
-
