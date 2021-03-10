@@ -31,7 +31,19 @@
   </p>
 </p>
 
+```typescript
+printConsole('Hello Platform');
 
+on('update', () => {
+  const gold = Game.getForm(0xf);
+  const target = Game.getDialogueTarget();
+  
+  if (target && Game.getPlayer().getItemCount(gold) >= 100) {
+    Game.getPlayer().removeItem(gold, 100, true, target);
+    Debug.notification('You have just paid to an NPC');
+  }
+});
+```
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -57,7 +69,11 @@ This section should list any major frameworks that you built your project using.
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Installation
+
+You can download a latest build [here](https://skymp.io/nightly/index.html) An archive contains the Skyrim Platform distribution and the plugin example.
+
+## Building From Source
 
 You can find instructions on setting up the project locally below.
 To get a local copy up and running follow these simple example steps.
@@ -127,18 +143,18 @@ Copying binaries and restarting the game on each compilation may be boring and f
 After doing these steps you would see that dev_service restarts your game automatically every time you compile Skyrim Platform.
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Real World Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Since Skyrim Platform is built as a part of the [Skyrim Multiplayer](https://skymp.io) project, [skymp5-client](https://github.com/skyrim-multiplayer/skymp5-client) is built in top of this tool. It's an open-source project so you are free to investigate. A good example of self-contained system is in the [worldCleaner.ts](https://github.com/skyrim-multiplayer/skymp5-client/blob/6013e4f8c28a8cb8621a2b5543037b63164dfd7a/src/front/worldCleaner.ts)
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+_For more information, please refer to the [Documentation](https://pospelovlm.gitbook.io/skyrim-multiplayer-docs/docs_skyrim_platform)_
 
 
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/skyrim-multiplayer/skyrim-platform/issues) for a list of proposed features (and known issues).
 
 
 
@@ -158,30 +174,15 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Use of this source code is subject to the Skymp Service Agreement provided on the Skyrim Multiplayer website at the following URL: https://skymp.io/terms.html
+(See `LICENSE` for more information)
 
 
 
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Leonid Pospelov - Pospelov#3228 - pospelovlm@yandex.ru
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Img Shields](https://shields.io)
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Pages](https://pages.github.com)
-* [Animate.css](https://daneden.github.io/animate.css)
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+Project Link: [https://github.com/skyrim-multiplayer/skyrim-platform](https://github.com/skyrim-multiplayer/skyrim-platform)
 
