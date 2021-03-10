@@ -6,8 +6,6 @@
 -->
 
 
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -27,7 +25,9 @@
     ·
     <a href="https://github.com/skyrim-multiplayer/skyrim-platform/issues">Report Bug</a>
     ·
-    <a href="https://github.com/skyrim-multiplayer/skyrim-platform/issues">Request Feature</a>
+    <a href="https://github.com/skyrim-multiplayer/skyrim-platform/issues">Request Feature</a> 
+    ·
+    <a href="https://discord.gg/NKtwpuGCHD">Join Discord</a>
   </p>
 </p>
 
@@ -66,6 +66,9 @@ SkyrimPlatform is technically an SKSE plugin written in C++. When writing script
 
 ### ES6 Modules
 SkyrimPlatform supports imports/exports thanks to its own module loader which mimics [systemjs](https://github.com/systemjs/systemjs).
+
+### In-game Browser
+SkyrimPlatform
 
 ## Built With
 
