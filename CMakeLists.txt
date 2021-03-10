@@ -1,4 +1,3 @@
-set(VCPKG_FEATURE_FLAGS manifests binarycaching)
 set(VCPKG_TARGET_TRIPLET "x64-windows-sp")
 set(VCPKG_OVERLAY_TRIPLETS "${CMAKE_CURRENT_LIST_DIR}/overlay_triplets")
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")

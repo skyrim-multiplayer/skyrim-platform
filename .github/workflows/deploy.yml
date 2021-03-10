@@ -35,7 +35,7 @@ jobs:
           # Ensure the vcpkg artifacts are cached, they are generated in the 'CMAKE_BINARY_DIR/vcpkg_installed' directory.
           additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
           # Provides the arguments appended to 'vcpkg install'. It is recommended to use a response file to provide either the triplet and the list of packages to be installed. , e.g. `@<github.workspace>/vcpkg_osx.txt`. Note the 'at' character prepended to the path denotes a response file.
-          vcpkgArguments: '--overlay-ports ${{ github.workspace }}/overlay_ports'
+          vcpkgArguments: '--overlay-ports ${{ github.workspace }}/overlay_ports --feature-flags=manifests,binarycaching'
 
       - name: Run CMake to install the dependencies specified in the vcpkg.json manifest, generate project file and build the project
         uses: lukka/run-cmake@v3
