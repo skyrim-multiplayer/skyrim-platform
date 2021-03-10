@@ -15,39 +15,39 @@ jobs:
         with:
           submodules: "recursive"
           fetch-depth: 0
+      
+          
+      # Install latest CMake.
+      - uses: lukka/get-cmake@latest
 
-      - name: Run vcpkg
+      # Restore from cache the previously built ports. If a "cache miss" occurs, then vcpkg is bootstrapped. Since a the vcpkg.json is being used later on to install the packages when run-cmake runs, no packages are installed at this time and the input 'setupOnly:true' is mandatory.
+      - name: Restore artifacts, or setup vcpkg (do not install any package)
         uses: lukka/run-vcpkg@v6
         with:
           # Just install vcpkg for now, do not install any ports in this step yet.
           setupOnly: true
-          # Location of the vcpkg as submodule of the repository.
+          # Location of the vcpkg submodule in the Git repository.
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           # Since the cache must be invalidated when content of the vcpkg.json file changes, let's
           # compute its hash and append this to the computed cache's key.
-          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
-          vcpkgTriplet: x64-windows-sp.cmake
-          # Ensure the vcpkg artifacts are cached, they are generated in the 'CMAKE_BINARY_DIR/vcpkg_installed'.
+          appendedCacheKey: ${{ hashFiles( '**/vcpkg_manifest/vcpkg.json' ) }}
+          vcpkgTriplet: x64-windows-sp
+          # Ensure the vcpkg artifacts are cached, they are generated in the 'CMAKE_BINARY_DIR/vcpkg_installed' directory.
           additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
           # Provides the arguments appended to 'vcpkg install'. It is recommended to use a response file to provide either the triplet and the list of packages to be installed. , e.g. `@<github.workspace>/vcpkg_osx.txt`. Note the 'at' character prepended to the path denotes a response file.
           vcpkgArguments: '--overlay-ports ${{ github.workspace }}/overlay_ports'
 
-      # Install latest CMake.
-      - uses: lukka/get-cmake@latest
-
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "12"
-      - name: Run CMake to generate project file and build the project
+      - name: Run CMake to install the dependencies specified in the vcpkg.json manifest, generate project file and build the project
         uses: lukka/run-cmake@v3
         with:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: "CMakeLists.txt"
+          cmakeListsTxtPath: '${{ github.workspace }}/vcpkg_manifest/CMakeLists.txt'
           buildDirectory: ${{ env.buildDir }}
           # This input tells run-cmake to consume the vcpkg.cmake toolchain file set by run-vcpkg.
           useVcpkgToolchainFile: true
           buildWithCMake: true
           buildWithCMakeArgs: "--config Release"
+
       - name: Use dev_service to pack everything into a dist directory
         working-directory: ./tools/dev_service
         run: npm run pack
