@@ -61,6 +61,7 @@ struct
   std::recursive_mutex m;
 } share;
 std::atomic<bool> papyrusEventsBlocked;
+std::atomic<bool> skyuiEventsAllowed;
 
 struct
 {
@@ -749,10 +750,17 @@ void TESModPlatform::ResetContainer(RE::BSScript::IVirtualMachine* vm,
 }
 
 void TESModPlatform::BlockPapyrusEvents(RE::BSScript::IVirtualMachine* vm,
-                                        RE::VMStackID stackId,
-                                        RE::StaticFunctionTag*, bool blocked)
+    RE::VMStackID stackId,
+    RE::StaticFunctionTag*, bool blocked)
 {
-  papyrusEventsBlocked = blocked;
+    papyrusEventsBlocked = blocked;
+}
+
+void TESModPlatform::allowSkyuiEvents(RE::BSScript::IVirtualMachine* vm,
+                                        RE::VMStackID stackId,
+                                        RE::StaticFunctionTag*, bool allow)
+{
+    skyuiEventsAllowed = allow;
 }
 
 int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
@@ -809,6 +817,11 @@ std::shared_ptr<RE::BSTArray<RE::TintMask*>> TESModPlatform::GetTintsFor(
 bool TESModPlatform::GetPapyrusEventsBlocked()
 {
   return papyrusEventsBlocked;
+}
+
+bool TESModPlatform::GetSkyuiEventsAllowed()
+{
+    return skyuiEventsAllowed;
 }
 
 bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
@@ -934,6 +947,11 @@ bool TESModPlatform::Register(RE::BSScript::IVirtualMachine* vm)
     new RE::BSScript::NativeFunction<true, decltype(BlockPapyrusEvents), void,
                                      RE::StaticFunctionTag*, bool>(
       "BlockPapyrusEvents", "TESModPlatform", BlockPapyrusEvents));
+
+  vm->BindNativeMethod(
+      new RE::BSScript::NativeFunction<true, decltype(allowSkyuiEvents), void,
+      RE::StaticFunctionTag*, bool>(
+          "allowSkyuiEvents", "TESModPlatform", allowSkyuiEvents));
 
   static LoadGameEvent loadGameEvent;
 
