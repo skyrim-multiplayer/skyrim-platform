@@ -128,33 +128,32 @@ static void example_listener_on_enter(GumInvocationListener* listener,
       auto handle = (RE::VMHandle)gum_invocation_context_get_nth_argument(ic, 1);
       auto vm = RE::BSScript::Internal::VirtualMachine::GetSingleton();
       bool blockEvents = TESModPlatform::GetPapyrusEventsBlocked();
-      bool skyuiAllowed = true; //TESModPlatform::GetSkyuiEventsAllowed();
 
-      if (strcmp(*eventName, "OnUpdate") != 0 && skyuiAllowed && vm) {
+      if (strcmp(*eventName, "OnUpdate") != 0 && vm) {
         vm->attachedScriptsLock.Lock();
         auto it = vm->attachedScripts.find(handle);
         
         if (it != vm->attachedScripts.end())
         {
-            auto scripts = it->second;
+          auto scripts = it->second;
 
-            for (int i = 0; i < scripts.size(); i++)
+          for (int i = 0; i < scripts.size(); i++)
+          {
+            auto script = scripts[i].get();
+            auto info = script->GetTypeInfo();
+            auto name = info->GetName();
+
+            const char* skyui_name = "SKI_"; //start skyui object name
+
+            if (name[0] == skyui_name[0]
+              && name[1] == skyui_name[1]
+              && name[2] == skyui_name[2]
+              && name[3] == skyui_name[3])
             {
-                auto script = scripts[i].get();
-                auto info = script->GetTypeInfo();
-                auto name = info->GetName();
-
-                const char* skyui_name = "SKI_"; //start skyui object name
-
-                if (name[0] == skyui_name[0]
-                    && name[1] == skyui_name[1]
-                    && name[2] == skyui_name[2]
-                    && name[3] == skyui_name[3])
-                {
-                    blockEvents = false;
-                    break;
-                }
+              blockEvents = false;
+              break;
             }
+          }
         }
 
         vm->attachedScriptsLock.Unlock();
