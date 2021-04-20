@@ -135,9 +135,9 @@ static void example_listener_on_enter(GumInvocationListener* listener,
         
         if (it != vm->attachedScripts.end())
         {
-          auto scripts = it->second;
+          auto& scripts = it->second;
 
-          for (int i = 0; i < scripts.size(); i++)
+          for (size_t i = 0; i < scripts.size(); i++)
           {
             auto script = scripts[i].get();
             auto info = script->GetTypeInfo();
@@ -145,7 +145,8 @@ static void example_listener_on_enter(GumInvocationListener* listener,
 
             const char* skyui_name = "SKI_"; //start skyui object name
 
-            if (name[0] == skyui_name[0]
+            if (strlen(name) >= 4
+              && name[0] == skyui_name[0]
               && name[1] == skyui_name[1]
               && name[2] == skyui_name[2]
               && name[3] == skyui_name[3])

@@ -749,10 +749,10 @@ void TESModPlatform::ResetContainer(RE::BSScript::IVirtualMachine* vm,
 }
 
 void TESModPlatform::BlockPapyrusEvents(RE::BSScript::IVirtualMachine* vm,
-    RE::VMStackID stackId,
-    RE::StaticFunctionTag*, bool blocked)
+                                        RE::VMStackID stackId,
+                                        RE::StaticFunctionTag*, bool blocked)
 {
-    papyrusEventsBlocked = blocked;
+  papyrusEventsBlocked = blocked;
 }
 
 int TESModPlatform::GetWeapDrawnMode(uint32_t actorId)
