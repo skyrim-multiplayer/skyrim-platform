@@ -116,6 +116,7 @@ JsValue MpClientPluginApi::Send(const JsFunctionArguments& args)
   typedef void (*SendString)(const char* jsonContent, bool reliable);
   typedef void (*SendData)(uint8_t* data, size_t dataSize, bool reliable);
 
+  // Call old function
   if (args[1].GetType() == JsValue::Type::String) {
     auto jsonContent = (std::string)args[1];
     auto reliable = (bool)args[2];
