@@ -7,6 +7,9 @@ INT WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
             INT nCmdShow)
 {
   auto root = std::filesystem::current_path().parent_path();
+  while (root.filename() != "skyrim-platform")
+    root = root.parent_path();
+
   auto p = (root / "tools/dev_service").wstring();
   SetCurrentDirectoryW(p.data());
 

@@ -1,4 +1,5 @@
 #include "MpClientPluginApi.h"
+#include <DbgHelp.h>
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -112,12 +113,26 @@ JsValue MpClientPluginApi::Tick(const JsFunctionArguments& args)
 
 JsValue MpClientPluginApi::Send(const JsFunctionArguments& args)
 {
-  typedef void (*Send)(const char* jsonContent, bool reliable);
+  typedef void (*SendString)(const char* jsonContent, bool reliable);
+  typedef void (*SendData)(uint8_t* data, size_t dataSize, bool reliable);
 
-  auto jsonContent = (std::string)args[1];
-  auto reliable = (bool)args[2];
+  // Call old function
+  if (args[1].GetType() == JsValue::Type::String) {
+    auto jsonContent = (std::string)args[1];
+    auto reliable = (bool)args[2];
 
-  auto f = (Send)GetMpClientPlugin()->GetFunction("Send");
-  f(jsonContent.data(), reliable);
+    auto f = (SendString)GetMpClientPlugin()->GetFunction("SendString");
+    f(jsonContent.data(), reliable);
+    return JsValue::Undefined();
+  }
+
+  auto data = args[0].GetArrayBufferData();
+  auto len = args[0].GetArrayBufferLength();
+
+  if (!data || len == 0) // return if data is empty
+    return JsValue::Undefined();
+
+  auto f = (SendData)GetMpClientPlugin()->GetFunction("SendData");
+  f((uint8_t*)data, len, (bool)args[2]);
   return JsValue::Undefined();
 }

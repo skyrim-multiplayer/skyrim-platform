@@ -7,6 +7,7 @@ cmake_minimum_required(VERSION 3.19.1)
 project(platform_se)
 
 add_executable(vs_startup_project src/platform_se/vs_startup_project/main.cpp)
+set_property(TARGET vs_startup_project PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
 set_target_properties(vs_startup_project PROPERTIES WIN32_EXECUTABLE true CXX_STANDARD 17)
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT vs_startup_project) 
 
